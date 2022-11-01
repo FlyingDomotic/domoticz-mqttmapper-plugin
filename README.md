@@ -118,7 +118,7 @@ When `default` is not specified, the extracted value will be directly loaded in 
     }
 ```
 
-Here, `options` contains the options used to create the device. Obviously, I don't find a full list. DeviceOptions.md contains the few ones I've found. I'll update it when finding new values.
+Here, `options` contains the options used to create the device. Obviously, I don't find a full list, I put a partial one at end of this document. 
 
 ```ts
     "Beed room temperature": {
@@ -140,3 +140,12 @@ This time, payload is in JSON format (`item` is not empty). This mean that the v
 To specify multiple values, separate them with a `;`, like in `temperature;humidity`. Device value will be set with the concatenation of the two items.
 
 Note that you also can specify constants in the list, prefixing them with `~`. For example `total;~0;~0;~0;power;~0`to generate a kw counter sValue.
+
+## Device options (partial) list
+
+Here's a partial list of device options that can be specified in `options` of JSON configuration file.
+
+| Device type    | Options                                       | Meaning                        |
+|----------------|-----------------------------------------------|--------------------------------|
+| Counter        | "ValueQuantity":"Distance", "ValueUnits":"km" | `Distance`is label,`km`is unit |
+| Custom counter | `1;km`                                        | `1` is multiplier, `km`is unit |
