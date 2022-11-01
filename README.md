@@ -148,4 +148,4 @@ Here's a partial list of device options that can be specified in `options` of JS
 | Device type    | Options                                       | Meaning                        |
 |----------------|-----------------------------------------------|--------------------------------|
 | Counter        | "ValueQuantity":"Distance", "ValueUnits":"km" | `Distance`is label,`km`is unit |
-| Custom counter | `1;km`                                        | `1` is multiplier, `km`is unit |
+| Custom counter | 1;km                                          | `1` is multiplier, `km`is unit |
