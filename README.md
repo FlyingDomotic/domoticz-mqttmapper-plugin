@@ -88,6 +88,13 @@ Plugin uses an external JSON configuration file to map MQTT topics to Domoticz d
         "topic": "boiler/SENSOR",
         "type": "248", "subtype": "1", "switchtype": "0",
         "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
+    },
+    "Mode selector": {"topic": "fan/mode",
+        "type": "244", "subtype": "62", "switchtype": "18",
+        "options": {"SelectorStyle":"1", "LevelOffHidden": "true", "LevelNames":"Off|Auto|Forced"},
+        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}},
+        "mapping": {"item": "mode", "default": "0", "values": {"Off": "0", "Auto": "10", "Forced": "20"}}
+    }
 }
 ```
 
@@ -141,11 +148,29 @@ To specify multiple values, separate them with a `;`, like in `temperature;humid
 
 Note that you also can specify constants in the list, prefixing them with `~`. For example `total;~0;~0;~0;power;~0`to generate a kw counter sValue.
 
+Previous examples detailled updates from MQTT to Domoticz devices. It's possible to push a change on Domoticz device to MQTT using the `set` tag:
+
+```ts
+    "Mode selector": {"topic": "fan/mode",
+        "type": "244", "subtype": "62", "switchtype": "18",
+        "options": {"SelectorStyle":"1", "LevelOffHidden": "true", "LevelNames":"Off|Auto|Forced"},
+        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}},
+        "mapping": {"item": "mode", "default": "0", "values": {"Off": "0", "Auto": "10", "Forced": "20"}}
+    }
+```
+
+`topic` contains the topic to send the value to (defaults to primary topic if not specified).
+`payload` contains the payload to send (defaults to `#`). The `#` character will be replaced by translated value (`Forced`in thi example if Domoticz devices holds 20 in its level).
+
 ## Device options (partial) list
 
 Here's a partial list of device options that can be specified in `options` of JSON configuration file.
 
-| Device type    | Options                                       | Meaning                        |
-|----------------|-----------------------------------------------|--------------------------------|
-| Counter        | "ValueQuantity":"Distance", "ValueUnits":"km" | `Distance`is label,`km`is unit |
-| Custom counter | 1;km                                          | `1` is multiplier, `km`is unit |
+| Device type    | Options                          | Meaning                                     |
+|----------------|----------------------------------|---------------------------------------------|
+| Counter        | `"ValueQuantity":"Distance",`    | `Distance`is label                          |
+|                | `"ValueUnits":"km"`              | `km`is unit                                 |
+| Custom counter | `1;km`                           | `1` is multiplier, `km` is unit             |
+| Selector       | `"SelectorStyle":"1",`           | `0`for dropdown list, `1`for radio buttons  |
+|                | `"LevelOffHidden": "true",`      | `true` to hide off level, `false`to show it |
+|                | `"LevelNames":"Off|Auto|Forced"` | Labels of each level, separated by `|` (here `Off` = 0, `Auto` = 10, `Forced` = 20)|

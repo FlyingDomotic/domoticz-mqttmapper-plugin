@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="0.0.5">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.0">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -171,8 +171,8 @@ class BasePlugin:
             element = element[pathElement]
         return element
 
+    # Find a device by name in devices table
     def getDevice(self, deviceName):
-        # Find a device by name in devices table
         for device in Devices:
             if (Devices[device].DeviceID == deviceName) :
                 # Return device
@@ -180,8 +180,8 @@ class BasePlugin:
         # Return None if not found
         return None
 
+    # Get next free device Id
     def getNextDeviceId(self):
-        # Get next free device Id
         nextDeviceId = 1
         while True:
             exists = False
@@ -237,10 +237,15 @@ class BasePlugin:
             nodeOptions  = self.getValue(nodeItems, 'options', None)
 
             if nodeName != None and nodeTopic != None and nodeType != None and nodeSubtype != None:
-                # Create device if needed
-                if (self.getDevice(nodeTopic) == None):
+                # Create device if needed, update it if it already exists
+                device = self.getDevice(nodeTopic)
+                if (device == None):
                     Domoticz.Log("Creating device " + nodeName)
                     Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeTopic, Options=nodeOptions, Used=True).Create()
+                else:
+                    Domoticz.Log("Updating device " + nodeName)
+                    device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
+
         # Connect to MQTT server
         self.mqttClient = MqttClient(self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed)
 
@@ -281,7 +286,7 @@ class BasePlugin:
             for node in self.jsonData.items():
                 nodeItems = node[1]
                 nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
-                if nodeTopic == topic:  # Is this the rigt topic?
+                if nodeTopic == topic:  # Is this the right topic?
                     nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
                     mappingItem = self.getValue(nodeMapping, 'item', None)
@@ -312,15 +317,21 @@ class BasePlugin:
                                     if testValue == readValue:  # Is this the same value?
                                         valueToSet = mappingValues[testValue]   # Insert mapped value
                             else:
-                                Domoticz('Bad mapping for '+device.Name)
+                                Domoticz.Error('Bad mapping for '+device.Name)
                         else:   # Not a switch
                             valueToSet = readValue
                     else:   # No mapping given
-                        Domoticz('No mapping for '+device.Name)
+                        Domoticz.Error('No mapping for '+device.Name)
                     if valueToSet != None: # Value given, set it
-                        if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not)
-                            Domoticz.Log('Setting '+device.Name+' to '+valueToSet)  # Value is numeric
-                            device.Update(nValue=int(valueToSet), sValue=str(readValue))   # For numeric mapped values, sValue is original payload (part)
+                        if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
+                            if nodeType == '244':   # This is a switch
+                                nValueToSet = 0 if str(valueToSet) == '0' else 1
+                                sValueToSet = str(valueToSet)
+                            else:
+                                nValueToSet = valueToSet
+                                sValueToSet = readValue
+                            Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
+                            device.Update(nValue=nValueToSet, sValue=sValueToSet)
                         else:   # Value is not numeric
                             Domoticz.Log('Setting '+device.Name+' to "'+valueToSet+'"') 
                             device.Update(nValue=0, sValue=str(valueToSet))
@@ -332,11 +343,52 @@ class BasePlugin:
 
 # ==========================================================DASHBOARD COMMAND=============================================================
     def onCommand(self, Unit, Command, Level, sColor):
-        Domoticz.Log(self.deviceStr(Unit) + ": Command: '" + str(Command) + "', Level: " + str(Level) + ", Color:" + str(sColor) + " ** not supported **")
+        device = Devices[Unit]
+        Domoticz.Log(self.deviceStr(Unit) + ", "+device.DeviceID+": Command: '" + str(Command) + "', Level: " + str(Level) + ", Color:" + str(sColor))
+        targetValue = None
+        if Command == 'Off':
+            targetValue = '0'
+        elif Command == 'On':
+            targetValue = '100'
+        elif Command == 'Set Level':
+            targetValue = str(Level)
+        else:
+            Domoticz.Error('Command: "' + str(Command) + '" not supported yet for ' + device.Name+'. Please ask for support.')
+
+        if targetValue != None: # Only if a target value has been given
+            # Iterating through the JSON list
+            for node in self.jsonData.items():
+                nodeItems = node[1]
+                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+                if nodeTopic == device.DeviceID:  # Is this the right topic?
+                    nodeMapping = self.getValue(nodeItems, 'mapping', None)
+                    nodeSet = self.getValue(nodeItems, 'set', None)
+                    if nodeSet !=None:  # Do we have some SET parameters?
+                        setTopic = self.getValue(nodeSet, 'topic', nodeTopic)   # Get topic, default to subscribed topic
+                        setPayload = self.getValue(nodeSet, 'payload', "#")     # Get value, default to #
+                        mappingValues = self.getValue(nodeMapping, 'values', None)
+                        valueToSet = None
+                        nodeType = self.getValue(nodeItems, 'type', None)
+                        if nodeType == '244':   # This is a switch
+                            if mappingValues != None:
+                                for testValue in mappingValues: # Scan all mapping values
+                                    if mappingValues[testValue] == targetValue:  # Is this the same value?
+                                        valueToSet = testValue  # Insert mapped value
+                                if valueToSet == None:  # No mapping value found
+                                    Domoticz.Error('Can\'t map "'+targetValue+'" for '+device.name)
+                            else: # No mapping given
+                                Domoticz.Error('No mapping for '+device.Name)
+                        else:   # Not a switch
+                            Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
+                    else:   # No set given
+                        Domoticz.Error('No SET parameters for '+device.Name)
+                    if valueToSet != None: # Value given, set it
+                        payload = json.dumps(setPayload).replace("#", valueToSet)
+                        Domoticz.Log('Setting '+device.DeviceID+' to "'+payload+'"')
+                        self.mqttClient.Publish(setTopic, payload)
 
     def onDeviceAdded(self, Unit):
         Domoticz.Log("onDeviceAdded " + self.deviceStr(Unit))
-        return
 
     def onDeviceModified(self, Unit):
         Domoticz.Log("onDeviceModified " + self.deviceStr(Unit))
@@ -409,7 +461,6 @@ def DumpConfigToLog():
     Domoticz.Log("Device count: " + str(len(Devices)))
     for x in Devices:
         Domoticz.Log("Device: " + str(x) + " - " + str(Devices[x]))
-    return
 
 def DumpMQTTMessageToLog(topic, rawmessage, prefix=''):
     message = rawmessage.decode('utf8','replace')
