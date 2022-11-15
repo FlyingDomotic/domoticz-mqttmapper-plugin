@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.0">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.1">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -324,6 +324,10 @@ class BasePlugin:
                         Domoticz.Error('No mapping for '+device.Name)
                     if valueToSet != None: # Value given, set it
                         if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
+                            multiplier = self.getValue(nodeMapping, 'multiplier', None)
+                            if multiplier !=None:   # Do we have a multiplier?
+                                valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
+                                readValue = str(valueToSet) # Force readValue to float value (valueToSet will be truncated as integer later on)
                             if nodeType == '244':   # This is a switch
                                 nValueToSet = 0 if str(valueToSet) == '0' else 1
                                 sValueToSet = str(valueToSet)

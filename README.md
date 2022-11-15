@@ -180,13 +180,17 @@ Dans cet exemple, `options` contient les options utilisées pour créer le dispo
     "Beed room temperature": {
         "topic": "beedRoom",
         "type": "80", "subtype": "5", "switchtype": "0",
-        "mapping": {"item": "temperature"}
+        "mapping": {"item": "temperature", "multiplier": 0.1}
     }
 ```
 
 This time, payload is in JSON format (`item` is not empty). This mean that the value will be extracted from `temperature` payload item, at the root level. `ENERGY/Power` in later example means that value will be extracted in `Power` item of `Energy` root item.
 
+`multiplier` is optional, and gives the factor to apply to numeric value (here `0.1`, equivalent to divid by 10).
+
 Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur extraite sera prise dans l'item `temperature` du contenu, au niveau supérieur. `ENERGY/Power` dans l'exemple suivant indique que la valeur sera extraite de l'item `Power` de l'item `Energy`.
+
+`multiplier` est optionel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, equivalent à diviser par 10).
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
