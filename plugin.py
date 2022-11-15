@@ -328,7 +328,7 @@ class BasePlugin:
                                 nValueToSet = 0 if str(valueToSet) == '0' else 1
                                 sValueToSet = str(valueToSet)
                             else:
-                                nValueToSet = valueToSet
+                                nValueToSet = int(valueToSet)
                                 sValueToSet = readValue
                             Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
                             device.Update(nValue=nValueToSet, sValue=sValueToSet)
