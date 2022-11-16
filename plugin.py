@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.1">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.2">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -306,7 +306,7 @@ class BasePlugin:
                                 else:
                                     itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                                     if itemValue == None:
-                                        Domoticz.Error('Can\'t find "'+str(item)+'" in "'+str(message)+'"')
+                                        Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
                                     else:   # Add extracted value
                                         readValue += str(itemValue)
                             readValue = readValue[1:]   # Remove first ';'
@@ -327,7 +327,7 @@ class BasePlugin:
                             multiplier = self.getValue(nodeMapping, 'multiplier', None)
                             if multiplier !=None:   # Do we have a multiplier?
                                 valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
-                                readValue = str(valueToSet) # Force readValue to float value (valueToSet will be truncated as integer later on)
+                                readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
                             if nodeType == '244':   # This is a switch
                                 nValueToSet = 0 if str(valueToSet) == '0' else 1
                                 sValueToSet = str(valueToSet)
@@ -337,7 +337,7 @@ class BasePlugin:
                             Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
                             device.Update(nValue=nValueToSet, sValue=sValueToSet)
                         else:   # Value is not numeric
-                            Domoticz.Log('Setting '+device.Name+' to "'+valueToSet+'"') 
+                            Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
                             device.Update(nValue=0, sValue=str(valueToSet))
 
     def onMQTTSubscribed(self):
@@ -379,7 +379,7 @@ class BasePlugin:
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
                                         valueToSet = testValue  # Insert mapped value
                                 if valueToSet == None:  # No mapping value found
-                                    Domoticz.Error('Can\'t map "'+targetValue+'" for '+device.name)
+                                    Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.name)
                             else: # No mapping given
                                 Domoticz.Error('No mapping for '+device.Name)
                         else:   # Not a switch
@@ -387,8 +387,11 @@ class BasePlugin:
                     else:   # No set given
                         Domoticz.Error('No SET parameters for '+device.Name)
                     if valueToSet != None: # Value given, set it
-                        payload = json.dumps(setPayload).replace("#", valueToSet)
-                        Domoticz.Log('Setting '+device.DeviceID+' to "'+payload+'"')
+                        if isinstance(setPayload, str):
+                            payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
+                        else:
+                            payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
+                        Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
                         self.mqttClient.Publish(setTopic, payload)
 
     def onDeviceAdded(self, Unit):

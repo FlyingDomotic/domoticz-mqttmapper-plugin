@@ -117,7 +117,7 @@ Ce plugin utilise un fichier de configuration externe au format JSON pour associ
     "Beed room temperature": {
         "topic": "beedRoom",
         "type": "80", "subtype": "5", "switchtype": "0",
-        "mapping": {"item": "temperature"}
+        "mapping": {"item": "temperature", "multiplier": 0.1}
     },
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
