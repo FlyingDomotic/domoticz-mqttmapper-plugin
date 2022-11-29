@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.2">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.3">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -34,7 +34,6 @@ class MqttClient:
     Address = ""
     Port = ""
     mqttConn = None
-    isConnected = False
     mqttConnectedCb = None
     mqttDisconnectedCb = None
     mqttPublishCb = None
@@ -379,7 +378,7 @@ class BasePlugin:
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
                                         valueToSet = testValue  # Insert mapped value
                                 if valueToSet == None:  # No mapping value found
-                                    Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.name)
+                                    Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
                             else: # No mapping given
                                 Domoticz.Error('No mapping for '+device.Name)
                         else:   # Not a switch
