@@ -210,7 +210,7 @@ class BasePlugin:
         # Parse options
         self.debugging = Parameters["Mode6"]
         DumpConfigToLog()
-        if self.debugging == "<!--Verbose+-->":
+        if self.debugging == "Verbose+":
             Domoticz.Debugging(2+4+8+16+64)
         if self.debugging == "Verbose":
             Domoticz.Debugging(2+4+8+16+64)
