@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.3">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.4">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -11,12 +11,12 @@
         <param field="Port" label="Port" width="300px" required="true" default="1883"/>
         <param field="Username" label="Username" width="300px"/>
         <param field="Password" label="Password" width="300px" password="true"/>
-        <param field="Mode1" label="JSON mapping file to use" width="400px" required="true" default="MqttMapper.json"/>
-        <param field="Mode6" label="Debug" width="75px">
+        <param field="Mode1" label="JSON mapping file to use" width="300px" required="true" default="MqttMapper.json"/>
+        <param field="Mode6" label="Debug" width="100px">
             <options>
-                <option label="Extra verbose (Framework logs 2+4+8+16+64 + device dump)" value="Verbose+"/>
-                <option label="Verbose (Framework logs 2+4+8+16+64)" value="Verbose"/>
-                <option label="Normal (Framework logs 2+4+8)" value="Debug"/>
+                <option label="Extra verbose" value="Verbose+"/>
+                <option label="Verbose" value="Verbose"/>
+                <option label="Normal" value="Debug"/>
                 <option label="None" value="Normal" default="true"/>
             </options>
         </param>
