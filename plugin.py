@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.4">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.5">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -223,8 +223,10 @@ class BasePlugin:
         jsonFile = Parameters['HomeFolder'] + Parameters["Mode1"]
         self.jsonData = None
         with open(jsonFile, encoding = 'UTF-8') as configStream:
-            self.jsonData = json.load(configStream)
-
+            try:
+                self.jsonData = json.load(configStream)
+            except:
+                Domoticz.Error("Error reading JSON file "+jsonFile)
         # Go through Json file to create devices
         for node in self.jsonData.items():
             nodeName = node[0]
