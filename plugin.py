@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.5">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.6">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -146,6 +146,7 @@ class BasePlugin:
     mqttserverport = ""
     debugging = "Normal"
     jsonData = None
+    initDone = False
 
     # Returns a dictionary value giving a key or default value if not existing
     def getValue(self, dict, key, default=''):
@@ -227,6 +228,7 @@ class BasePlugin:
                 self.jsonData = json.load(configStream)
             except:
                 Domoticz.Error("Error reading JSON file "+jsonFile)
+                return
         # Go through Json file to create devices
         for node in self.jsonData.items():
             nodeName = node[0]
@@ -250,26 +252,45 @@ class BasePlugin:
         # Connect to MQTT server
         self.mqttClient = MqttClient(self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed)
 
+        initDone = True
         # Enable heartbeat
         Domoticz.Heartbeat(60)
 
     def onConnect(self, Connection, Status, Description):
+        # Exit if init not properly done
+        if not initDone:
+            return
         self.mqttClient.onConnect(Connection, Status, Description)
 
     def onDisconnect(self, Connection):
+        # Exit if init not properly done
+        if not initDone:
+            return
         self.mqttClient.onDisconnect(Connection)
 
     def onMessage(self, Connection, Data):
+        # Exit if init not properly done
+        if not initDone:
+            return
         self.mqttClient.onMessage(Connection, Data)
 
     def onMQTTConnected(self):
+        # Exit if init not properly done
+        if not initDone:
+            return
         Domoticz.Debug("onMQTTConnected")
         self.mqttClient.Subscribe(self.getTopics())
 
     def onMQTTDisconnected(self):
+        # Exit if init not properly done
+        if not initDone:
+            return
         Domoticz.Debug("onMQTTDisconnected")
 
     def onMQTTPublish(self, topic, rawmessage):
+        # Exit if init not properly done
+        if not initDone:
+            return
         message = ""
         try:
             message = json.loads(rawmessage.decode('utf8'))
@@ -342,12 +363,18 @@ class BasePlugin:
                             device.Update(nValue=0, sValue=str(valueToSet))
 
     def onMQTTSubscribed(self):
+        # Exit if init not properly done
+        if not initDone:
+            return
         # (Re)subscribed, refresh device info
         Domoticz.Debug("onMQTTSubscribed")
         topics = set()
 
 # ==========================================================DASHBOARD COMMAND=============================================================
     def onCommand(self, Unit, Command, Level, sColor):
+        # Exit if init not properly done
+        if not initDone:
+            return
         device = Devices[Unit]
         Domoticz.Log(self.deviceStr(Unit) + ", "+device.DeviceID+": Command: '" + str(Command) + "', Level: " + str(Level) + ", Color:" + str(sColor))
         targetValue = None
@@ -396,15 +423,27 @@ class BasePlugin:
                         self.mqttClient.Publish(setTopic, payload)
 
     def onDeviceAdded(self, Unit):
+        # Exit if init not properly done
+        if not initDone:
+            return
         Domoticz.Log("onDeviceAdded " + self.deviceStr(Unit))
 
     def onDeviceModified(self, Unit):
+        # Exit if init not properly done
+        if not initDone:
+            return
         Domoticz.Log("onDeviceModified " + self.deviceStr(Unit))
         
     def onDeviceRemoved(self, Unit):
+        # Exit if init not properly done
+        if not initDone:
+            return
         Domoticz.Log("onDeviceRemoved " + self.deviceStr(Unit))
 
     def onHeartbeat(self):
+        # Exit if init not properly done
+        if not initDone:
+            return
         if self.debugging == "Verbose" or self.debugging == "Verbose+":
             Domoticz.Debug("Heartbeating...")
 
