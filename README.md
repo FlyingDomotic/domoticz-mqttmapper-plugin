@@ -68,11 +68,19 @@ Note: if you did any changes to plugin files and `git pull` command doesn't work
 ```
 git stash
 ```
+or
+```
+git checkout <modified file>
+```
 
 1. Allez dans le répertoire du plugin et charger la nouvelle version
 ```
 cd domoticz/plugins/MqttMapper
 git pull
+```
+ou
+```
+git checkout <fichier modifié>
 ```
 2. Relancez Domoticz
 
