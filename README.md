@@ -164,7 +164,7 @@ In short, when receiving topic `volvo/xx-999-xx/binary_sensor/any_window_open/st
 
 When `default` is not specified, the extracted value will be directly loaded in associated device.
 
-`Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les type/subtype/switchtype du dispositif à créer. La liste des valeurs supportées est disponible à (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
+`Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les types/subtypes/switchtypes du dispositif à créer. La liste des valeurs supportées est disponible à (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
 
 Vide, `mapping` -> `item` indique que le contenu n'est pas dans un format JSON. La valeur extraite est le contenu de topic MQTT. La valeur par défaut est indiquée dans `default` et les valeurs associées sont dans `values` . Dans cet exemple, lorsque le contenu est `close`, le dispositif est mis à `1`.
 
@@ -198,7 +198,7 @@ This time, payload is in JSON format (`item` is not empty). This mean that the v
 
 Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur extraite sera prise dans l'item `temperature` du contenu, au niveau supérieur. `ENERGY/Power` dans l'exemple suivant indique que la valeur sera extraite de l'item `Power` de l'item `Energy`.
 
-`multiplier` est optionel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, equivalent à diviser par 10).
+`multiplier` est optionnel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, équivalent à diviser par 10).
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
@@ -209,13 +209,34 @@ Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur ext
 
 To specify multiple values, separate them with a `;`, like in `temperature;humidity`. Device value will be set with the concatenation of the two items.
 
-Note that you also can specify constants in the list, prefixing them with `~`. For example `total;~0;~0;~0;power;~0` to generate a kW counter sValue.
-
-Previous examples detailed updates from MQTT to Domoticz devices. It's possible to push a change on Domoticz device to MQTT using the `set` tag:
+Note that you also can specify constants in the list, prefixing them with `~`. For example `total;~0;~0;~0;power;~0` to generate a kWh counter sValue.
 
 Pour indiquer des valeurs multiples, séparez-les par des `;`, comme dans `temperature;humidity`. La valeur chargée sera la concaténation des deux items.
 
-Noter que vous pouvez aussi insérer des constantes, en les préfixant par `~`. Par exemple `total;~0;~0;~0;power;~0` pour spécifier le contenu de type sValue d'un compteur en kW.
+Noter que vous pouvez aussi insérer des constantes, en les préfixant par `~`. Par exemple `total;~0;~0;~0;power;~0` pour spécifier le contenu de type sValue d'un compteur en KWh.
+
+You may need to create multiple devices from the same topic. In this case, use optional `key` item to specify a "virtual" key. This key can be anything, as long as it is unique and different from topics. For exemple:
+
+Vous pouvez avoir besoin de créer plusieurs dispositifs à partir d'un même topic. Dans ce cas, utilisez l'item optionnel `key` pour spécifier un clef "virtuelle". Cette clef peut être n'importe quoi, tant qu'elle est unique et différente des topics utilisés. Par exemple :
+```
+{
+     "mvtdec1": {
+        "topic": "KC868_AI/1234567890/STATE",
+		"key": "KC868_AI/1234567890/STATE-input1",
+        "type": "244", "subtype": "73", "switchtype": "8",
+        "mapping": {"item": "input1/value", "default": "0", "values": {"True": "1"}}
+    },
+     "mvtdec2": {
+        "topic": "KC868_AI/1234567890/STATE",
+		"key": "KC868_AI/1234567890/STATE-input2",
+        "type": "244", "subtype": "73", "switchtype": "8",
+        "mapping": {"item": "input2/value", "default": "0", "values": {"True": "1"}}
+    }
+}
+```
+will map properly a json payload as / va décoder proprement un message json comme `{"input1":{"value":false},"input2":{"value":false}}`
+
+Previous examples detailed updates from MQTT to Domoticz devices. It's possible to push a change on Domoticz device to MQTT using the `set` tag:
 
 Les exemples précédents détaillaient des mises à jour depuis MQTT vers des dispositifs Domoticz. Il est également possible de pousser un changement initié par Domoticz vers MQTT en utilisant le mot clef `set` :
 

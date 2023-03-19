@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.7">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.8">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -234,6 +234,7 @@ class BasePlugin:
             nodeName = node[0]
             nodeItems = node[1]
             nodeTopic = self.getValue(nodeItems, 'topic', None)
+            nodeKey = self.getValue(nodeItems, 'key', None)
             nodeType = self.getValue(nodeItems, 'type', None)
             nodeSubtype = self.getValue(nodeItems, 'subtype', None)
             nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
@@ -241,10 +242,10 @@ class BasePlugin:
 
             if nodeName != None and nodeTopic != None and nodeType != None and nodeSubtype != None:
                 # Create device if needed, update it if it already exists
-                device = self.getDevice(nodeTopic)
+                device = self.getDevice(nodeKey if nodeKey else nodeTopic)
                 if (device == None):
                     Domoticz.Log("Creating device " + nodeName)
-                    Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeTopic, Options=nodeOptions, Used=True).Create()
+                    Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=True).Create()
                 else:
                     Domoticz.Log("Updating device " + nodeName)
                     device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
@@ -301,66 +302,67 @@ class BasePlugin:
         if self.debugging == "Verbose+":
             DumpMQTTMessageToLog(topic, rawmessage, 'onMQTTPublish: ')
 
-        device = self.getDevice(topic)
-        if (device != None):
-            Domoticz.Debug("onMQTTConnected found "+str(topic)+", Device '" + device.Name + "'")
-            # Iterating through the JSON list
-            for node in self.jsonData.items():
-                nodeItems = node[1]
-                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
-                if nodeTopic == topic:  # Is this the right topic?
-                    nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
-                    nodeMapping = self.getValue(nodeItems, 'mapping', None)
-                    mappingItem = self.getValue(nodeMapping, 'item', None)
-                    mappingDefault = self.getValue(nodeMapping, 'default', None)
-                    mappingValues = self.getValue(nodeMapping, 'values', None)
-                    valueToSet = None
-                    if mappingItem !=None:
-                        if mappingItem == '':   # Empty mapping means (not json) full message
-                            readValue = str(message)
-                        else:   # This is a json payload
-                            readValue = ''
-                            items = mappingItem.split(';')  # Work with multiple items values
-                            for item in items:  # Read all values to map
-                                readValue += ";"# Add ';' as separator
-                                if item[0:1] == '~': # Insert every item starting with '~' as is
-                                    readValue += item[1:]   # Add item minus '~'
-                                else:
-                                    itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
-                                    if itemValue == None:
-                                        Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
-                                    else:   # Add extracted value
-                                        readValue += str(itemValue)
-                            readValue = readValue[1:]   # Remove first ';'
+        # Iterating through the JSON list
+        for node in self.jsonData.items():
+            nodeItems = node[1]
+            nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+            nodeKey = self.getValue(nodeItems, 'key', None) # Get device key
+            if nodeTopic == topic:  # Is this the right topic?
+                device = self.getDevice(nodeKey if nodeKey else nodeTopic)
+                Domoticz.Debug("onMQTTConnected found "+str(topic)+", Device '" + device.Name + "'")
+                nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
+                nodeMapping = self.getValue(nodeItems, 'mapping', None)
+                mappingItem = self.getValue(nodeMapping, 'item', None)
+                mappingDefault = self.getValue(nodeMapping, 'default', None)
+                mappingValues = self.getValue(nodeMapping, 'values', None)
+                valueToSet = None
+                if mappingItem !=None:
+                    if mappingItem == '':   # Empty mapping means (not json) full message
+                        readValue = str(message)
+                    else:   # This is a json payload
+                        readValue = ''
+                        items = mappingItem.split(';')  # Work with multiple items values
+                        for item in items:  # Read all values to map
+                            readValue += ";"# Add ';' as separator
+                            if item[0:1] == '~': # Insert every item starting with '~' as is
+                                readValue += item[1:]   # Add item minus '~'
+                            else:
+                                itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
+                                if itemValue == None:
+                                    Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
+                                else:   # Add extracted value
+                                    readValue += str(itemValue)
+                        readValue = readValue[1:]   # Remove first ';'
+                    if nodeType == '244':   # This is a switch
+                        if  mappingDefault != None and mappingValues != None:
+                            valueToSet = mappingDefault # Set default mapping
+                            for testValue in mappingValues: # Scan all mapping values
+                                Domoticz.Log(f'testValue="{testValue}" ({type(testValue)}), readValue="{readValue}" ({type(readValue)})')
+                                if testValue == readValue:  # Is this the same value?
+                                    valueToSet = mappingValues[testValue]   # Insert mapped value
+                        else:
+                            Domoticz.Error('Bad mapping for '+device.Name)
+                    else:   # Not a switch
+                        valueToSet = readValue
+                else:   # No mapping given
+                    Domoticz.Error('No mapping for '+device.Name)
+                if valueToSet != None: # Value given, set it
+                    if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
+                        multiplier = self.getValue(nodeMapping, 'multiplier', None)
+                        if multiplier !=None:   # Do we have a multiplier?
+                            valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
+                            readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
                         if nodeType == '244':   # This is a switch
-                            if  mappingDefault != None and mappingValues != None:
-                                valueToSet = mappingDefault # Set default mapping
-                                for testValue in mappingValues: # Scan all mapping values
-                                    if testValue == readValue:  # Is this the same value?
-                                        valueToSet = mappingValues[testValue]   # Insert mapped value
-                            else:
-                                Domoticz.Error('Bad mapping for '+device.Name)
-                        else:   # Not a switch
-                            valueToSet = readValue
-                    else:   # No mapping given
-                        Domoticz.Error('No mapping for '+device.Name)
-                    if valueToSet != None: # Value given, set it
-                        if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
-                            multiplier = self.getValue(nodeMapping, 'multiplier', None)
-                            if multiplier !=None:   # Do we have a multiplier?
-                                valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
-                                readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
-                            if nodeType == '244':   # This is a switch
-                                nValueToSet = 0 if str(valueToSet) == '0' else 1
-                                sValueToSet = str(valueToSet)
-                            else:
-                                nValueToSet = int(valueToSet)
-                                sValueToSet = readValue
-                            Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
-                            device.Update(nValue=nValueToSet, sValue=sValueToSet)
-                        else:   # Value is not numeric
-                            Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
-                            device.Update(nValue=0, sValue=str(valueToSet))
+                            nValueToSet = 0 if str(valueToSet) == '0' else 1
+                            sValueToSet = str(valueToSet)
+                        else:
+                            nValueToSet = int(valueToSet)
+                            sValueToSet = readValue
+                        Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
+                        device.Update(nValue=nValueToSet, sValue=sValueToSet)
+                    else:   # Value is not numeric
+                        Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
+                        device.Update(nValue=0, sValue=str(valueToSet))
 
     def onMQTTSubscribed(self):
         # Exit if init not properly done
@@ -457,8 +459,14 @@ class BasePlugin:
     # Returns list of topics to subscribe to
     def getTopics(self):
         topics = set()
-        for device in Devices:
-            topics.add(Devices[device].DeviceID)
+        # Go through Json file to extract topics
+        for node in self.jsonData.items():
+            nodeName = node[0]
+            nodeItems = node[1]
+            nodeTopic = self.getValue(nodeItems, 'topic', None)
+            # Add topic if not already in list (as multiple devices on the same topic are allowed)
+            if nodeTopic not in topics:
+                topics.add(nodeTopic)
         Domoticz.Debug("getTopics: '" + str(topics) +"'")
         return list(topics)
 
