@@ -211,9 +211,32 @@ To specify multiple values, separate them with a `;`, like in `temperature;humid
 
 Note that you also can specify constants in the list, prefixing them with `~`. For example `total;~0;~0;~0;power;~0` to generate a kWh counter sValue.
 
+Should you want to change only part of sValue, you may use `~` alone to keep current value. For example, `value;~` will insert content of value item and keep second part of sValue.
+
+The following example will load a KWh counter with elements from tow different topics:
+
 Pour indiquer des valeurs multiples, séparez-les par des `;`, comme dans `temperature;humidity`. La valeur chargée sera la concaténation des deux items.
 
 Noter que vous pouvez aussi insérer des constantes, en les préfixant par `~`. Par exemple `total;~0;~0;~0;power;~0` pour spécifier le contenu de type sValue d'un compteur en KWh.
+
+Si vous voulez ne changer qu'une partie de la variable sValue d'un dispositif, vous pouvez utiliser `~` seul pour conserver une partie existante. Par exemple, `value;~` va insérer le contenu de l'item value et conserver la seconde partie de sValue.
+
+L'exemple suivant permet de charger un compteur de type KWh avec des éléments de deux topics différents :
+
+```
+      "My KWh counter" : {
+        "topic": "plug/power",
+        "key": "My KWh counter",
+        "type": "248", "subtype": "1", "switchtype": "0",
+        "mapping": {"item": "val;~"}
+      },
+      "My KWh counter2" : {
+        "topic": "plug/counter",
+        "key": "My KWh counter",
+        "type": "248", "subtype": "1", "switchtype": "0",
+        "mapping": {"item": "~;val"}
+      }
+```
 
 You may need to create multiple devices from the same topic. In this case, use optional `key` item to specify a "virtual" key. This key can be anything, as long as it is unique and different from topics. For exemple:
 

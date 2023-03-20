@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.8">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.9">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -211,12 +211,15 @@ class BasePlugin:
         # Parse options
         self.debugging = Parameters["Mode6"]
         DumpConfigToLog()
-        if self.debugging == "Verbose+":
+        if self.debugging == "Extra verbose":
             Domoticz.Debugging(2+4+8+16+64)
-        if self.debugging == "Verbose":
+        elif self.debugging == "Verbose":
             Domoticz.Debugging(2+4+8+16+64)
-        if self.debugging == "Debug":
+        elif self.debugging == "Debug":
             Domoticz.Debugging(2+4+8)
+        elif self.debugging == "Normal":
+            Domoticz.Debugging(2+4)
+
         self.mqttserveraddress = Parameters["Address"].replace(" ", "")
         self.mqttserverport = Parameters["Port"].replace(" ", "")
 
@@ -299,7 +302,7 @@ class BasePlugin:
             message = rawmessage.decode('utf8')
 
         topiclist = topic.split('/')
-        if self.debugging == "Verbose+":
+        if self.debugging == "Extra verbose":
             DumpMQTTMessageToLog(topic, rawmessage, 'onMQTTPublish: ')
 
         # Iterating through the JSON list
@@ -321,11 +324,17 @@ class BasePlugin:
                         readValue = str(message)
                     else:   # This is a json payload
                         readValue = ''
+                        itemIndex = -1
                         items = mappingItem.split(';')  # Work with multiple items values
                         for item in items:  # Read all values to map
                             readValue += ";"# Add ';' as separator
-                            if item[0:1] == '~': # Insert every item starting with '~' as is
-                                readValue += item[1:]   # Add item minus '~'
+                            itemIndex += 1  # Increment index
+                            if item[0:1] == '~': # Does item start with '~'?
+                                if item == '~': # If item is just '~', insert previous sValue item
+                                    sValue = device.sValue.split(';')   # Extract current sValue
+                                    readValue += sValue[itemIndex]   # Insert the corresponding sValue item
+                                else:
+                                    readValue += item[1:]   # Add item, removing initial '~'
                             else:
                                 itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                                 if itemValue == None:
@@ -446,7 +455,7 @@ class BasePlugin:
         # Exit if init not properly done
         if not self.initDone:
             return
-        if self.debugging == "Verbose" or self.debugging == "Verbose+":
+        if self.debugging == "Extra verbose":
             Domoticz.Debug("Heartbeating...")
 
         # Reconnect if connection has dropped
