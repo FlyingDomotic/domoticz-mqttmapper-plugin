@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.9">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.10">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -332,7 +332,11 @@ class BasePlugin:
                             if item[0:1] == '~': # Does item start with '~'?
                                 if item == '~': # If item is just '~', insert previous sValue item
                                     sValue = device.sValue.split(';')   # Extract current sValue
-                                    readValue += sValue[itemIndex]   # Insert the corresponding sValue item
+                                    if itemIndex < len(sValue): # Is index within device sValue range?
+                                        valueToSet = sValue[itemIndex]  # Yes, load it
+                                    else:
+                                        valueToSet = '' # No, use empty string
+                                    readValue += str(valueToSet)    # Insert the value
                                 else:
                                     readValue += item[1:]   # Add item, removing initial '~'
                             else:
@@ -340,6 +344,10 @@ class BasePlugin:
                                 if itemValue == None:
                                     Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
                                 else:   # Add extracted value
+                                    if str(itemValue).isnumeric():  # If extracted value is numeric
+                                        multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                        if multiplier !=None:   # Do we have a multiplier?
+                                            itemValue = float(itemValue) * float(multiplier) # Yes, apply it
                                     readValue += str(itemValue)
                         readValue = readValue[1:]   # Remove first ';'
                     if nodeType == '244':   # This is a switch
