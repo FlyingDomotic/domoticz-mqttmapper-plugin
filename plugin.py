@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.10">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.11">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -344,7 +344,7 @@ class BasePlugin:
                                 if itemValue == None:
                                     Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
                                 else:   # Add extracted value
-                                    if str(itemValue).isnumeric():  # If extracted value is numeric
+                                    if str(itemValue).replace('.', '', 1).isdigit():  # If extracted value is numeric or float
                                         multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
                                         if multiplier !=None:   # Do we have a multiplier?
                                             itemValue = float(itemValue) * float(multiplier) # Yes, apply it
