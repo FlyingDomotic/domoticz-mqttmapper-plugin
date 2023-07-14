@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.11">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.12">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -420,7 +420,7 @@ class BasePlugin:
                         mappingValues = self.getValue(nodeMapping, 'values', None)
                         valueToSet = None
                         nodeType = self.getValue(nodeItems, 'type', None)
-                        if nodeType == '244':   # This is a switch
+                        if nodeType == '244' or  nodeType == '242' :   # This is a switch or a set temp device
                             if mappingValues != None:
                                 for testValue in mappingValues: # Scan all mapping values
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
