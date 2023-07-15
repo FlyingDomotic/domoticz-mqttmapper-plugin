@@ -1,7 +1,7 @@
 #           MQTT mapper plugin (inspired from MQTT discovery plugin)
 #
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.12">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.13">
     <description>
       MQTT mapper plug-in<br/><br/>
       Maps MQTT topics to Domoticz devices<br/>
@@ -427,8 +427,8 @@ class BasePlugin:
                                         valueToSet = testValue  # Insert mapped value
                                 if valueToSet == None:  # No mapping value found
                                     Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
-                            else: # No mapping given
-                                Domoticz.Error('No mapping for '+device.Name)
+                            else: # No mapping given, use command value
+                                valueToSet = targetValue
                         else:   # Not a switch
                             Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
                     else:   # No set given
@@ -439,7 +439,7 @@ class BasePlugin:
                         else:
                             payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
                         Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
-                        self.mqttClient.Publish(setTopic, payload)
+                        self.mqttClient.Publish(setTopic, payload, 1)
 
     def onDeviceAdded(self, Unit):
         # Exit if init not properly done
