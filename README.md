@@ -129,7 +129,7 @@ Ce plugin utilise un fichier de configuration externe au format JSON pour associ
     },
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
-        "mapping": {"item": "temperature;humidity"}
+        "mapping": {"item": "temperature;humidity;~0"}
     },
     "Boiler power": {
         "topic": "boiler/SENSOR",
@@ -203,7 +203,7 @@ Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur ext
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
-        "mapping": {"item": "temperature;humidity"}
+        "mapping": {"item": "temperature;humidity;~0"}
     }
 ```
 
