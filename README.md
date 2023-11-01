@@ -1,70 +1,70 @@
-﻿# MqttMapper Domoticz plugin / Plugin MqttMapper pour Domoticz
+﻿# MqttMapper Domoticz plug-in / plug-in MqttMapper pour Domoticz
 
 [English version and French version in the same document]
 
-MqttMapper is a Domoticz Python plugin allowing to map MQTT topics directly to Domoticz devices.
+MqttMapper is a Domoticz Python plug-in allowing to map MQTT topics directly to Domoticz devices.
 
 [ Versions françaises et anglaises dans le même document]
 
-MqttMapper est un plugin Domoticz qui permet de relier des dispositifs Domoticz à MQTT directement.
+MqttMapper est un plug-in Domoticz qui permet de relier des dispositifs Domoticz à MQTT directement.
 
 ## What's for? / A quoi ça sert ?
-If you want to be able to read/write some MQTT topics and maps them to Domoticz devices, without having to install NodeRed, and integrate sensors that don't have HomeAssistant discovery item, this plugin is made for you.
+If you want to be able to read/write some MQTT topics and maps them to Domoticz devices, without having to install NodeRed, and/or integrate sensors that don't have HomeAssistant discovery item, this plug-in is made for you.
 
-Si vous voulez lire/écrire des topics MQTT et les lier à des dispositifs Domoticz, sans avoir besoin d'installer NodeRed, et intégrer des capteurs qui n'ont pas de découvertes HomeAssistant, ce plugin est fait pour vous.
+Si vous voulez lire/écrire des topics MQTT et les lier à des dispositifs Domoticz, sans avoir besoin d'installer NodeRed, et/ou intégrer des capteurs qui n'ont pas de découvertes HomeAssistant, ce plug-in est fait pour vous.
 
 ## Warning / Attention
 
-This plugin is at an early stage, and has only partly be tested, with few Domoticz devices types. In addition, bad JSON configuration files will lead to unexpected behavior. You've been warned!
+This plug-in is at an early stage, and has only partly be tested, with few Domoticz devices types. In addition, bad JSON configuration files will lead to unexpected behavior. You've been warned!
 
-Ce plugin est en phase de développement initial, et n'a été que partiellement testé, avec seulement certains types de dispositifs Domoticz. De plus, un fichier de configuration JSON incorrect va provoquer des effets inattendus, voire rigolos. Vous avez été prévenus !
+Ce plug-in est en phase de développement initial, et n'a été que partiellement testé, avec seulement certains types de dispositifs Domoticz. De plus, un fichier de configuration JSON incorrect va provoquer des effets inattendus, voire rigolos. Vous avez été prévenus !
 
 ## Prerequisites / Prérequis
 
 - Domoticz 2020.0 or higher (but lower version could also work)
-- Make sure that your Domoticz supports Python plugins (https://www.domoticz.com/wiki/Using_Python_plugins)
+- Make sure that your Domoticz supports Python plug-ins (https://www.domoticz.com/wiki/Using_Python_plug-ins)
 
 - Domoticz 2022.0 ou supérieurs (les versions précédentes peuvent aussi fonctionner)
-- Vérifiez que votre version de Domoticz supporte les plugins Python (https://www.domoticz.com/wiki/Using_Python_plugins)
+- Vérifiez que votre version de Domoticz supporte les plug-ins Python (https://www.domoticz.com/wiki/Using_Python_plug-ins)
 
 ## Installation
 
 Follow these steps:
 
-1. Clone repository into your Domoticz plugins folder
+1. Clone repository into your Domoticz plug-ins folder
 ```
-cd domoticz/plugins
-git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin.git MqttMapper
+cd domoticz/plug-ins
+git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plug-in.git MqttMapper
 ```
 2. Restart Domoticz
 3. Make sure that "Accept new Hardware Devices" is enabled in Domoticz settings
 4. Go to "Hardware" page and add new item with type "MqttMapper"
-5. Set your MQTT server information to plugin settings (address, port, username, password)
-6. Give JSON configuration file name to be used (located in MqttMapper plugin folder)
+5. Set your MQTT server information to plug-in settings (address, port, username, password)
+6. Give JSON configuration file name to be used (located in MqttMapper plug-in folder)
 
 Suivez ces étapes :
 
-1. Clonez le dépôt GitHub dans le répertoire plugins de Domoticz
+1. Clonez le dépôt GitHub dans le répertoire plug-ins de Domoticz
 ```
-cd domoticz/plugins
-git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin.git MqttMapper
+cd domoticz/plug-ins
+git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plug-in.git MqttMapper
 ```
 2. Redémarrer Domoticz 
 3. Assurez-vous qu' "Acceptez les nouveaux dispositifs" est coché dans les paramètres de Domoticz
 4. Allez dans la page "Matériel" du bouton "configuration" et ajouter une entrée de type "MqttMapper"
-5. Entrez les informations de votre serveur MQTT dans les paramètres du plugin (adresse, port, utilisateur, mot de passe)
-6. entrez le nom du fichier de configuration JSON à utiliser (qui doit être dans le répertoire d'installation du plugin MqttMapper)
+5. Entrez les informations de votre serveur MQTT dans les paramètres du plug-in (adresse, port, utilisateur, mot de passe)
+6. entrez le nom du fichier de configuration JSON à utiliser (qui doit être dans le répertoire d'installation du plug-in MqttMapper)
 
-## Plugin update / Mise à jour du plugin
+## plug-in update / Mise à jour du plug-in
 
-1. Go to plugin folder and pull new version
+1. Go to plug-in folder and pull new version
 ```
-cd domoticz/plugins/MqttMapper
+cd domoticz/plug-ins/MqttMapper
 git pull
 ```
 2. Restart Domoticz
 
-Note: if you did any changes to plugin files and `git pull` command doesn't work for you anymore, you could stash all local changes using
+Note: if you did any changes to plug-in files and `git pull` command doesn't work for you anymore, you could stash all local changes using
 ```
 git stash
 ```
@@ -73,9 +73,9 @@ or
 git checkout <modified file>
 ```
 
-1. Allez dans le répertoire du plugin et charger la nouvelle version
+1. Allez dans le répertoire du plug-in et charger la nouvelle version
 ```
-cd domoticz/plugins/MqttMapper
+cd domoticz/plug-ins/MqttMapper
 git pull
 ```
 ou
@@ -84,16 +84,16 @@ git checkout <fichier modifié>
 ```
 2. Relancez Domoticz
 
-Note: si vous avez fait des modifs dans les fichiers du plugin et que la commande `git pull` ne fonctionne pas, vous pouvez écraser les modifications locales avec la commande
+Note: si vous avez fait des modifs dans les fichiers du plug-in et que la commande `git pull` ne fonctionne pas, vous pouvez écraser les modifications locales avec la commande
 ```
 git stash
 ```
 
 ## Configuration
 
-Plugin uses an external JSON configuration file to map MQTT topics to Domoticz devices. Here's an example of syntax:
+plug-in uses an external JSON configuration file to map MQTT topics to Domoticz devices. Here's an example of syntax:
 
-Ce plugin utilise un fichier de configuration externe au format JSON pour associer les topics MQTT avec les dispositifs Domoticz. Voici un exemple de syntaxe :
+Ce plug-in utilise un fichier de configuration externe au format JSON pour associer les topics MQTT avec les dispositifs Domoticz. Voici un exemple de syntaxe :
 ```ts
 {
     "Car windows": {
@@ -156,7 +156,7 @@ Let's see how this is constructed: / Voyons comment c'est construit :
 
 ```
 
-`Car windows` is the name of Domoticz device to be created. `type`, `subtype` and `switchtype` contains the type/subtype/switchtype values of device being created. Valid values can be found at (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
+`Car windows` is the name of Domoticz device to be created. `type`, `subtype` and `switchtype` contains the type/subtype/switchtype values of device being created. Valid values can be found at (https://www.domoticz.com/wiki/Developing_a_Python_plug-in#Available_Device_Types).
 
 When empty, `mapping` -> `item` indicates that payload is not in a JSON format. Extracted value is content of payload. Default value is set in `default` and mapping values in `values`. Here, when payload is `close`, device is set to `1`.
 
@@ -164,7 +164,7 @@ In short, when receiving topic `volvo/xx-999-xx/binary_sensor/any_window_open/st
 
 When `default` is not specified, the extracted value will be directly loaded in associated device.
 
-`Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les types/subtypes/switchtypes du dispositif à créer. La liste des valeurs supportées est disponible à (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
+`Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les types/subtypes/switchtypes du dispositif à créer. La liste des valeurs supportées est disponible à (https://www.domoticz.com/wiki/Developing_a_Python_plug-in#Available_Device_Types).
 
 Vide, `mapping` -> `item` indique que le contenu n'est pas dans un format JSON. La valeur extraite est le contenu de topic MQTT. La valeur par défaut est indiquée dans `default` et les valeurs associées sont dans `values` . Dans cet exemple, lorsque le contenu est `close`, le dispositif est mis à `1`.
 
