@@ -22,10 +22,10 @@ Ce plug-in est en phase de développement initial, et n'a été que partiellemen
 ## Prerequisites / Prérequis
 
 - Domoticz 2020.0 or higher (but lower version could also work)
-- Make sure that your Domoticz supports Python plug-ins (https://www.domoticz.com/wiki/Using_Python_plug-ins)
+- Make sure that your Domoticz supports Python plug-ins (https://www.domoticz.com/wiki/Using_Python_plugins)
 
 - Domoticz 2022.0 ou supérieurs (les versions précédentes peuvent aussi fonctionner)
-- Vérifiez que votre version de Domoticz supporte les plug-ins Python (https://www.domoticz.com/wiki/Using_Python_plug-ins)
+- Vérifiez que votre version de Domoticz supporte les plug-ins Python (https://www.domoticz.com/wiki/Using_Python_plugins)
 
 ## Installation
 
@@ -34,7 +34,7 @@ Follow these steps:
 1. Clone repository into your Domoticz plug-ins folder
 ```
 cd domoticz/plug-ins
-git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plug-in.git MqttMapper
+git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin.git MqttMapper
 ```
 2. Restart Domoticz
 3. Make sure that "Accept new Hardware Devices" is enabled in Domoticz settings
@@ -47,7 +47,7 @@ Suivez ces étapes :
 1. Clonez le dépôt GitHub dans le répertoire plug-ins de Domoticz
 ```
 cd domoticz/plug-ins
-git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plug-in.git MqttMapper
+git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin.git MqttMapper
 ```
 2. Redémarrer Domoticz 
 3. Assurez-vous qu' "Acceptez les nouveaux dispositifs" est coché dans les paramètres de Domoticz
@@ -59,7 +59,7 @@ git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plug-in.git MqttM
 
 1. Go to plug-in folder and pull new version
 ```
-cd domoticz/plug-ins/MqttMapper
+cd domoticz/plugins/MqttMapper
 git pull
 ```
 2. Restart Domoticz
@@ -75,7 +75,7 @@ git checkout <modified file>
 
 1. Allez dans le répertoire du plug-in et charger la nouvelle version
 ```
-cd domoticz/plug-ins/MqttMapper
+cd domoticz/plugins/MqttMapper
 git pull
 ```
 ou
