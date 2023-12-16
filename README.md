@@ -33,7 +33,7 @@ Follow these steps:
 
 1. Clone repository into your Domoticz plug-ins folder
 ```
-cd domoticz/plug-ins
+cd domoticz/plugins
 git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin.git MqttMapper
 ```
 2. Restart Domoticz
@@ -46,7 +46,7 @@ Suivez ces étapes :
 
 1. Clonez le dépôt GitHub dans le répertoire plug-ins de Domoticz
 ```
-cd domoticz/plug-ins
+cd domoticz/plugins
 git clone https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin.git MqttMapper
 ```
 2. Redémarrer Domoticz 
