@@ -420,6 +420,7 @@ class BasePlugin:
             for node in self.jsonData.items():
                 nodeItems = node[1]
                 nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+                valueToSet = None
                 if nodeTopic == device.DeviceID:  # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
                     nodeSet = self.getValue(nodeItems, 'set', None)
@@ -427,7 +428,6 @@ class BasePlugin:
                         setTopic = self.getValue(nodeSet, 'topic', nodeTopic)   # Get topic, default to subscribed topic
                         setPayload = self.getValue(nodeSet, 'payload', "#")     # Get value, default to #
                         mappingValues = self.getValue(nodeMapping, 'values', None)
-                        valueToSet = None
                         nodeType = self.getValue(nodeItems, 'type', None)
                         if nodeType == '244' or  nodeType == '242' :   # This is a switch or a set temp device
                             if mappingValues != None:
