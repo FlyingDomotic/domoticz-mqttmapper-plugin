@@ -272,10 +272,10 @@ Les exemples précédents détaillaient des mises à jour depuis MQTT vers des d
     }
 ```
 
-`topic` contains the topic to send the value to (defaults to primary topic if not specified).
+`topic` contains the topic to send the value to (defaults to primary topic if not specified). Set it to empty to ignore SET requests without error message.
 `payload` contains the payload to send (defaults to `#`). The `#` character will be replaced by translated value (`Forced` in this example if Domoticz devices holds 20 in its level).
 
-`topic` contient le topic vers lequel la valeur sera envoyée (par défaut, on utilisera celui du dispositif).
+`topic` contient le topic vers lequel la valeur sera envoyée (par défaut, on utilisera celui du dispositif). Mettez le vide pour ignorer les demandes de modification sans afficher d'erreur. 
 
 `payload` contient la valeur à envoyer (par défaut `#`). Le caractère `#` sera remplacé par la valeur associée (Dans cet exemple, `Forced` si le dispositif Domoticz contient un niveau 20).
 

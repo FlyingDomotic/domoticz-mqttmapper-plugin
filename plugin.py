@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.14" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.16" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -467,6 +467,7 @@ class BasePlugin:
             # Iterating through the JSON list
             for node in self.jsonData.items():
                 nodeItems = node[1]
+                valueToSet = None
                 nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
                 if nodeTopic == device.DeviceID:  # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
@@ -477,7 +478,7 @@ class BasePlugin:
                         valueToSet = targetValue
                     else:   # No set given
                         Domoticz.Error('No SET parameters for '+device.Name)
-                    if valueToSet != None: # Value given, set it
+                    if valueToSet != None and setTopic != "": # Value and topic given, set it
                         if isinstance(setPayload, str):
                             payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
                         else:
