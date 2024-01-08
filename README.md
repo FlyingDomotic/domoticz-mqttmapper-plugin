@@ -213,32 +213,13 @@ Note that you also can specify constants in the list, prefixing them with `~`. F
 
 Should you want to change only part of sValue, you may use `~` alone to keep current value. For example, `value;~` will insert content of value item and keep second part of sValue.
 
-The following example will load a KWh counter with elements from tow different topics:
-
 Pour indiquer des valeurs multiples, séparez-les par des `;`, comme dans `temperature;humidity`. La valeur chargée sera la concaténation des deux items.
 
 Noter que vous pouvez aussi insérer des constantes, en les préfixant par `~`. Par exemple `total;~0;~0;~0;power;~0` pour spécifier le contenu de type sValue d'un compteur en KWh.
 
 Si vous voulez ne changer qu'une partie de la variable sValue d'un dispositif, vous pouvez utiliser `~` seul pour conserver une partie existante. Par exemple, `value;~` va insérer le contenu de l'item value et conserver la seconde partie de sValue.
 
-L'exemple suivant permet de charger un compteur de type KWh avec des éléments de deux topics différents :
-
-```
-      "My KWh counter" : {
-        "topic": "plug/power",
-        "key": "My KWh counter",
-        "type": "248", "subtype": "1", "switchtype": "0",
-        "mapping": {"item": "val;~"}
-      },
-      "My KWh counter2" : {
-        "topic": "plug/counter",
-        "key": "My KWh counter",
-        "type": "248", "subtype": "1", "switchtype": "0",
-        "mapping": {"item": "~;val"}
-      }
-```
-
-You may need to create multiple devices from the same topic. In this case, use optional `key` item to specify a "virtual" key. This key can be anything, as long as it is unique and different from topics. For exemple:
+You may need to create multiple devices from the same topic. In this case, use optional `key` item to specify a "virtual" key. This key can be anything, as long as it is unique and different from topics. For example:
 
 Vous pouvez avoir besoin de créer plusieurs dispositifs à partir d'un même topic. Dans ce cas, utilisez l'item optionnel `key` pour spécifier un clef "virtuelle". Cette clef peut être n'importe quoi, tant qu'elle est unique et différente des topics utilisés. Par exemple :
 ```
@@ -302,3 +283,116 @@ Voici une liste partielle des options utilisables avec le mot clef `options` du 
 | Selector       | `"SelectorStyle":"1",`           | `0` = liste déroulante, `1` = boutons radio |
 |                | `"LevelOffHidden": "true",`      | `true` pour cacher le niveau off, `false` pour le montrer |
 |                | `"LevelNames":"Off|Auto|Forced"` | Etiquettes de chaque niveau, séparées par `|` (ici `Off` = 0, `Auto` = 10, `Forced` = 20)|
+
+# Examples / Exemples
+Here are some examples that may be useful.  Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat
+
+## Full topic content / Totalité du contenu du topic
+```
+Setup / Configuration:
+{"device": {"topic": "sensor/state",  "mapping": {"item": ""}}}
+
+Topic content / Contenu du topic:
+active since 1 hour
+
+Domoticz device value / Valeur du dispositif Domoticz:
+[device] -> active since 1 hour
+```
+
+## One JSON item / Un item du message JSON
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}}}
+
+Topic content / Contenu du topic:
+{"temperature": 19, "humidity":70}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+ 19 
+```
+
+## With multiplier / Avec Multiplicateur
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature",  "multiplier": 0.1}}}
+
+Topic content / Contenu du topic:
+{"temperature": 195, "humidity":700}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+19.5
+```
+
+## With mapping / Avec association
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "mode",  "values": {"Off": "0",  "Auto": "10",  "Forced": "20"}}}}
+
+Topic content / Contenu du topic:
+{"mode": "Auto"}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+ 10 
+```
+
+## With default value / Avec valeur par défaut
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "mode",  "values": {"Off": "0",  "Auto": "10",  "Forced": "20"},  "default": "0"}}}
+
+Topic content / Contenu du topic:
+{"mode": "Unknown"}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+ 0 
+```
+
+## With multiple items / Avec plusieurs items
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature;humidity"}}}
+
+Topic content / Contenu du topic:
+{"temperature": 19, "humidity":70}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+19;70
+```
+
+## With multiple items and constant / Avec plusieurs items et constante
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature;humidity;~3"}}}
+
+Topic content / Contenu du topic:
+{"temperature": 19, "humidity":70}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+19;70;3
+```
+
+## One topic/Multiple devices / Un topic/Plusieurs dispositifs
+```
+Setup / Configuration:
+{"device1":{"topic": "sensor/state", "key":"sensor/state-1", "mapping": {"item": "temperature"}},
+"device2":{"topic": "sensor/state", "key":"sensor/state-2",  "mapping": {"item": "humitidy"}}}
+
+Topic content / Contenu du topic:
+{"temperature": 19, "humidity":70}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+[device1] ->  19
+[device2] ->  70
+```
+
+## Item deeper in JSON message / L'item est enfoui dans le message JSON
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "sensor1/lastRead/temperature"}}}
+
+Topic content / Contenu du topic:
+{"sensor1": {"counter" : 123456, "lastRead" : {"temperature": 19, "humidity":70}}}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+ 19 
+```
