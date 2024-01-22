@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.16" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.17" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -323,6 +323,8 @@ class BasePlugin:
                 device = self.getDevice(nodeKey if nodeKey else nodeTopic)
                 Domoticz.Debug("onMQTTConnected found "+str(topic)+", Device '" + device.Name + "'")
                 nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
+                nodeSubtype = self.getValue(nodeItems, 'subtype', None)
+                nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
                 nodeMapping = self.getValue(nodeItems, 'mapping', None)
                 mappingItem = self.getValue(nodeMapping, 'item', None)
                 mappingDefault = self.getValue(nodeMapping, 'default', None)
@@ -367,7 +369,7 @@ class BasePlugin:
                                 if testValue == readValue:  # Is this the same value?
                                     valueToSet = mappingValues[testValue]   # Insert mapped value
                         else:
-                            Domoticz.Error('Bad mapping for '+device.Name)
+                            valueToSet = readValue  # Set value = read value
                     else:   # Not a switch
                         valueToSet = readValue
                 else:   # No mapping given
@@ -379,7 +381,8 @@ class BasePlugin:
                             valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
                             readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
                         if nodeType == '244':   # This is a switch
-                            nValueToSet = 0 if str(valueToSet) == '0' else 1
+                            if nodeSwitchtype == '0': # This is an On/Off switch
+                                nValueToSet = 0 if str(valueToSet) == '0' else 1
                             sValueToSet = str(valueToSet)
                         else:
                             nValueToSet = int(valueToSet)
