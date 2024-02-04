@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.18" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.19" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -467,29 +467,6 @@ class BasePlugin:
             return
         device = Devices[Unit]
         Domoticz.Log("onDeviceModified " + self.deviceStr(Unit) + ", " + device.DeviceID + ", sValue=" + device.sValue)
-        targetValue = device.sValue
-        if targetValue != None: # Only if a target value has been given
-            # Iterating through the JSON list
-            for node in self.jsonData.items():
-                nodeItems = node[1]
-                valueToSet = None
-                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
-                if nodeTopic == device.DeviceID:  # Is this the right topic?
-                    nodeMapping = self.getValue(nodeItems, 'mapping', None)
-                    nodeSet = self.getValue(nodeItems, 'set', None)
-                    if nodeSet != None:  # Do we have some SET parameters?
-                        setTopic = self.getValue(nodeSet, 'topic', nodeTopic)   # Get topic, default to subscribed topic
-                        setPayload = self.getValue(nodeSet, 'payload', "#")     # Get value, default to #
-                        valueToSet = targetValue
-                    else:   # No set given
-                        Domoticz.Error('No SET parameters for '+device.Name)
-                    if valueToSet != None and setTopic != "": # Value and topic given, set it
-                        if isinstance(setPayload, str):
-                            payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
-                        else:
-                            payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
-                        Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
-                        self.mqttClient.Publish(setTopic, payload, 1)
 
     def onDeviceRemoved(self, Unit):
         # Exit if init not properly done
