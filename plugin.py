@@ -307,8 +307,10 @@ class BasePlugin:
         message = ""
         try:
             message = json.loads(rawmessage.decode('utf8'))
+            isJson = True
         except ValueError:
             message = rawmessage.decode('utf8')
+            isJson = False
 
         topiclist = topic.split('/')
         if self.debugging == "Extra verbose":
@@ -334,6 +336,9 @@ class BasePlugin:
                     if mappingItem == '':   # Empty mapping means (not json) full message
                         readValue = str(message)
                     else:   # This is a json payload
+                        if not isJson:
+                            Domoticz.Error("Can't decode "+str(message)+" as JSON data, while searching for "+str(mappingItem))
+                            return
                         readValue = ''
                         itemIndex = -1
                         items = mappingItem.split(';')  # Work with multiple items values
