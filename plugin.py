@@ -360,6 +360,10 @@ class BasePlugin:
                                     readValue += item[1:]   # Add item, removing initial '~'
                                     if readValue == "*":     # Item is ~*, insert topic content
                                         readValue = str(message)
+                                        if str(readValue).replace('.', '', 1).isdigit():  # If raw value is numeric or float
+                                            multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                            if multiplier !=None:   # Do we have a multiplier?
+                                                readValue += str(float(readValue) * float(multiplier)) # Yes, apply it
                             else:
                                 itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                                 if itemValue == None:
