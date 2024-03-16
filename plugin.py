@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.21" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.22" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -174,10 +174,13 @@ class BasePlugin:
     def getPathValue (self, dict, path, separator = '/', default=''):
         pathElements = path.split(separator)
         element = dict
-        for pathElement in pathElements:
-            if pathElement not in element:
-                return default
-            element = element[pathElement]
+        try:
+            for pathElement in pathElements:
+                if pathElement not in element:
+                    return default
+                element = element[pathElement]
+        except TypeError as te:
+            element = default
         return element
 
     # Find a device by name in devices table
@@ -355,7 +358,7 @@ class BasePlugin:
                                     readValue += str(valueToSet)    # Insert the value
                                 else:
                                     readValue += item[1:]   # Add item, removing initial '~'
-                                    if readValue = "*":     # Item is ~*, insert topic content
+                                    if readValue == "*":     # Item is ~*, insert topic content
                                         readValue = str(message)
                             else:
                                 itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
