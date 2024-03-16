@@ -158,7 +158,7 @@ Let's see how this is constructed: / Voyons comment c'est construit :
 
 `Car windows` is the name of Domoticz device to be created. `type`, `subtype` and `switchtype` contains the type/subtype/switchtype values of device being created. Valid values can be found at (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
 
-When empty, `mapping` -> `item` indicates that payload is not in a JSON format. Extracted value is content of payload. Default value is set in `default` and mapping values in `values`. Here, when payload is `close`, device is set to `1`.
+When empty or `~*`, `mapping` -> `item` indicates that payload is not in a JSON format. Extracted value is content of payload. Default value is set in `default` and mapping values in `values`. Here, when payload is `close`, device is set to `1`.
 
 In short, when receiving topic `volvo/xx-999-xx/binary_sensor/any_window_open/state` with value `close`, a switch device `(244/73/11)` is set to off, else on.
 
@@ -166,7 +166,7 @@ When `default` is not specified, the extracted value will be directly loaded in 
 
 `Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les types/subtypes/switchtypes du dispositif à créer. La liste des valeurs supportées est disponible à (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
 
-Vide, `mapping` -> `item` indique que le contenu n'est pas dans un format JSON. La valeur extraite est le contenu de topic MQTT. La valeur par défaut est indiquée dans `default` et les valeurs associées sont dans `values` . Dans cet exemple, lorsque le contenu est `close`, le dispositif est mis à `1`.
+Vide ou égal à `~*`, `mapping` -> `item` indique que le contenu n'est pas dans un format JSON. La valeur extraite est le contenu de topic MQTT. La valeur par défaut est indiquée dans `default` et les valeurs associées sont dans `values` . Dans cet exemple, lorsque le contenu est `close`, le dispositif est mis à `1`.
 
 En gros, quand un topic `volvo/xx-999-xx/binary_sensor/any_window_open/state` contient la valeur `close`, un interrupteur `(244/73/11)` est mis à fermé, ouvert sinon.
 
