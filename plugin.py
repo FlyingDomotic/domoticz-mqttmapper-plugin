@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.22" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.24" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -261,6 +261,13 @@ class BasePlugin:
                 if (device == None):
                     Domoticz.Log("Creating device " + nodeName)
                     Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=True).Create()
+                    initialData = self.getValue(nodeItems, 'initial', None)
+                    if initialData: # Set initial data if required
+                        nValue = int(self.getValue(initialData, 'nvalue', 0))
+                        sValue = self.getValue(initialData, 'svalue', '')
+                        Domoticz.Log(f"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
+                        device = self.getDevice(nodeKey if nodeKey else nodeTopic)
+                        device.Update(nValue = nValue, sValue = sValue)
                 else:
                     Domoticz.Log("Updating device " + nodeName)
                     device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
