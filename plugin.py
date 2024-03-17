@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.24" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.25" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -317,10 +317,8 @@ class BasePlugin:
         message = ""
         try:
             message = json.loads(rawmessage.decode('utf8'))
-            isJson = True
         except ValueError:
             message = rawmessage.decode('utf8')
-            isJson = False
 
         topiclist = topic.split('/')
         if self.debugging == "Extra verbose":
@@ -345,10 +343,7 @@ class BasePlugin:
                 if mappingItem !=None:
                     if mappingItem == '':   # Empty mapping means (not json) full message
                         readValue = str(message)
-                    else:   # This is a json payload
-                        if not isJson:
-                            Domoticz.Error("Can't decode "+str(message)+" as JSON data, while searching for "+str(mappingItem))
-                            return
+                    else:   # We have a mapping item
                         readValue = ''
                         itemIndex = -1
                         items = mappingItem.split(';')  # Work with multiple items values
@@ -363,14 +358,17 @@ class BasePlugin:
                                     else:
                                         valueToSet = '' # No, use empty string
                                     readValue += str(valueToSet)    # Insert the value
+                                elif item == "~*":  # Item is ~*, insert topic content
+                                    if str(message).replace('.', '', 1).isdigit():  # If raw value is numeric or float
+                                        multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                        if multiplier !=None:   # Do we have a multiplier?
+                                            readValue += str(float(str(message)) * float(multiplier)) # Yes, apply it
+                                        else:
+                                            readValue += str(message)   # Add full content
+                                    else:
+                                        readValue += str(message)   # Add full content
                                 else:
                                     readValue += item[1:]   # Add item, removing initial '~'
-                                    if readValue == "*":     # Item is ~*, insert topic content
-                                        readValue = str(message)
-                                        if str(readValue).replace('.', '', 1).isdigit():  # If raw value is numeric or float
-                                            multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                            if multiplier !=None:   # Do we have a multiplier?
-                                                readValue += str(float(readValue) * float(multiplier)) # Yes, apply it
                             else:
                                 itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                                 if itemValue == None:
