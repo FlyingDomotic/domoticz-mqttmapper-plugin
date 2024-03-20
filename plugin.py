@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.25" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.26" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -394,25 +394,32 @@ class BasePlugin:
                 else:   # No mapping given
                     Domoticz.Error('No mapping for '+device.Name)
                 if valueToSet != None: # Value given, set it
-                    if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
-                        multiplier = self.getValue(nodeMapping, 'multiplier', None)
-                        if multiplier !=None:   # Do we have a multiplier?
-                            valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
-                            readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
-                        if nodeType == '244':   # This is a switch
-                            if nodeSwitchtype == '0': # This is an On/Off switch
-                                nValueToSet = 0 if str(valueToSet) == '0' else 1
-                            else:   # Not a switch, use given value
+                    if nodeType == '81':        # This is an humidity sensor
+                        try:
+                            numericValue = round(float(valueToSet)) # Find closest integer value
+                        except:                 # Error converting value to float
+                            Domoticz.Error(valueToSet+' is not a valid humidity data')
+                        device.Update(nValue=numericValue, sValue='0')
+                    else:
+                        if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
+                            multiplier = self.getValue(nodeMapping, 'multiplier', None)
+                            if multiplier !=None:   # Do we have a multiplier?
+                                valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
+                                readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
+                            if nodeType == '244':   # This is a switch
+                                if nodeSwitchtype == '0': # This is an On/Off switch
+                                    nValueToSet = 0 if str(valueToSet) == '0' else 1
+                                else:   # Not a switch, use given value
+                                    nValueToSet = int(valueToSet)
+                                sValueToSet = str(valueToSet)
+                            else:
                                 nValueToSet = int(valueToSet)
-                            sValueToSet = str(valueToSet)
-                        else:
-                            nValueToSet = int(valueToSet)
-                            sValueToSet = readValue
-                        Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
-                        device.Update(nValue=nValueToSet, sValue=sValueToSet)
-                    else:   # Value is not numeric
-                        Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
-                        device.Update(nValue=0, sValue=str(valueToSet))
+                                sValueToSet = readValue
+                            Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
+                            device.Update(nValue=nValueToSet, sValue=sValueToSet)
+                        else:   # Value is not numeric
+                            Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
+                            device.Update(nValue=0, sValue=str(valueToSet))
 
     def onMQTTSubscribed(self):
         # Exit if init not properly done
