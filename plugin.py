@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.27" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.28" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -171,15 +171,40 @@ class BasePlugin:
                 return default #or None
 
     # Return a path in a dictionary or default value if not existing
+    #   When value is a list, [sub]path can be either "*" to test all list elements, or a numerical index, starting from 1) 
     def getPathValue (self, dict, path, separator = '/', default=''):
-        pathElements = path.split(separator)
-        element = dict
         try:
-            for pathElement in pathElements:
-                if pathElement not in element:
-                    return default
-                element = element[pathElement]
-        except TypeError as te:
+            pathElements = path.split(separator) # Split path with separator
+            pathElement = pathElements[0] # Extract first part of path
+            if len(pathElements) > 1: # Do we have remaining path?
+                pathRemaining = separator.join(pathElements[1:]) # Yes, build it, removing first one
+            else:
+                pathRemaining = "" # No, set empty
+            element = dict # Load data
+            if type(element).__name__ == "list": # Is data a list?
+                if pathElement == "*": # Yes, do we have a star?
+                    found = False # No item found yet
+                    for subElement in element: # Scan all elements for token
+                        result = self.getPathValue(subElement,pathRemaining, separator, None)
+                        if result != None: # We found a match
+                            element = result # Load result
+                            pathRemaining = "" # Clean path as we already have the result
+                            found = True # Set found flag
+                            break # Exit loop
+                    if not found: # If nothing found
+                        return default # Returen default
+                else: # We have a list with an index
+                    index = int(pathElement) # Extract list index from path
+                    if index < 1 or index > len(element): # Check it
+                        return default # Bad index
+                    element = element[index-1] # Extract data giving index
+            else: # We don't have a list (but a dict)
+                if pathElement not in element: # Check for path in data
+                    return default # Not found, return default
+                element = element[pathElement] # Extract data
+            if pathRemaining != "": # Do we still have remaining path?
+                element = self.getPathValue(element, pathRemaining, separator, default) # Iterate
+        except:
             element = default
         return element
 

@@ -226,19 +226,23 @@ Vous pouvez avoir besoin de créer plusieurs dispositifs à partir d'un même to
 {
      "mvtdec1": {
         "topic": "KC868_AI/1234567890/STATE",
-		"key": "KC868_AI/1234567890/STATE-input1",
+        "key": "KC868_AI/1234567890/STATE-input1",
         "type": "244", "subtype": "73", "switchtype": "8",
         "mapping": {"item": "input1/value", "default": "0", "values": {"True": "1"}}
     },
      "mvtdec2": {
         "topic": "KC868_AI/1234567890/STATE",
-		"key": "KC868_AI/1234567890/STATE-input2",
+        "key": "KC868_AI/1234567890/STATE-input2",
         "type": "244", "subtype": "73", "switchtype": "8",
         "mapping": {"item": "input2/value", "default": "0", "values": {"True": "1"}}
     }
 }
 ```
 will map properly a json payload as / va décoder proprement un message json comme `{"input1":{"value":false},"input2":{"value":false}}`
+
+In certain cases, payload contains lists (represented by `[]` delimiters). In this case, you have to specify either list index to use (starting with 1) or `*` in order to analyze all list items.
+
+Dans certains cas, la charge contient une liste (représentée par les délimiteurs `[]`). Dans ce cas, vous devez spécifier soit l'index de la liste à utiliser (démarrant à 1), soit `*`pour analyser l'ensemble des éléments de la liste.
 
 Previous examples detailed updates from MQTT to Domoticz devices. It's possible to push a change on Domoticz device to MQTT using the `set` tag:
 
@@ -395,4 +399,16 @@ Topic content / Contenu du topic:
 
 Domoticz device value / Valeur du dispositif Domoticz:
  19 
+```
+
+## Item with list in JSON message / L'item est dans une liste du message JSON
+```
+Setup / Configuration:
+{"device":{"topic": "gateway/12345/event/up", "mapping": {"item": "rxInfo/*/rssi"}}}
+
+Topic content / Contenu du topic:
+{"rxInfo": [{"rssi": -69, "snr": 11.2, "channel": 2}]}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+ -69 
 ```
