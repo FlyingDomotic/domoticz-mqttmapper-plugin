@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.28" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.29" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -493,7 +493,12 @@ class BasePlugin:
                                 if valueToSet == None:  # No mapping value found
                                     Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
                             else: # No mapping given, use command value
-                                valueToSet = targetValue
+                                # If we have a multiplier, divide value before setting it
+                                multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                if multiplier !=None:   # Do we have a multiplier?
+                                    valueToSet = targetValue / multiplier
+                                else:
+                                    valueToSet = targetValue
                         else:   # Not a switch
                             Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
                     else:   # No set given
