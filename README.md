@@ -222,7 +222,7 @@ Si vous voulez ne changer qu'une partie de la variable sValue d'un dispositif, v
 You may need to create multiple devices from the same topic. In this case, use optional `key` item to specify a "virtual" key. This key can be anything, as long as it is unique and different from topics. For example:
 
 Vous pouvez avoir besoin de créer plusieurs dispositifs à partir d'un même topic. Dans ce cas, utilisez l'item optionnel `key` pour spécifier un clef "virtuelle". Cette clef peut être n'importe quoi, tant qu'elle est unique et différente des topics utilisés. Par exemple :
-```
+```ts
 {
      "mvtdec1": {
         "topic": "KC868_AI/1234567890/STATE",
@@ -263,6 +263,35 @@ Les exemples précédents détaillaient des mises à jour depuis MQTT vers des d
 `topic` contient le topic vers lequel la valeur sera envoyée (par défaut, on utilisera celui du dispositif). Mettez le vide pour ignorer les demandes de modification sans afficher d'erreur. 
 
 `payload` contient la valeur à envoyer (par défaut `#`). Le caractère `#` sera remplacé par la valeur associée (Dans cet exemple, `Forced` si le dispositif Domoticz contient un niveau 20).
+
+It's also possible to execute a bash command through `command` tag. In this case, unless you explicitely specify `topic`, no MQTT set will be send. Value to set will replace the `#`in command.
+
+Il est également possible d'exécuter une commande bash avec le tag `command`. Dans ce cas, il n'y aura pas de set MQTT, sauf si vous specifiez explicitement le tag `topic`. Les `#` présents dans la commande seront remplacés par la valeur à affecter.
+
+```ts
+{
+    "temp target heating": {
+        "topic": "/home/alsavo/config/1",
+        "type": "242", "subtype":"1","switchtype":0,
+        "mapping":{"item":""},
+         "set":{"command": "plugins/MqttMapper/test.sh #"}
+    }
+}
+```
+
+Note that bash command will be executed with a default folder equal to Domoticz root folder. Add `plugin/MqttMapper/` in command if you wish to execute commands into MqttMQpper context. You may also specify a full path like `/home/user/...`.
+
+Noter que la commande bash sera executée par défaut dans le répertoire de Domoticz. Ajoutez `plugin/MqttMapper/`  dans la commande si vous souhaitez l'exécuter dans le contexte de MqttMapper. Vous pouvez aussi spcifier un chemin complet comme `/home/user/...`.
+
+If value to set is a float, lot of digits will be given to the command. A way to round it is to use `bc` command (`sudo apt install bc` if not already installed). Here's an example (replace `1` in `scale=1\ by number of digits you want so see after decimal point):
+
+Si la valeur à définir est un nombre flottant, de nombreuses décimales seront passées à la commande. Une façon de l'arrondir est d'utiliser la commande `bc` (à installer par `sudo apt install bc` si elle n'existe pas). Voici un exemple (remplacer `1` dans  `scale=1\ par le nombre de décimales souhaitées) :
+
+```ts
+#!/bin/bash
+value=$(echo "scale=1; $1 / 1" | bc)
+echo "Received $value"
+```
 
 ## Device options (partial) list / Liste (partielle) des options
 

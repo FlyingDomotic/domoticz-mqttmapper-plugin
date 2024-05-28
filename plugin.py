@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.29" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.30" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -38,6 +38,7 @@ from itertools import count, filterfalse
 import json
 import time
 import traceback
+import subprocess
 
 class MqttClient:
     Address = ""
@@ -480,12 +481,13 @@ class BasePlugin:
                 if nodeTopic == device.DeviceID:  # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
                     nodeSet = self.getValue(nodeItems, 'set', None)
-                    if nodeSet !=None:  # Do we have some SET parameters?
-                        setTopic = self.getValue(nodeSet, 'topic', nodeTopic)   # Get topic, default to subscribed topic
-                        setPayload = self.getValue(nodeSet, 'payload', "#")     # Get value, default to #
-                        mappingValues = self.getValue(nodeMapping, 'values', None)
-                        nodeType = self.getValue(nodeItems, 'type', None)
-                        if nodeType == '244' or  nodeType == '242' :   # This is a switch or a set temp device
+                    if nodeSet != None:  # Do we have some SET parameters?
+                        localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
+                        setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
+                        setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
+                        mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
+                        nodeType = self.getValue(nodeItems, 'type', None)           # Get device type
+                        if nodeType == '244' or  nodeType == '242' :                # This is a switch or a set temp device
                             if mappingValues != None:
                                 for testValue in mappingValues: # Scan all mapping values
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
@@ -493,23 +495,34 @@ class BasePlugin:
                                 if valueToSet == None:  # No mapping value found
                                     Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
                             else: # No mapping given, use command value
-                                # If we have a multiplier, divide value before setting it
-                                multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                if multiplier !=None:   # Do we have a multiplier?
-                                    valueToSet = targetValue / multiplier
+                                if str(targetValue).replace('.', '', 1).isdigit():  # If raw value is numeric or float
+                                    multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                    if multiplier !=None:                           # Do we have a multiplier?
+                                        valueToSet = str(float(str(targetValue)) /float(multiplier)) # Yes, divide by it
+                                    else:
+                                        valueToSet = str(targetValue)               # Add full content
                                 else:
-                                    valueToSet = targetValue
+                                    valueToSet = str(targetValue)                   # Add full content
                         else:   # Not a switch
                             Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
                     else:   # No set given
                         Domoticz.Error('No SET parameters for '+device.Name)
-                    if valueToSet != None: # Value given, set it
+                    if valueToSet != None and setTopic != None: # Value and topic given, set it
                         if isinstance(setPayload, str):
                             payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
                         else:
                             payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
                         Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
                         self.mqttClient.Publish(setTopic, payload, 1)
+                    if localCommand != None: # Command given, execute it
+                        localCommand = str(localCommand).replace("#", valueToSet) # Replace # in command by value
+                        Domoticz.Log(F"Executing {localCommand}")
+                        localProcess = subprocess.Popen(localCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                        for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
+                            Domoticz.Log(F">{line}")
+                        finalStatus = localProcess.wait()   # Get final status
+                        if (finalStatus):   # Did we got an error?
+                            Domoticz.Error(F"Error {finalStatus} executing {localCommand}")
 
     def onDeviceAdded(self, Unit):
         # Exit if init not properly done
