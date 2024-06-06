@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.30" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.31" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -280,13 +280,14 @@ class BasePlugin:
             nodeSubtype = self.getValue(nodeItems, 'subtype', None)
             nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
             nodeOptions  = self.getValue(nodeItems, 'options', None)
+            nodeVisible  = self.getValue(nodeItems, 'visible', True)
 
             if nodeName != None and nodeTopic != None and nodeType != None and nodeSubtype != None:
                 # Create device if needed, update it if it already exists
                 device = self.getDevice(nodeKey if nodeKey else nodeTopic)
                 if (device == None):
                     Domoticz.Log("Creating device " + nodeName)
-                    Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=True).Create()
+                    Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=nodeVisible).Create()
                     initialData = self.getValue(nodeItems, 'initial', None)
                     if initialData: # Set initial data if required
                         nValue = int(self.getValue(initialData, 'nvalue', 0))
@@ -487,7 +488,7 @@ class BasePlugin:
                         setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
                         mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
                         nodeType = self.getValue(nodeItems, 'type', None)           # Get device type
-                        if nodeType == '244' or  nodeType == '242' :                # This is a switch or a set temp device
+                        if nodeType >= '242' and nodeType <= '244':               # Select valid types
                             if mappingValues != None:
                                 for testValue in mappingValues: # Scan all mapping values
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
