@@ -78,15 +78,15 @@ git checkout <modified file>
 cd domoticz/plugins/MqttMapper
 git pull
 ```
-ou
-```
-git checkout <fichier modifié>
-```
 2. Relancez Domoticz
 
 Note: si vous avez fait des modifs dans les fichiers du plug-in et que la commande `git pull` ne fonctionne pas, vous pouvez écraser les modifications locales avec la commande
 ```
 git stash
+```
+ou
+```
+git checkout <fichier modifié>
 ```
 
 ## Configuration
@@ -316,6 +316,12 @@ Voici une liste partielle des options utilisables avec le mot clef `options` du 
 | Selector       | `"SelectorStyle":"1",`           | `0` = liste déroulante, `1` = boutons radio |
 |                | `"LevelOffHidden": "true",`      | `true` pour cacher le niveau off, `false` pour le montrer |
 |                | `"LevelNames":"Off|Auto|Forced"` | Etiquettes de chaque niveau, séparées par `|` (ici `Off` = 0, `Auto` = 10, `Forced` = 20)|
+
+## JSON files check/Vérification des fichiers JSON
+
+You may run checkJsonFiles.py to scan JSON file for important errors. It'll scan all JSON files in the current folder and display errors. Fix them until no errors are found.
+
+Vous pouvez vérifier les erreurs les plus flagrantes des fichiers JSON avec le script checkJsonFiles.py. Il va scanner l'ensemble des .JSON présents dans le répertoire courant et afficher les erreurs. Corrigez jusqu'à ce qu'aucune erreur ne soit affichée.
 
 # Examples / Exemples
 Here are some examples that may be useful.  Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat

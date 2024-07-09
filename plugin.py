@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.32" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.33" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -271,6 +271,7 @@ class BasePlugin:
                 Domoticz.Error(f"Error loading {jsonFile} - {type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
                 return
         # Go through Json file to create devices
+        deviceList = []
         for node in self.jsonData.items():
             nodeName = node[0]
             nodeItems = node[1]
@@ -284,7 +285,12 @@ class BasePlugin:
 
             if nodeName != None and nodeTopic != None and nodeType != None and nodeSubtype != None:
                 # Create device if needed, update it if it already exists
-                device = self.getDevice(nodeKey if nodeKey else nodeTopic)
+                deviceKeyName = nodeKey if nodeKey else nodeTopic
+                device = self.getDevice(deviceKeyName)
+                if (deviceKeyName in deviceList):
+                    Domoticz.Error("Duplicate "+str(deviceKeyName)+" node/key - Please make them unique")
+                else:
+                    deviceList.append(deviceKeyName)
                 if (device == None):
                     Domoticz.Log("Creating device " + nodeName)
                     Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=nodeVisible).Create()
