@@ -483,7 +483,9 @@ class BasePlugin:
             # Iterating through the JSON list
             for node in self.jsonData.items():
                 nodeItems = node[1]
-                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+                nodeTopic = self.getValue(nodeItems, 'key', None) # Get MQTT key
+                if nodeTopic == None:
+                    nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
                 valueToSet = None
                 if nodeTopic == device.DeviceID:  # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
