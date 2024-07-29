@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.33" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.34" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -352,6 +352,8 @@ class BasePlugin:
             message = json.loads(rawmessage.decode('utf8'))
         except ValueError:
             message = rawmessage.decode('utf8')
+        except Exception as e:
+            Domoticz.Error(f"Error decoding {rawmessage} - {type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
 
         topiclist = topic.split('/')
         if self.debugging == "Extra verbose":
@@ -483,9 +485,11 @@ class BasePlugin:
             # Iterating through the JSON list
             for node in self.jsonData.items():
                 nodeItems = node[1]
-                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+                nodeTopic = self.getValue(nodeItems, 'topic', None)                 # Get MQTT topic
+                nodeKey = self.getValue(nodeItems, 'key', None)                     # Get device key
                 valueToSet = None
-                if nodeTopic == device.DeviceID:  # Is this the right topic?
+                localCommand = None
+                if device.DeviceID == nodeKey if nodeKey else nodeTopic :           # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
                     nodeSet = self.getValue(nodeItems, 'set', None)
                     if nodeSet != None:  # Do we have some SET parameters?
