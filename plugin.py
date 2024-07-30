@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.34" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.35" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -485,14 +485,8 @@ class BasePlugin:
             # Iterating through the JSON list
             for node in self.jsonData.items():
                 nodeItems = node[1]
-<<<<<<< HEAD
                 nodeTopic = self.getValue(nodeItems, 'topic', None)                 # Get MQTT topic
                 nodeKey = self.getValue(nodeItems, 'key', None)                     # Get device key
-=======
-                nodeTopic = self.getValue(nodeItems, 'key', None) # Get MQTT key
-                if nodeTopic == None:
-                    nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
->>>>>>> 40877b4f3ec9ad24211f0000c5daa60619003fc0
                 valueToSet = None
                 localCommand = None
                 if device.DeviceID == nodeKey if nodeKey else nodeTopic :           # Is this the right topic?
