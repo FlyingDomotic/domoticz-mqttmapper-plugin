@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.35" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.36" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -439,7 +439,7 @@ class BasePlugin:
                         if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
                             multiplier = self.getValue(nodeMapping, 'multiplier', None)
                             if multiplier !=None:   # Do we have a multiplier?
-                                valueToSet = float(valueToSet) * float(multiplier) # Yes, apply it
+                                valueToSet = float(valueToSet) / float(multiplier) # Yes, apply it
                                 readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
                             if nodeType == '244':   # This is a switch
                                 if nodeSwitchtype == '0': # This is an On/Off switch
