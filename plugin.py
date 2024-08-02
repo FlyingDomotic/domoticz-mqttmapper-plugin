@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.39" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.40" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -193,7 +193,7 @@ class BasePlugin:
                             found = True # Set found flag
                             break # Exit loop
                     if not found: # If nothing found
-                        return default # Returen default
+                        return default # Return default
                 else: # We have a list with an index
                     index = int(pathElement) # Extract list index from path
                     if index < 1 or index > len(element): # Check it
@@ -208,6 +208,36 @@ class BasePlugin:
         except:
             element = default
         return element
+
+    # Return value to use, depending on 'multiplier' and 'digits' for numerical data
+    #   If setMapping is specified, we're about to set the value.
+    #   Multiplier and/or digits should be taken from setMapping first, if they exists.
+    #   Else, they'll be taken from nodeMapping
+    def computeValue(self, itemValue, nodeMapping, setMapping=None):
+        if str(itemValue).replace('.', '', 1).isdigit():                    # If raw value is numeric or float
+            result = float(itemValue)                                       # Convert value as float
+            multiplier = None
+            digits = None
+            if setMapping:                                                  # Are we in set operation?
+                multiplier = self.getValue(setMapping, 'multiplier', None)  # Extract multiplier from set parameters
+                digits = self.getValue(setMapping, 'digits', None)          # Extract number of digits needed from mapping parameters
+            if multiplier == None:                                          # Multiplier not given in setMapping
+                multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier from node parameters
+            if multiplier !=None:                                           # Do we have a multiplier?
+                if setMapping:                                              # Is this a set operation?
+                    result /= float(multiplier)                             # Yes, divide by multiplier
+                else:
+                    result *= float(multiplier)                             # No, multiply
+            if digits == None:                                              # Digits not given in setMapping
+                digits = self.getValue(nodeMapping, 'digits', None)         # Extract digits from node parameters
+            if digits == None:                                              # Digits not defined elsewhere
+                return result                                               # Return float not rounded
+            if int(digits) <= 0:                                            # Digits is negative or zero
+                return int(result)                                          # Return integer
+            else:                                                           # Digits defined and positive
+                return round(result, int(digits))                           # Return rounded value
+        else:                                                               # Value is not numerical
+            return itemValue                                                # Return original value else
 
     # Find a device by name in devices table
     def getDevice(self, deviceName):
@@ -393,14 +423,7 @@ class BasePlugin:
                                     valueToSet = '' # No, use empty string
                                 readValue += str(valueToSet)    # Insert the value
                             elif item == "~*":  # Item is ~*, insert topic content
-                                if str(message).replace('.', '', 1).isdigit():  # If raw value is numeric or float
-                                    multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                    if multiplier !=None:   # Do we have a multiplier?
-                                        readValue += str(float(str(message)) * float(multiplier)) # Yes, apply it
-                                    else:
-                                        readValue += str(message)   # Add full content
-                                else:
-                                    readValue += str(message)   # Add full content
+                                readValue += str(self.computeValue(message, nodeMapping))
                             else:
                                 readValue += item[1:]   # Add item, removing initial '~'
                         else:
@@ -408,11 +431,7 @@ class BasePlugin:
                             if itemValue == None:
                                 Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
                             else:   # Add extracted value
-                                if str(itemValue).replace('.', '', 1).isdigit():  # If extracted value is numeric or float
-                                    multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                    if multiplier !=None:   # Do we have a multiplier?
-                                        itemValue = float(itemValue) * float(multiplier) # Yes, apply it
-                                readValue += str(itemValue)
+                                readValue += str(self.computeValue(itemValue, nodeMapping))
                     readValue = readValue[1:]   # Remove first ';'
                     if nodeType == '244':   # This is a switch
                         if  mappingDefault != None and mappingValues != None:
@@ -436,10 +455,8 @@ class BasePlugin:
                         device.Update(nValue=numericValue, sValue='0')
                     else:
                         if valueToSet.isnumeric():  # Set nValue and sValue depending on value type (numeric or not, switch or not)
-                            multiplier = self.getValue(nodeMapping, 'multiplier', None)
-                            if multiplier !=None:   # Do we have a multiplier?
-                                valueToSet = float(valueToSet) / float(multiplier) # Yes, apply it
-                                readValue = str(valueToSet) # Force value to set to float value (valueToSet will be truncated as integer later on)
+                            valueToSet = self.computeValue(valueToSet, nodeMapping)
+                            readValue = str(valueToSet) # Force read value as string
                             if nodeType == '244':   # This is a switch
                                 if nodeSwitchtype == '0': # This is an On/Off switch
                                     nValueToSet = 0 if str(valueToSet) == '0' else 1
@@ -509,14 +526,7 @@ class BasePlugin:
                                 if valueToSet == None:  # No mapping value found
                                     Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
                             else: # No mapping given, use command value
-                                if str(targetValue).replace('.', '', 1).isdigit():  # If raw value is numeric or float
-                                    multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                    if multiplier !=None:                           # Do we have a multiplier?
-                                        valueToSet = str(float(str(targetValue)) / float(multiplier)) # Yes, divide by it
-                                    else:
-                                        valueToSet = str(targetValue)               # Add full content
-                                else:
-                                    valueToSet = str(targetValue)                   # Add full content
+                                valueToSet = str(self.computeValue(targetValue, nodeMapping, nodeSet))
                         else:   # Not a switch
                             Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
                     else:   # No set given

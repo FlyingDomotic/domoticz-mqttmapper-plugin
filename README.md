@@ -125,7 +125,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
     "Beed room temperature": {
         "topic": "beedRoom",
         "type": "80", "subtype": "5", "switchtype": "0",
-        "mapping": {"item": "temperature", "multiplier": 0.1}
+        "mapping": {"item": "temperature", "multiplier": 0.1, "digits": 1}
     },
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
@@ -188,17 +188,19 @@ Dans cet exemple, `options` contient les options utilisées pour créer le dispo
     "Beed room temperature": {
         "topic": "beedRoom",
         "type": "80", "subtype": "5", "switchtype": "0",
-        "mapping": {"item": "temperature", "multiplier": 0.1}
+        "mapping": {"item": "temperature", "multiplier": 0.1, "digits": 1}
     }
 ```
 
 This time, payload is in JSON format (`item` is not empty). This mean that the value will be extracted from `temperature` payload item, at the root level. `ENERGY/Power` in later example means that value will be extracted in `Power` item of `Energy` root item.
 
-`multiplier` is optional, and gives the factor to apply to numeric value (here `0.1`, equivalent to divid by 10).
+`multiplier` is optional, and gives the factor to apply to numeric value (here `0.1`, equivalent to divided by 10).
+'digits' is also optional, and gives the number of decimal digits to round value to.
 
 Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur extraite sera prise dans l'item `temperature` du contenu, au niveau supérieur. `ENERGY/Power` dans l'exemple suivant indique que la valeur sera extraite de l'item `Power` de l'item `Energy`.
 
 `multiplier` est optionnel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, équivalent à diviser par 10).
+'digits' est également optionnel et indique le nombre de décimales à utiliser pour arrondir la valeur.
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
@@ -291,6 +293,14 @@ Si la valeur à définir est un nombre flottant, de nombreuses décimales seront
 #!/bin/bash
 value=$(echo "scale=1; $1 / 1" | bc)
 echo "Received $value"
+```
+
+You may also use "'digit': n" in set command parameters to round value:
+
+Vous pouvez aussi utiliser "'digit': n" dans les parramtres de la commande set pour arrondir la valeur:
+
+```ts
+        "set": {"topic": "topic/xxx", "payload": {"value":"#"}, "digits": 2}
 ```
 
 ## Device options (partial) list / Liste (partielle) des options
