@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.38" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.39" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -477,6 +477,8 @@ class BasePlugin:
             targetValue = '100'
         elif Command == 'Set Level':
             targetValue = str(Level)
+        elif str(Command).replace('.', '', 1).isdigit():  # If command is numeric or float
+            targetValue = Command
         else:
             Domoticz.Error('Command: "' + str(Command) + '" not supported yet for ' + device.Name+'. Please ask for support.')
         self.setTargetValue (targetValue, device)
@@ -490,7 +492,7 @@ class BasePlugin:
                 nodeKey = self.getValue(nodeItems, 'key', None)                     # Get device key
                 valueToSet = None
                 localCommand = None
-                if device.DeviceID == nodeKey if nodeKey else nodeTopic :           # Is this the right topic?
+                if device.DeviceID == (nodeKey if nodeKey else nodeTopic):          # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
                     nodeSet = self.getValue(nodeItems, 'set', None)
                     if nodeSet != None:  # Do we have some SET parameters?
@@ -518,7 +520,7 @@ class BasePlugin:
                         else:   # Not a switch
                             Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
                     else:   # No set given
-                        Domoticz.Error('No SET parameters for '+device.Name)
+                        Domoticz.Error('No SET parameters for '+device.Name+"/"+device.DeviceID+" in "+str(node))
                     if valueToSet != None and setTopic != None: # Value and topic given, set it
                         if isinstance(setPayload, str):
                             payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
