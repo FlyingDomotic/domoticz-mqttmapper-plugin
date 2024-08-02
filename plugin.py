@@ -561,7 +561,7 @@ class BasePlugin:
         device = Devices[Unit]
         Domoticz.Log("onDeviceModified " + self.deviceStr(Unit) + ", " + device.DeviceID + ", nValue=" + str(device.nValue) + ", sValue=" + device.sValue)
         targetValue = device.sValue
-        setTargetValue(targetValue, device)
+        self.setTargetValue(targetValue, device)
 
     def onDeviceRemoved(self, Unit):
         # Exit if init not properly done
