@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.36" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.37" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -377,44 +377,43 @@ class BasePlugin:
                 valueToSet = None
                 if mappingItem !=None:
                     if mappingItem == '':   # Empty mapping means (not json) full message
-                        readValue = str(message)
-                    else:   # We have a mapping item
-                        readValue = ''
-                        itemIndex = -1
-                        items = mappingItem.split(';')  # Work with multiple items values
-                        for item in items:  # Read all values to map
-                            readValue += ";"# Add ';' as separator
-                            itemIndex += 1  # Increment index
-                            if item[0:1] == '~': # Does item start with '~'?
-                                if item == '~': # If item is just '~', insert previous sValue item
-                                    sValue = device.sValue.split(';')   # Extract current sValue
-                                    if itemIndex < len(sValue): # Is index within device sValue range?
-                                        valueToSet = sValue[itemIndex]  # Yes, load it
-                                    else:
-                                        valueToSet = '' # No, use empty string
-                                    readValue += str(valueToSet)    # Insert the value
-                                elif item == "~*":  # Item is ~*, insert topic content
-                                    if str(message).replace('.', '', 1).isdigit():  # If raw value is numeric or float
-                                        multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                        if multiplier !=None:   # Do we have a multiplier?
-                                            readValue += str(float(str(message)) * float(multiplier)) # Yes, apply it
-                                        else:
-                                            readValue += str(message)   # Add full content
+                        mappingItem = "~*"
+                    readValue = ''
+                    itemIndex = -1
+                    items = mappingItem.split(';')  # Work with multiple items values
+                    for item in items:  # Read all values to map
+                        readValue += ";"# Add ';' as separator
+                        itemIndex += 1  # Increment index
+                        if item[0:1] == '~': # Does item start with '~'?
+                            if item == '~': # If item is just '~', insert previous sValue item
+                                sValue = device.sValue.split(';')   # Extract current sValue
+                                if itemIndex < len(sValue): # Is index within device sValue range?
+                                    valueToSet = sValue[itemIndex]  # Yes, load it
+                                else:
+                                    valueToSet = '' # No, use empty string
+                                readValue += str(valueToSet)    # Insert the value
+                            elif item == "~*":  # Item is ~*, insert topic content
+                                if str(message).replace('.', '', 1).isdigit():  # If raw value is numeric or float
+                                    multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                    if multiplier !=None:   # Do we have a multiplier?
+                                        readValue += str(float(str(message)) * float(multiplier)) # Yes, apply it
                                     else:
                                         readValue += str(message)   # Add full content
                                 else:
-                                    readValue += item[1:]   # Add item, removing initial '~'
+                                    readValue += str(message)   # Add full content
                             else:
-                                itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
-                                if itemValue == None:
-                                    Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
-                                else:   # Add extracted value
-                                    if str(itemValue).replace('.', '', 1).isdigit():  # If extracted value is numeric or float
-                                        multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
-                                        if multiplier !=None:   # Do we have a multiplier?
-                                            itemValue = float(itemValue) * float(multiplier) # Yes, apply it
-                                    readValue += str(itemValue)
-                        readValue = readValue[1:]   # Remove first ';'
+                                readValue += item[1:]   # Add item, removing initial '~'
+                        else:
+                            itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
+                            if itemValue == None:
+                                Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
+                            else:   # Add extracted value
+                                if str(itemValue).replace('.', '', 1).isdigit():  # If extracted value is numeric or float
+                                    multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
+                                    if multiplier !=None:   # Do we have a multiplier?
+                                        itemValue = float(itemValue) * float(multiplier) # Yes, apply it
+                                readValue += str(itemValue)
+                    readValue = readValue[1:]   # Remove first ';'
                     if nodeType == '244':   # This is a switch
                         if  mappingDefault != None and mappingValues != None:
                             valueToSet = mappingDefault # Set default mapping
@@ -509,7 +508,7 @@ class BasePlugin:
                                 if str(targetValue).replace('.', '', 1).isdigit():  # If raw value is numeric or float
                                     multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier
                                     if multiplier !=None:                           # Do we have a multiplier?
-                                        valueToSet = str(float(str(targetValue)) /float(multiplier)) # Yes, divide by it
+                                        valueToSet = str(float(str(targetValue)) / float(multiplier)) # Yes, divide by it
                                     else:
                                         valueToSet = str(targetValue)               # Add full content
                                 else:
