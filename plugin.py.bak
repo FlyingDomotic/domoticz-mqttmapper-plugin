@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.42" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.41" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -520,7 +520,7 @@ class BasePlugin:
                         setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
                         setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
                         mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
-                        nodeType = str(self.getValue(nodeItems, 'type', None))      # Get device type
+                        nodeType = self.getValue(nodeItems, 'type', None)           # Get device type
                         if nodeType >= '242' and nodeType <= '244':               # Select valid types
                             if mappingValues != None:
                                 for testValue in mappingValues: # Scan all mapping values
@@ -542,7 +542,7 @@ class BasePlugin:
                         Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
                         self.mqttClient.Publish(setTopic, payload, 1)
                     if localCommand != None: # Command given, execute it
-                        localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace # in command by value
+                        localCommand = str(localCommand).replace("#", valueToSet) # Replace # in command by value
                         Domoticz.Log(F"Executing {localCommand}")
                         localProcess = subprocess.Popen(localCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                         for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
@@ -562,7 +562,7 @@ class BasePlugin:
         if not self.initDone:
             return
         device = Devices[Unit]
-        Domoticz.Log("onDeviceModified " + self.deviceStr(Unit) + ", " + str(device.DeviceID) + ", nValue=" + str(device.nValue) + ", sValue=" + device.sValue)
+        Domoticz.Log("onDeviceModified " + self.deviceStr(Unit) + ", " + device.DeviceID + ", nValue=" + str(device.nValue) + ", sValue=" + device.sValue)
         targetValue = device.sValue
         self.setTargetValue(targetValue, device)
 
@@ -580,7 +580,7 @@ class BasePlugin:
             Domoticz.Debug("Heartbeating...")
 
         # Reconnect if connection has dropped
-        if self.mqttClient.mqttConn is None or (not self.mqttClient.mqttConn.Connecting and not self.mqttClient.mqttConn.Connected or not self.mqttClient.isConnected):
+        if self.mqttClient.mqttConn is None or (not self.mqttClient.mqttConn.Connecting() and not self.mqttClient.mqttConn.Connected() or not self.mqttClient.isConnected):
             Domoticz.Debug("Reconnecting")
             self.mqttClient.Open()
         else:
