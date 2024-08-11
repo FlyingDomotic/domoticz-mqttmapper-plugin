@@ -1,0 +1,48 @@
+{
+    "Car windows": {
+        "topic": "volvo/xx-999-xx/binary_sensor/any_window_open/state",
+        "type": "244", "subtype": "73", "switchtype": "11",
+        "mapping": {"item": "", "default": "1", "values": {"close": "0"}}
+    },
+    "Car lock": {
+        "topic": "volvo/xx-999-xx/lock/lock/state",
+        "type": "244", "subtype": "73","switchtype": "11",
+        "mapping": {"item": "", "default": "0", "values": {"lock": "1"}}
+    },
+    "Car engine running": {
+        "topic": "volvo/xx-999-xx/binary_sensor/is_engine_running/state",
+        "type": "244", "subtype": "73", "switchtype": "8", 
+        "mapping": {"item": "", "default": "1", "values": {"off": "0"}
+        }
+    },
+    "Car odometer": {"topic": "volvo/xx-999-xx/sensor/odometer/state",
+        "type": "113", "subtype": "0", "switchtype": "3",
+        "options": {"ValueQuantity":"Distance", "ValueUnits":"km"},
+        "mapping": {"item": ""}
+    },
+    "Car fuel amount": {"topic": "volvo/xx-999-xx/sensor/fuel_amount/state",
+        "type": "243", "subtype": "31", "switchtype": "0",
+        "options": {"Custom":"1;L"},
+        "mapping": {"item": ""}
+    },
+    "Beed room temperature": {
+        "topic": "beedRoom",
+        "type": "80", "subtype": "5", "switchtype": "0",
+        "mapping": {"item": "temperature", "multiplier": 0.1}
+    },
+    "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
+        "type": "82", "subtype": "5", "switchtype": "0",
+        "mapping": {"item": "temperature;humidity"}
+    },
+    "Boiler power": {
+        "topic": "boiler/SENSOR",
+        "type": "248", "subtype": "1", "switchtype": "0",
+        "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
+    },
+    "Mode selector": {"topic": "fan/mode",
+        "type": "244", "subtype": "62", "switchtype": "18",
+        "options": {"SelectorStyle":"1", "LevelOffHidden": "true", "LevelNames":"Off|Auto|Forced"},
+        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}},
+        "mapping": {"item": "mode", "default": "0", "values": {"Off": "0", "Auto": "10", "Forced": "20"}}
+    }
+}

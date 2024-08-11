@@ -406,7 +406,7 @@ class BasePlugin:
             nodeKey = self.getValue(nodeItems, 'key', None) # Get device key
             if nodeTopic == topic:  # Is this the right topic?
                 device = self.getDevice(nodeKey if nodeKey else nodeTopic)
-                Domoticz.Debug("onMQTTConnected found "+str(topic)+", Device '" + device.Name + "'")
+                Domoticz.Debug("onMQTTPublish found "+str(topic)+", Device '" + device.Name + "', message '" + str(message) + "'")
                 nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
                 nodeSubtype = self.getValue(nodeItems, 'subtype', None)
                 nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
@@ -457,7 +457,6 @@ class BasePlugin:
                 else:   # No mapping given
                     Domoticz.Error('No mapping for '+device.Name)
                 if valueToSet != None: # Value given, set it
-                    valueToSet = self.computeValue(valueToSet, nodeMapping)
                     if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
                         readValue = str(valueToSet) # Force read value as string
                         if nodeType == '244':   # This is a switch
@@ -467,9 +466,9 @@ class BasePlugin:
                                 nValueToSet = int(valueToSet)
                             sValueToSet = str(valueToSet)
                         else:
-                            nValueToSet = int(valueToSet)
+                            nValueToSet = int(round(float(valueToSet),0))
                             sValueToSet = readValue
-                        Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric
+                        Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric or float
                         device.Update(nValue=nValueToSet, sValue=sValueToSet)
                     else:   # Value is not numeric
                         Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
