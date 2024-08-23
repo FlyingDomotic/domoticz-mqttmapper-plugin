@@ -333,6 +333,12 @@ You may run checkJsonFiles.py to scan JSON file for important errors. It'll scan
 
 Vous pouvez vérifier les erreurs les plus flagrantes des fichiers JSON avec le script checkJsonFiles.py. Il va scanner l'ensemble des .JSON présents dans le répertoire courant et afficher les erreurs. Corrigez jusqu'à ce qu'aucune erreur ne soit affichée.
 
+## Debug tool/Outil de déverminage
+
+If asked, you may run dumpMqttMapperValues.py tool. It will scan plugin folder for configuration files, dump their content and their MQTT topics values to screen. Cut and past output to send it to me.
+
+Sur demande, vous pouvez lancer l'outil dumpMqttMapperValues.py. Il va chercher les fichiers de configuration dans le répertoire du plugin , afficher leur contenu et lister les topics MQTT associés sur l'écran. Copiez/collez les pour me les envoyer
+
 # Examples / Exemples
 Here are some examples that may be useful.  Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat
 

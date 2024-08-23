@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.42" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.43" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -347,7 +347,13 @@ class BasePlugin:
 
         # Connect to MQTT server
         self.mqttClient = MqttClient(self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed)
-
+        with open(Parameters['HomeFolder'] + Parameters["Mode1"] + ".parameters", "wt") as f:
+            fields = {}
+            fields["mqttHost"] = self.mqttserveraddress
+            fields["mqttPort"] = self.mqttserverport
+            fields["mqttUsername"] = Parameters["Username"]
+            fields["mqttPassword"] = Parameters["Password"]
+            f.write(json.dumps(fields, indent=4))
         self.initDone = True
         # Enable heartbeat
         Domoticz.Heartbeat(60)
