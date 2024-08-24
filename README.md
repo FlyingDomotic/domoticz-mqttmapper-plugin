@@ -335,9 +335,9 @@ Vous pouvez vérifier les erreurs les plus flagrantes des fichiers JSON avec le 
 
 ## Debug tool/Outil de déverminage
 
-If asked, you may run dumpMqttMapperValues.py tool. It will scan plugin folder for configuration files, dump their content and their MQTT topics values to screen. Cut and past output to send it to me.
+If asked, you may run dumpMqttMapperValues.py tool. It will scan plugin folder for configuration files, dump them with Domoticz API and database content, as well as MQTT topics values to screen. Cut and past output to send it to me. Use --help modifier to get help.
 
-Sur demande, vous pouvez lancer l'outil dumpMqttMapperValues.py. Il va chercher les fichiers de configuration dans le répertoire du plugin , afficher leur contenu et lister les topics MQTT associés sur l'écran. Copiez/collez les pour me les envoyer
+Sur demande, vous pouvez lancer l'outil dumpMqttMapperValues.py. Il va chercher les fichiers de configuration dans le répertoire du plugin , afficher leur contenu, celui de l'API et de la base de données DOmoticz, ainsi que les topics MQTT associés sur l'écran. Copiez/collez les pour me les envoyer. Utiliser l'option --help pour avoir de l'aide.
 
 # Examples / Exemples
 Here are some examples that may be useful.  Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat
