@@ -1,17 +1,37 @@
 #!/usr/bin/python3
-#   Dump MqttMapper topic values
 #
-
-import glob
-from logging import debug
+#   Dump MqttMapper values V1.0.2
+#
+#   This tool dumps MQTT Mapper data from:
+#       - JSON configuration file
+#       - Domoticz API
+#       - Domoticz database
+#       - MQTT retained topics
+#
+#   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
+#
 import os
+import sys
 import pathlib
 import getopt
-import sys
+import glob
 import json
-from time import sleep
-import paho.mqtt.client as mqtt
 import random
+import requests
+
+global mqttInstalled
+try:
+    import paho.mqtt.client as mqtt
+    mqttInstalled = True
+except:
+    mqttInstalled = False
+
+global sqlite3Installed
+try:
+    import sqlite3
+    sqlite3Installed = True
+except:
+    sqlite3Installed = False
 
 # Print an error message
 def printError(message):
@@ -71,7 +91,7 @@ def onMessage(client, userdata, msg):
     global sleepCount
     sleepCount = 2
     cleanMessage = msg.payload.decode('UTF-8').replace('\n','').replace('\t','')
-    printLog(F"{msg.topic}={cleanMessage}")
+    printLog(F"Topic '{msg.topic}'='{cleanMessage}'")
 
 # Check MqttMapper JSON mapping file jsonConfigurationFile
 def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
@@ -83,67 +103,167 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
 
     # Scan all configuration lines
     for node in jsonConfiguration.items():
+        deviceName = node[0]
+        mqttMapperDefinition = node[1]
+
+        # Extract topic and key
+        nodeTopic = getValue(mqttMapperDefinition, "topic")
+        nodeKey = getValue(mqttMapperDefinition, "key")
+        # build device ID
+        deviceId = nodeKey if nodeKey !="" else nodeTopic
+
+        apiDefinition = getApiDataById(deviceId, "    API: " )
+        databaseDefinition = getDatabaseDataById(deviceId, "    Database: ")
+    
+        printLog(F"{deviceName}")
+        printLog(F"    MqttMapper: {mqttMapperDefinition}")
+        if apiDefinition != "": 
+            printLog(F"{apiDefinition}")
+        if databaseDefinition != "": 
+            printLog(F"{databaseDefinition}")
+
         # Extract topic
-        nodeTopic = getValue(node[1], "topic")
-
-        # Trace line (contains definition of device)
-        printLog(F"{node}")
-
+        nodeTopic = getValue(mqttMapperDefinition, "topic")
         # Add to topic list if not already done
         if nodeTopic not in mqttTopics:
             mqttTopics.append((nodeTopic, 0))
 
-    # Compose unique mqtt client Id
-    random.seed()
-    mqttClientName = pathlib.Path(__file__).stem+'_{:x}'.format(random.randrange(65535))
+    global mqttInstalled
+    if mqttInstalled:
+        # Compose unique mqtt client Id
+        random.seed()
+        mqttClientName = pathlib.Path(__file__).stem+'_{:x}'.format(random.randrange(65535))
 
-    # Create client with userdata
-    data = {}
-    data["host"] = jsonParameters['mqttHost']
-    data["port"] = jsonParameters['mqttPort']
-    data["mqttTopics"] = mqttTopics
-    mqttClient = mqtt.Client(client_id=mqttClientName, userdata=data)
-    printDebug(F"Client {mqttClientName}, topics {mqttTopics}")
+        # Create client with userdata
+        data = {}
+        data["host"] = jsonParameters['mqttHost']
+        data["port"] = jsonParameters['mqttPort']
+        data["mqttTopics"] = mqttTopics
+        mqttClient = mqtt.Client(client_id=mqttClientName, userdata=data)
+        printDebug(F"Client {mqttClientName}, topics {mqttTopics}")
 
-    # Set callbacks
-    mqttClient.on_message = onMessage
-    mqttClient.on_connect = onConnect
-    mqttClient.on_subscribe = onSubcribe
+        # Set callbacks
+        mqttClient.on_message = onMessage
+        mqttClient.on_connect = onConnect
+        mqttClient.on_subscribe = onSubcribe
 
-    # Set credentials
-    if jsonParameters["mqttUsername"] != "":
-        if jsonParameters["mqttPassword"] != "":
-            printDebug(F"Credentials: Username {jsonParameters['mqttUsername']}, password {jsonParameters['mqttPassword']}")
-            mqttClient.username_pw_set(jsonParameters["mqttUsername"], jsonParameters["mqttPassword"])
+        # Set credentials
+        if jsonParameters["mqttUsername"] != "":
+            if jsonParameters["mqttPassword"] != "":
+                printDebug(F"Credentials: Username {jsonParameters['mqttUsername']}, password {jsonParameters['mqttPassword']}")
+                mqttClient.username_pw_set(jsonParameters["mqttUsername"], jsonParameters["mqttPassword"])
+            else:
+                printDebug(F"Credentials: Username {jsonParameters['mqttUsername']}")
+                mqttClient.username_pw_set(jsonParameters["mqttUsername"])
+
+        # Set initial sleep count to 10 sec (will be overwritten to 2 on each received message)
+        global sleepCount
+        sleepCount = 10
+
+        # Connect to MQTT server
+        printDebug(F"Opening {jsonParameters['mqttHost']}, port {jsonParameters['mqttPort']}")
+        mqttClient.connect(host=jsonParameters["mqttHost"], port=int(jsonParameters["mqttPort"]))
+
+        # Loop MQTT for sleeCount seconds (as told, will be overwritten in onMessage)
+        while 1:
+            if sleepCount <= 0:
+                break
+            sleepCount -= 1
+            mqttClient.loop(timeout=1.0, max_packets=0)
+
+        # Additional wait if asked (useful for data without retain flag)
+        global waitTime
+        if waitTime > 0.0:
+            printDebug(F"Waiting for {waitTime} minute{'s' if waitTime > 1 else ''}")
+            mqttClient.loop(timeout=waitTime * 60.0, max_packets=0)
+
+        # Disconnect
+        mqttClient.disconnect()
+        # Release client
+        mqttClient = None
+
+# Return an URL text content
+def getLinkContent(url):
+    try:
+        response = requests.get(url)
+    except Exception as exception:
+        return F"Error {str(exception)} when opening {url}", None
+    else:
+        if response.status_code != 200:
+            return F"{url} returned error {response.status_code}", response.text
+    return None, response.text
+
+# Return an URL binary content
+def getLinkBinaryContent(url):
+    try:
+        response = requests.get(url)
+    except Exception as exception:
+        return F"Error {str(exception)} when opening {url}", None
+    else:
+        if response.status_code != 200:
+            return F"{url} returned error {response.status_code}", response.text
+    return None, response.content
+
+# Return a json dictionary containing decoded URL content
+def getJsonLinkContent(url):
+    errorMessage, response = getLinkContent(url)
+    if errorMessage == None and response != None:
+        try:
+            jsonContent = json.loads(response)
+            return None, jsonContent
+        except Exception as exception:
+            return F"Error {str(exception)} when decoding response from {url}", response
+    else:
+        return errorMessage, response
+
+# Check if new API is used
+def isNewApi(version):
+    return version[:2] == "20" and version >= "2023.2"
+
+# Extract data from database using device ID
+def getDatabaseDataById(deviceId, prefix):
+    global databaseConnection
+    if databaseConnection != None:
+        cursor = databaseConnection.cursor()
+        datas = cursor.execute(F"select ID, Type, SubType, SwitchType, nValue, sValue, LastLeveL, Color, Name from DeviceStatus where DeviceID='{deviceId}'").fetchall()
+        response = ""
+        if len(datas) > 0:
+            for data in datas:
+                response += F"\n{prefix}" \
+                    + F"Name='{data[8]}'" \
+                    + F", Idx='{data[0]}'" \
+                    + F", Type='{data[1]}|{data[2]}|{data[3]}'" \
+                    + F", nValue='{data[4]}'" \
+                    + F", sValue='{data[5]}'" \
+                    + F", Color='{data[7]}'" \
+                    + F", LastLevel='{data[6]}'" 
+            cursor.close()
+            return response[1:]
         else:
-            printDebug(F"Credentials: Username {jsonParameters['mqttUsername']}")
-            mqttClient.username_pw_set(jsonParameters["mqttUsername"])
+            cursor.close()
+            return F"{prefix}'Device ID {deviceId}' not found"
+    return ""
 
-    # Set initial sleep count to 10 sec (will be overwritten to 2 on each received message)
-    global sleepCount
-    sleepCount = 10
-
-    # Connect to MQTT server
-    printDebug(F"Opening {jsonParameters['mqttHost']}, port {jsonParameters['mqttPort']}")
-    mqttClient.connect(host=jsonParameters["mqttHost"], port=int(jsonParameters["mqttPort"]))
-
-    # Loop MQTT for sleeCount seconds (as told, will be overwritten in onMessage)
-    while 1:
-        if sleepCount <= 0:
-            break
-        sleepCount -= 1
-        mqttClient.loop(timeout=1.0, max_packets=0)
-
-    # Additional wait if asked (useful for data without retain flag)
-    global waitTime
-    if waitTime > 0.0:
-        printDebug(F"Waiting for {waitTime} minute{'s' if waitTime > 1 else ''}")
-        mqttClient.loop(timeout=waitTime * 60.0, max_packets=0)
-
-    # Disconnect
-    mqttClient.disconnect()
-    # Release client
-    mqttClient = None
+# Extract data by device ID from Domoticz device list
+def getApiDataById(deviceId, prefix):
+    global domoticzDevices
+    if domoticzDevices != None:
+        result = getValue(domoticzDevices, "result")
+        if result != "":
+            response = ""
+            for device in result:    
+                if getValue(device, "ID") == deviceId:
+                    response += F"\n{prefix}" \
+                        + F"Name='{getValue(device, 'Name')}'" \
+                        + F", Idx='{getValue(device, 'idx')}'" \
+                        + F", Type='{getValue(device, 'Type')}|{getValue(device, 'Subtype')}|{getValue(device, 'Switchtype')}'" \
+                        + F", Data='{getValue(device, 'Data')}'" \
+                        + F", Color='{getValue(device, 'Color')}'" \
+                        + F", Level='{getValue(device, 'Level')}'"
+            if response != "":
+                return response[1:]
+            return F"{prefix} Device ID '{deviceId}' not found"
+    return ""
 
 # *** Main code ***
 
@@ -153,12 +273,15 @@ if cdeFile[:2] == './':
     cdeFile = cdeFile[2:]
 
 inputFiles = []
-
+domoticzUrl = None
 global debugFlag
 debugFlag = False
 
+keepFlag = False
+
 global waitTime
 waitTime = 0.0
+
 
 # Use command line if given
 if sys.argv[1:]:
@@ -170,6 +293,8 @@ else:
 helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
     [--input=<input file(s)>]: input file name (can be repeated, default to *.json.parameters)
     [--wait=<minutes>]: wait for MQTT changes for <minutes>
+    [--url=<domoticz URL>: use this Domoticz URL instead of default http://127.0.0.1:8080/]
+    [--keep]: keep database copy and API response
     [--debug]: print debug messages
     [--help]: print this help message
 
@@ -177,7 +302,7 @@ helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
 
 """
 try:
-    opts, args = getopt.getopt(command, "h",["help", "debug", "input=", "wait="])
+    opts, args = getopt.getopt(command, "h",["help", "debug", "keep", "input=", "wait=", "url="])
 except getopt.GetoptError as excp:
     print(excp.msg)
     print('in >'+str(command)+'<')
@@ -190,6 +315,10 @@ for opt, arg in opts:
         sys.exit()
     elif opt == '--debug':
         debugFlag = True
+    elif opt == '--keep':
+        keepFlag = True
+    elif opt == '--url':
+        domoticzUrl = arg
     elif opt == '--wait':
         waitTime = int(arg)
         printDebug("Will wait for {waitTime} minute(s)")
@@ -199,8 +328,87 @@ for opt, arg in opts:
 if not inputFiles:
     inputFiles.append('*.json.parameters')
 
+if domoticzUrl == None:
+    domoticzUrl = "http://127.0.0.1:8080/"
+
+# Check for MQTT installed
+if not mqttInstalled:
+    printLog("Warning: Python MQTT not installed. Please use 'pip3 install paho-mqtt' to fix it")
+    printLog("Warning: MQTT topics content will not being displayed")
+
 # Set current working directory to this python file folder
 os.chdir(pathlib.Path(__file__).parent.resolve())
+
+# Ask for domoticz API version and device list 
+domoticzVersion = None
+
+global domoticzDevices
+domoticzDevices = None
+
+# Ask Domoticz for version
+printDebug("Asking for Domoticz version")
+errorMessage, jsonContent = getJsonLinkContent(F"{domoticzUrl}json.htm?type=command&param=getversion")
+
+# Ask for Domoticz device list
+if errorMessage == None:
+    printDebug("Asking for Domoticz API device list for version {domoticzVersion}")
+    domoticzVersion = jsonContent["version"]
+    if isNewApi(domoticzVersion):
+        errorMessage, domoticzDevices = getJsonLinkContent(F"{domoticzUrl}json.htm?type=command&param=getdevices&displayhidden=1")
+    else:
+        errorMessage, domoticzDevices = getJsonLinkContent(F"{domoticzUrl}json.htm?type=devices&displayhidden=1")
+
+# Print errors if any
+if errorMessage != None:
+    printLog(F"Warning: {errorMessage}")
+
+# Display a warning if something wrong
+if domoticzVersion == None or domoticzDevices == None:
+    printLog("Warning: Domoticz API device content will not be displayed")
+
+apiFileName = "kept_apiAnswer.json"
+# Keep a copy of API answer if needed
+if domoticzDevices != None and keepFlag:
+    try:
+        with open(apiFileName, "wt") as f:
+            f.write(json.dumps(domoticzDevices, indent=4))
+    except Exception as exception:
+        printError(F"Error {str(exception)} when writting {apiFileName} - Continuing...")
+
+databaseFileName = "kept_databaseCopy.db"
+
+global databaseConnection
+databaseConnection = None
+
+# Check sqlite3 installed
+if sqlite3Installed:
+    printDebug("Asking for Domoticz database copy")
+    # Ask Domoticz for a database copy
+    errorMessage, binaryContent = getLinkBinaryContent(F"{domoticzUrl}backupdatabase.php")
+    if errorMessage == None and binaryContent != "":
+        try:
+            with open(databaseFileName, "wb") as dbStream:
+                dbStream.write(binaryContent)
+        except Exception as exception:
+            errorMessage = str(exception)+" when writing "+databaseFileName
+            
+    # Open database
+    if errorMessage == None:
+        try:
+            # Open database copy
+            databaseConnection = sqlite3.connect(databaseFileName)
+        except Exception as exception:
+            errorMessage = str(exception)+" when opening "+databaseFileName
+
+    # Print errors if any
+    if errorMessage != None:
+        printLog(F"Warning: {errorMessage}")
+else:
+        printLog("Warning: Python sqlite3 not installed. Please use 'pip3 install sqlite3' to fix it")
+
+# Display a warning if something wrong
+if databaseConnection == None:
+    printLog("Warning: Domoticz database device content will not be displayed")
 
 # Read config files
 for specs in inputFiles:
@@ -220,3 +428,22 @@ for specs in inputFiles:
             printError(str(exception)+" when loading "+configFile+". Fix error and retry check!!!")
             continue
         dumpTopics(jsonParameters, jsonConfig, configFile)
+
+# Close database if needed
+if databaseConnection != None:
+    databaseConnection.close()
+
+# Should we keep files?
+if not keepFlag:
+    # Delete api file if it exists, ignoring errors
+    if os.path.exists(apiFileName):
+        try:
+            os.remove(apiFileName)
+        except:
+            pass
+    # Delete database file if it exists, ignoring errors
+    if os.path.exists(databaseFileName):
+        try:
+            os.remove(databaseFileName)
+        except:
+            pass
