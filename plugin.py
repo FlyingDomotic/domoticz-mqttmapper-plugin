@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.43" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.44" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -39,6 +39,7 @@ import json
 import time
 import traceback
 import subprocess
+import os
 
 class MqttClient:
     Address = ""
@@ -347,13 +348,21 @@ class BasePlugin:
 
         # Connect to MQTT server
         self.mqttClient = MqttClient(self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed)
-        with open(Parameters['HomeFolder'] + Parameters["Mode1"] + ".parameters", "wt") as f:
-            fields = {}
-            fields["mqttHost"] = self.mqttserveraddress
-            fields["mqttPort"] = self.mqttserverport
-            fields["mqttUsername"] = Parameters["Username"]
-            fields["mqttPassword"] = Parameters["Password"]
-            f.write(json.dumps(fields, indent=4))
+        parametersFile = Parameters['HomeFolder'] + Parameters["Mode1"] + ".parameters"
+        try:
+            with open(parametersFile, "wt") as f:
+                fields = {}
+                fields["mqttHost"] = self.mqttserveraddress
+                fields["mqttPort"] = self.mqttserverport
+                fields["mqttUsername"] = Parameters["Username"]
+                fields["mqttPassword"] = Parameters["Password"]
+                f.write(json.dumps(fields, indent=4))
+                try:
+                    os.chmod(parametersFile, 0o666)
+                except Exception as exception:
+                    Domoticz.Error(F"Error {str(exception)} changing {parametersFile} protection")
+        except Exception as exception:
+            Domoticz.Error(F"Error {str(exception)} opening {parametersFile}")
         self.initDone = True
         # Enable heartbeat
         Domoticz.Heartbeat(60)
