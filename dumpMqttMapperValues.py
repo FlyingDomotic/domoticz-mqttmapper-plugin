@@ -8,10 +8,12 @@
 #       - Domoticz database
 #       - MQTT retained topics
 #
+#   It also checks for database duplicated names (that causes amazing side effects ;-)
+#
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.0.7"
+codeVersion = "1.1.0"
 
 import os
 import sys
@@ -80,6 +82,27 @@ def getValue(dict, key, default=''):
         else:
             return default #or None
 
+# Checks for duplicates device (ending) names in database
+def checkForDatabaseDuplicates(databaseConnection):
+    if databaseConnection != None:
+        cursor = databaseConnection.cursor()
+        datas = cursor.execute("select d.ID, d.Name, h.Name from DeviceStatus d, Hardware H where h.ID = D.HardwareID;").fetchall()
+        deviceNames = {}
+        for data in datas:
+            deviceIdx = data[0]
+            deviceName = data[1]
+            hardwareName = data[2]
+            for key in deviceNames.keys():
+                if key == deviceName:
+                    printError(F"Device '{deviceIdx}'/'{hardwareName}' and '{deviceNames[key]['idx']}'/'{deviceNames[key]['hardware']}' are both nammed '{deviceName}' - Problems likely to occur!")
+                elif checkSameEnd and (key.endswith(deviceName) or deviceName.endswith(key)):
+                    printLog(F"Warning: Device '{deviceIdx}'/'{hardwareName}', name '{deviceName}' and '{deviceNames[key]['idx']}'/'{deviceNames[key]['hardware']}', name '{key}' '{deviceName}' share same end - Amazing things may happen...")
+            # Save this device data
+            fields = {}
+            fields["idx"] = deviceIdx
+            fields["hardware"] = hardwareName
+            deviceNames[deviceName] = fields
+
 # Called when MQTT broker is connected
 def onConnect(client, userdata, flags, reasonCode, properties=None):
     if reasonCode != 'Success':
@@ -140,7 +163,7 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
 
     global mqttInstalled
     if mqttInstalled:
-        # Compose unique mqtt client Id
+        # Compose unique MQTT client Id
         random.seed()
         mqttClientName = pathlib.Path(__file__).stem+'_{:x}'.format(random.randrange(65535))
 
@@ -297,6 +320,7 @@ global debugFlag
 debugFlag = False
 
 keepFlag = False
+checkSameEnd = False
 
 global waitTime
 waitTime = 0.0
@@ -313,6 +337,7 @@ helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
     [--input=<input file(s)>]: input file name (can be repeated, default to *.json.parameters)
     [--wait=<minutes>]: wait for MQTT changes for <minutes>
     [--url=<domoticz URL>: use this Domoticz URL instead of default http://127.0.0.1:8080/]
+    [--checkend]: check for device names sharing same text at end
     [--keep]: keep database copy and API response
     [--debug]: print debug messages
     [--help]: print this help message
@@ -321,7 +346,7 @@ helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
 
 """
 try:
-    opts, args = getopt.getopt(command, "h",["help", "debug", "keep", "input=", "wait=", "url="])
+    opts, args = getopt.getopt(command, "h",["help", "debug", "keep", "checkend", "input=", "wait=", "url="])
 except getopt.GetoptError as excp:
     print(excp.msg)
     print('in >'+str(command)+'<')
@@ -336,6 +361,8 @@ for opt, arg in opts:
         debugFlag = True
     elif opt == '--keep':
         keepFlag = True
+    elif opt == '--sameend':
+        checkSameEnd = True
     elif opt == '--url':
         domoticzUrl = arg
     elif opt == '--wait':
@@ -349,6 +376,7 @@ if not inputFiles:
 
 if domoticzUrl == None:
     domoticzUrl = "http://127.0.0.1:8080/"
+    domoticzUrl = "http://Noailles:8080/"
 
 # Check for MQTT installed
 if not mqttInstalled:
@@ -425,6 +453,7 @@ if sqlite3Installed:
 else:
         printLog(F"Warning: Python sqlite3 not installed. Please use 'pip3 install sqlite3' to fix it")
 
+
 # Display a warning if something wrong
 if databaseConnection == None:
     printLog(F"Warning: Domoticz database device content will not be displayed")
@@ -450,6 +479,8 @@ for specs in inputFiles:
 
 # Close database if needed
 if databaseConnection != None:
+    printDebug(F"Checking for database duplicates")
+    checkForDatabaseDuplicates(databaseConnection)
     databaseConnection.close()
 
 # Should we keep files?
