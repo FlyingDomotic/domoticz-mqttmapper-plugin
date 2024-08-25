@@ -20,7 +20,6 @@ import getopt
 import glob
 import json
 import random
-from paho.mqtt.enums import CallbackAPIVersion
 import requests
 
 # MQTT import stuff
@@ -34,9 +33,9 @@ mqttApiVersion = 1
 try:
     import paho.mqtt.client as mqtt
     mqttInstalled = True
-    # Try to find call_api_version (exists starting on version 2)
+    # Try to find CallbackAPIVersion (exists starting on version 2)
     try:
-        mqtt.Client.callback_api_version
+        from paho.mqtt.enums import CallbackAPIVersion
         mqttApiVersion = 2
     except AttributeError:
         pass
