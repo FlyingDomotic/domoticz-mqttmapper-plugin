@@ -11,7 +11,7 @@
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.0.6"
+codeVersion = "1.0.7"
 
 import os
 import sys
@@ -371,7 +371,7 @@ errorMessage, jsonContent = getJsonLinkContent(F"{domoticzUrl}json.htm?type=comm
 # Ask for Domoticz device list
 if errorMessage == None:
     printDebug(F"Asking for Domoticz API device list for version V{domoticzVersion}")
-    domoticzVersion = jsonContent["version"]
+    domoticzVersion = jsonContent["app_version"]
     if isNewApi(domoticzVersion):
         errorMessage, domoticzDevices = getJsonLinkContent(F"{domoticzUrl}json.htm?type=command&param=getdevices&displayhidden=1")
     else:
