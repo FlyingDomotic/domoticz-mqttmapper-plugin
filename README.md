@@ -335,12 +335,38 @@ Vous pouvez vérifier les erreurs les plus flagrantes des fichiers JSON avec le 
 
 ## Debug tool/Outil de déverminage
 
-If asked, you may run dumpMqttMapperValues.py tool. It will scan plugin folder for configuration files, dump them with Domoticz API and database content, as well as MQTT topics values to screen. It will also check for device names duplicates, that often bring amazing side effects ;-) Cut and past output to send it to me. Use --help modifier to get help.
+To help debugging MqttMapper issues/configuration errors, a tool named dumpMqttMapperValues.py is available into plugin folder. It will scan plugin folder for configuration files, dump them with Domoticz API data, database content, and MQTT topics values. It will also check for device names duplicates, that often bring amazing side effects ;-) 
 
-Sur demande, vous pouvez lancer l'outil dumpMqttMapperValues.py. Il va chercher les fichiers de configuration dans le répertoire du plugin , afficher leur contenu, celui de l'API et de la base de données DOmoticz, ainsi que les topics MQTT associés sur l'écran. Il détecte aussi les noms de dispositifs dupliqués, qui apportent des effets de bord amusants ;-) Copiez/collez les pour me les envoyer. Utiliser l'option --help pour avoir de l'aide.
+Cut and past output (or redirect it to a file) and send it to me. 
+
+You can use the following options:
+    [--input=<input file(s)>]: input file name (can be repeated, default to *.json.parameters). Can be used when multiple instances of plugin are run from the same folder.
+    [--wait=<minutes>]: wait for MQTT changes for <minutes>. Can be used for topics not having a retain flag, to wait sufficient time to get an update.
+    [--url=<domoticz URL>]: use this Domoticz URL instead of default http://127.0.0.1:8080/. You may specify username:password if needed. Don't forget http:// or https://.
+    [--checkend]: check for device names sharing same text at end. In addition to identical device naming, this option allow checking devices ending by another device name.
+    [--keep]: keep database copy and API response
+    [--debug]: print debug messages
+    [--help]: print this help message
+
+To display all data, 2 Python extensions should be installed on the machine (the script can work without them, but will only display partial messages): paho-mqtt and sqlite3. If they're not installed, you'll get a warning message. You may install them using "pip3 install paho-mqtt" and "pip3 install sqlite3". If you have managed environment, replace these commands by "sudo apt install python3-paho-mqtt" and "sudo apt install python3-sqlite3".
+
+Pour aider au déverminage des problèmes de MQTTMapper ou des fichiers de configuration, un script nommé dumpMqttMapperValues.py est disponible dans le répertoire du plugin. Il va chercher les fichiers de configuration dans le répertoire courant, afficher leur contenu, les données de l'API ddomoticz et de la base de données, ainsi que les topics MQTT associés sur l'écran. Il détecte aussi les noms de dispositifs dupliqués, qui apportent des effets de bord aussi amusants qu'inattendus ;-)
+
+Copiez/collez (ou redirigez) les messages pour me les envoyer.
+
+Les options suivantes sont disponibles :
+    [--input=<Fichier(s) a analyser>]: fichier(s) en entrée (peut être répété, par défaut on utilise *.json.parameters). Peut être utilisé lorsque plusieurs instances du plugin sont lancées depuis le même répertoire.
+    [--wait=<minutes>]: attend les changements des topics pendant <minutes>. Peut être utilisé pour les topics qui n'ont pas l'indicateur "retain", pour attendre un changement suffisament longtemps.
+    [--url=<URL de Domoticz>]: utiliser cette URL Domoticz au lieu du défaut http://127.0.0.1:8080/. Vous pouvez spécifier si besoin username:password. Noubliez pas http:// ou https://.
+    [--checkend]: vérifie les dispositfs partageant la même fin de nom. En plus des dispositifs possédant le même nom, cette option permet de détecter les mêmes terminaisons.
+    [--keep]: conserve la copie de la base et la réponse de l'API
+    [--debug]: affiche les messages de déverminage
+    [--help]: affiche ce message d'aide (en version anglaise)
+
+Pour afficher l'ensemble des données, 2 etensions Python peuvent être installés sur la machine (le script peut fnctionner sans elles, mais seules des informations partielles seront affichées). Si elles ne sont pas installées, vous aurez un message. Vous pouvez les nstaller en utilisant les commandes "pip3 install paho-mqtt" et "pip3 install sqlite3". Si vous avez un environnement managé, remplacez ces commandes par "sudo apt install python3-paho-mqtt" et "sudo apt install python3-sqlite3".
 
 # Examples / Exemples
-Here are some examples that may be useful.  Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat
+Here are some examples that may be useful. Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat
 
 ## Full topic content / Totalité du contenu du topic
 ```
