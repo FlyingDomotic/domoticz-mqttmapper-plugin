@@ -11,7 +11,7 @@
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.0.3"
+codeVersion = "1.0.6"
 
 import os
 import sys
@@ -106,7 +106,7 @@ def onMessage(client, userdata, msg):
 # Check MqttMapper JSON mapping file jsonConfigurationFile
 def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
     # Iterating through the configuration JSON file
-    printLog("Reading "+jsonConfigurationFile)
+    printLog(F"Reading {jsonConfigurationFile}")
 
     # Clear topics to subscribe
     mqttTopics = []
@@ -340,7 +340,7 @@ for opt, arg in opts:
         domoticzUrl = arg
     elif opt == '--wait':
         waitTime = int(arg)
-        printDebug("Will wait for {waitTime} minute(s)")
+        printDebug(F"Will wait for {waitTime} minute(s)")
     elif opt == '--input':
         inputFiles.append(arg)
 
@@ -349,12 +349,11 @@ if not inputFiles:
 
 if domoticzUrl == None:
     domoticzUrl = "http://127.0.0.1:8080/"
-    domoticzUrl = "http://utility:8080/"
 
 # Check for MQTT installed
 if not mqttInstalled:
-    printLog("Warning: Python MQTT not installed. Please use 'pip3 install paho-mqtt' to fix it")
-    printLog("Warning: MQTT topics content will not being displayed")
+    printLog(F"Warning: Python MQTT not installed. Please use 'pip3 install paho-mqtt' to fix it")
+    printLog(F"Warning: MQTT topics content will not being displayed")
 
 # Set current working directory to this python file folder
 os.chdir(pathlib.Path(__file__).parent.resolve())
@@ -366,12 +365,12 @@ global domoticzDevices
 domoticzDevices = None
 
 # Ask Domoticz for version
-printDebug("Asking for Domoticz version")
+printDebug(F"Asking for Domoticz version")
 errorMessage, jsonContent = getJsonLinkContent(F"{domoticzUrl}json.htm?type=command&param=getversion")
 
 # Ask for Domoticz device list
 if errorMessage == None:
-    printDebug("Asking for Domoticz API device list for version {domoticzVersion}")
+    printDebug(F"Asking for Domoticz API device list for version V{domoticzVersion}")
     domoticzVersion = jsonContent["version"]
     if isNewApi(domoticzVersion):
         errorMessage, domoticzDevices = getJsonLinkContent(F"{domoticzUrl}json.htm?type=command&param=getdevices&displayhidden=1")
@@ -384,7 +383,7 @@ if errorMessage != None:
 
 # Display a warning if something wrong
 if domoticzVersion == None or domoticzDevices == None:
-    printLog("Warning: Domoticz API device content will not be displayed")
+    printLog(F"Warning: Domoticz API device content will not be displayed")
 
 apiFileName = "kept_apiAnswer.json"
 # Keep a copy of API answer if needed
@@ -402,7 +401,7 @@ databaseConnection = None
 
 # Check sqlite3 installed
 if sqlite3Installed:
-    printDebug("Asking for Domoticz database copy")
+    printDebug(F"Asking for Domoticz database copy")
     # Ask Domoticz for a database copy
     errorMessage, binaryContent = getLinkBinaryContent(F"{domoticzUrl}backupdatabase.php")
     if errorMessage == None and binaryContent != "":
@@ -424,11 +423,11 @@ if sqlite3Installed:
     if errorMessage != None:
         printLog(F"Warning: {errorMessage}")
 else:
-        printLog("Warning: Python sqlite3 not installed. Please use 'pip3 install sqlite3' to fix it")
+        printLog(F"Warning: Python sqlite3 not installed. Please use 'pip3 install sqlite3' to fix it")
 
 # Display a warning if something wrong
 if databaseConnection == None:
-    printLog("Warning: Domoticz database device content will not be displayed")
+    printLog(F"Warning: Domoticz database device content will not be displayed")
 
 # Read config files
 for specs in inputFiles:
@@ -438,14 +437,14 @@ for specs in inputFiles:
             with open(parametersFile, encoding = 'UTF-8') as parametersStream:
                 jsonParameters = json.load(parametersStream)
         except Exception as exception:
-            printError(str(exception)+" when loading "+parametersFile+". Please report error")
+            printError(F"{str(exception)} when loading {parametersFile}. Please report error")
             continue
         configFile = str(parametersFile).replace(".parameters", "")
         try:
             with open(configFile, encoding = 'UTF-8') as configStream:
                 jsonConfig = json.load(configStream)
         except Exception as exception:
-            printError(str(exception)+" when loading "+configFile+". Fix error and retry check!!!")
+            printError(F"{str(exception)} when decoding {configFile}. Fix error and retry check!!!")
             continue
         dumpTopics(jsonParameters, jsonConfig, configFile)
 
