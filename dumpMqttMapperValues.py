@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-#   Dump MqttMapper values V1.0.2
+#   Dump MqttMapper values
 #
 #   This tool dumps MQTT Mapper data from:
 #       - JSON configuration file
@@ -10,6 +10,9 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
+
+codeVersion = "1.0.3"
+
 import os
 import sys
 import pathlib
@@ -17,21 +20,39 @@ import getopt
 import glob
 import json
 import random
+from paho.mqtt.enums import CallbackAPIVersion
 import requests
 
+# MQTT import stuff
 global mqttInstalled
+mqttInstalled = False
+
+global mqttApiVersion
+mqttApiVersion = 1
+
+# Try to load paho-mqtt
 try:
     import paho.mqtt.client as mqtt
     mqttInstalled = True
+    # Try to find call_api_version (exists starting on version 2)
+    try:
+        mqtt.Client.callback_api_version
+        mqttApiVersion = 2
+    except AttributeError:
+        pass
 except:
-    mqttInstalled = False
+    pass
 
+# Sqlite3 import stuff
 global sqlite3Installed
+sqlite3Installed = False
+
+# Try to load sqlite3
 try:
     import sqlite3
     sqlite3Installed = True
 except:
-    sqlite3Installed = False
+    pass
 
 # Print an error message
 def printError(message):
@@ -62,18 +83,8 @@ def getValue(dict, key, default=''):
 
 # Called when MQTT broker is connected
 def onConnect(client, userdata, flags, reasonCode, properties=None):
-    if reasonCode:
-        if reasonCode >=0 and reasonCode <= 5:
-            errorMessage = ["Ok", \
-                "Inccorect protocol version", \
-                "Invalid client identifier", \
-                "Server unavailable", \
-                "Bad username or password", \
-                "Not authorized" \
-                ][reasonCode]
-        else:
-            errorMessage = "Unknown error"
-        printError(F"Failed to connect - Reason code={reasonCode}/{errorMessage}")
+    if reasonCode != 'Success':
+        printError(F"Failed to connect - Reason code={reasonCode}")
         return
     printDebug(F"Connected to {userdata['host']}:{userdata['port']}")
     mqttTopics = userdata["mqttTopics"]
@@ -82,7 +93,7 @@ def onConnect(client, userdata, flags, reasonCode, properties=None):
     printDebug(F"Status={status}")
 
 # Called when a subscription is acknoledged
-def onSubcribe(client, userdata, mid, granted_qos):
+def onSubcribe(client, userdata, mid, reason_codes, properties=None):
     pass
 
 # Called when a subscribed message is received
@@ -139,7 +150,11 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
         data["host"] = jsonParameters['mqttHost']
         data["port"] = jsonParameters['mqttPort']
         data["mqttTopics"] = mqttTopics
-        mqttClient = mqtt.Client(client_id=mqttClientName, userdata=data)
+        if mqttApiVersion >= 2:
+            mqttClient = mqtt.Client(client_id=mqttClientName, userdata=data, callback_api_version=CallbackAPIVersion.VERSION2)
+        else:
+            mqttClient = mqtt.Client(client_id=mqttClientName, userdata=data)
+
         printDebug(F"Client {mqttClientName}, topics {mqttTopics}")
 
         # Set callbacks
@@ -169,13 +184,13 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
             if sleepCount <= 0:
                 break
             sleepCount -= 1
-            mqttClient.loop(timeout=1.0, max_packets=0)
+            mqttClient.loop(timeout=1.0)
 
         # Additional wait if asked (useful for data without retain flag)
         global waitTime
         if waitTime > 0.0:
             printDebug(F"Waiting for {waitTime} minute{'s' if waitTime > 1 else ''}")
-            mqttClient.loop(timeout=waitTime * 60.0, max_packets=0)
+            mqttClient.loop(timeout=waitTime * 60.0)
 
         # Disconnect
         mqttClient.disconnect()
@@ -265,7 +280,12 @@ def getApiDataById(deviceId, prefix):
             return F"{prefix} Device ID '{deviceId}' not found"
     return ""
 
+# *****************
 # *** Main code ***
+# *****************
+
+# Welcome message
+print(F"Starting dumpMqttMapperValues V{codeVersion}")
 
 # Init arguments variables
 cdeFile = __file__
@@ -330,6 +350,7 @@ if not inputFiles:
 
 if domoticzUrl == None:
     domoticzUrl = "http://127.0.0.1:8080/"
+    domoticzUrl = "http://utility:8080/"
 
 # Check for MQTT installed
 if not mqttInstalled:
