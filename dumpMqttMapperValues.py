@@ -105,7 +105,7 @@ def checkForDatabaseDuplicates(databaseConnection):
 
 # Called when MQTT broker is connected
 def onConnect(client, userdata, flags, reasonCode, properties=None):
-    if reasonCode != 'Success':
+    if reasonCode != 'Success' and str(reasonCode) != '0':
         printError(F"Failed to connect - Reason code={reasonCode}")
         return
     printDebug(F"Connected to {userdata['host']}:{userdata['port']}")
