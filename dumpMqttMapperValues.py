@@ -13,7 +13,7 @@
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.1.0"
+codeVersion = "1.1.1"
 
 import os
 import sys
