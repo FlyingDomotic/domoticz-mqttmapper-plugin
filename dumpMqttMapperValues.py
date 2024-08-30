@@ -376,7 +376,10 @@ if not inputFiles:
 
 if domoticzUrl == None:
     domoticzUrl = "http://127.0.0.1:8080/"
-    domoticzUrl = "http://Noailles:8080/"
+ 
+# Add an ending "/" if not given
+if not domoticzUrl.endswith("/"):
+    domoticzUrl += "/"
 
 # Check for MQTT installed
 if not mqttInstalled:
