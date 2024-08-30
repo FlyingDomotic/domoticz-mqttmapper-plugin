@@ -13,7 +13,7 @@
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.1.2"
+codeVersion = "1.2.0"
 
 import os
 import sys
@@ -105,9 +105,12 @@ def checkForDatabaseDuplicates(databaseConnection):
 
 # Called when MQTT broker is connected
 def onConnect(client, userdata, flags, reasonCode, properties=None):
+    global mqttIsConnected
     if reasonCode != 'Success' and str(reasonCode) != '0':
         printError(F"Failed to connect - Reason code={reasonCode}")
+        mqttIsConnected = False
         return
+    mqttIsConnected = True
     printDebug(F"Connected to {userdata['host']}:{userdata['port']}")
     mqttTopics = userdata["mqttTopics"]
     printDebug(F"Subscribing to {mqttTopics}")
@@ -124,7 +127,9 @@ def onMessage(client, userdata, msg):
     global sleepCount
     sleepCount = 2
     cleanMessage = msg.payload.decode('UTF-8').replace('\n','').replace('\t','')
-    printLog(F"Topic '{msg.topic}'='{cleanMessage}'")
+    global mqttTopicsValue
+    mqttTopicsValue[msg.topic] = cleanMessage
+    printDebug(F"Topic '{msg.topic}'='{cleanMessage}'")
 
 # Check MqttMapper JSON mapping file jsonConfigurationFile
 def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
@@ -145,22 +150,17 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
         # build device ID
         deviceId = nodeKey if nodeKey !="" else nodeTopic
 
-        apiDefinition = getApiDataById(deviceId, "    API: " )
-        databaseDefinition = getDatabaseDataById(deviceId, "    Database: ")
-    
-        printLog(F"{deviceName}")
-        printLog(F"    MqttMapper: {mqttMapperDefinition}")
-        if apiDefinition != "": 
-            printLog(F"{apiDefinition}")
-        if databaseDefinition != "": 
-            printLog(F"{databaseDefinition}")
-
         # Extract topic
         nodeTopic = getValue(mqttMapperDefinition, "topic")
         # Add to topic list if not already done
         if nodeTopic not in mqttTopics:
             mqttTopics.append((nodeTopic, 0))
 
+    # Set Mqtt topic value to empty dict
+    global mqttTopicsValue
+    mqttTopicsValue = {}
+
+    # If MQTT is installed, connect to MQTT to get topics values
     global mqttInstalled
     if mqttInstalled:
         # Compose unique MQTT client Id
@@ -218,6 +218,34 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
         mqttClient.disconnect()
         # Release client
         mqttClient = None
+
+    # Display result, including MqttMapper, API, database and MQTT view
+    for node in jsonConfiguration.items():
+        deviceName = node[0]
+        mqttMapperDefinition = node[1]
+
+        # Extract topic and key
+        nodeTopic = getValue(mqttMapperDefinition, "topic")
+        nodeKey = getValue(mqttMapperDefinition, "key")
+        # build device ID
+        deviceId = nodeKey if nodeKey !="" else nodeTopic
+
+        apiDefinition = getApiDataById(deviceId, "    API: " )
+        databaseDefinition = getDatabaseDataById(deviceId, "    Database: ")
+        printLog(F"{deviceName}")
+        printLog(F"    MqttMapper: {mqttMapperDefinition}")
+        if apiDefinition != "": 
+            printLog(F"{apiDefinition}")
+        if databaseDefinition != "": 
+            printLog(F"{databaseDefinition}")
+        if mqttInstalled and mqttIsConnected:
+            mqttValue = "    MQTT: "
+            if nodeTopic in mqttTopicsValue:
+                mqttValue += F"'{nodeTopic}'='{mqttTopicsValue[nodeTopic]}'"
+            else:
+                mqttValue += F"*** '{nodeTopic}' not seen - No 'retain' flag or don't exist ***"
+            printLog(F"{mqttValue}")
+
 
 # Return an URL text content
 def getLinkContent(url):
@@ -386,6 +414,9 @@ if not mqttInstalled:
     printLog(F"Warning: Python MQTT not installed. Please use 'pip3 install paho-mqtt' to fix it")
     printLog(F"Warning: MQTT topics content will not being displayed")
 
+global mqttConnected
+mqttIsConnected = False
+
 # Set current working directory to this python file folder
 os.chdir(pathlib.Path(__file__).parent.resolve())
 
@@ -394,6 +425,7 @@ domoticzVersion = None
 
 global domoticzDevices
 domoticzDevices = None
+
 
 # Ask Domoticz for version
 printDebug(F"Asking for Domoticz version")
@@ -460,6 +492,9 @@ else:
 # Display a warning if something wrong
 if databaseConnection == None:
     printLog(F"Warning: Domoticz database device content will not be displayed")
+
+# Set Mqtt topic value to empty dict
+mqttTopicsValue = {}
 
 # Read config files
 for specs in inputFiles:
