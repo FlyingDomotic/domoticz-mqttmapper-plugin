@@ -13,7 +13,7 @@
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.2.0"
+codeVersion = "1.3.0"
 
 import os
 import sys
@@ -129,7 +129,11 @@ def onMessage(client, userdata, msg):
     cleanMessage = msg.payload.decode('UTF-8').replace('\n','').replace('\t','')
     global mqttTopicsValue
     mqttTopicsValue[msg.topic] = cleanMessage
-    printDebug(F"Topic '{msg.topic}'='{cleanMessage}'")
+    if showChanges:
+        printLog(F"Topic '{msg.topic}'='{cleanMessage}'{' (NOT retained)' if msg.retain == 0 else ''}")
+    else:
+        printDebug(F"Topic '{msg.topic}'='{cleanMessage}'{' (NOT retained)' if msg.retain == 0 else ''}")
+
 
 # Check MqttMapper JSON mapping file jsonConfigurationFile
 def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
@@ -211,7 +215,7 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
         # Additional wait if asked (useful for data without retain flag)
         global waitTime
         if waitTime > 0.0:
-            printDebug(F"Waiting for {waitTime} minute{'s' if waitTime > 1 else ''}")
+            printLog(F"Waiting for changes for {waitTime} minute{'s' if waitTime > 1 else ''}")
             mqttClient.loop(timeout=waitTime * 60.0)
 
         # Disconnect
@@ -349,6 +353,7 @@ debugFlag = False
 
 keepFlag = False
 checkSameEnd = False
+showChanges = False
 
 global waitTime
 waitTime = 0.0
@@ -364,17 +369,18 @@ else:
 helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
     [--input=<input file(s)>]: input file name (can be repeated, default to *.json.parameters)
     [--wait=<minutes>]: wait for MQTT changes for <minutes>
-    [--url=<domoticz URL>: use this Domoticz URL instead of default http://127.0.0.1:8080/]
-    [--checkend]: check for device names sharing same text at end
+    [--showchanges]: display MQTT topics changes for --wait minutes (1 minutes if not given)
+    [--url=<domoticz URL>]: use this Domoticz URL instead of default http://127.0.0.1:8080/
+    [--sameend]: check for device names sharing same text at end
     [--keep]: keep database copy and API response
     [--debug]: print debug messages
     [--help]: print this help message
 
-   Dump MqttMapper topic values
+   Dump MqttMapper definitions, Domoticz API and database settings and related topic values
 
 """
 try:
-    opts, args = getopt.getopt(command, "h",["help", "debug", "keep", "checkend", "input=", "wait=", "url="])
+    opts, args = getopt.getopt(command, "h",["help", "debug", "keep", "sameend", "showchanges", "input=", "wait=", "url="])
 except getopt.GetoptError as excp:
     print(excp.msg)
     print('in >'+str(command)+'<')
@@ -391,11 +397,14 @@ for opt, arg in opts:
         keepFlag = True
     elif opt == '--sameend':
         checkSameEnd = True
+    elif opt == '--showchanges':
+        showChanges = True
+        if waitTime <= 0.0:
+            waitTime = 1
     elif opt == '--url':
         domoticzUrl = arg
     elif opt == '--wait':
         waitTime = int(arg)
-        printDebug(F"Will wait for {waitTime} minute(s)")
     elif opt == '--input':
         inputFiles.append(arg)
 
