@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.44" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with LAN interface" author="Flying Domotic" version="1.0.45" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -212,7 +212,11 @@ class BasePlugin:
 
     # Return True is valueToTest can be interpreted as a float
     def isFloat(self, valueToTest):
-        if valueToTest is None: 
+        if valueToTest is None:
+            return False
+        if type(valueToTest).__name__ == "bool":
+            return False
+        if valueToTest.lower() in {"false", "true"}:
             return False
         try:
             float(valueToTest)
@@ -227,6 +231,8 @@ class BasePlugin:
     def computeValue(self, itemValue, nodeMapping, setMapping=None):
         if self.isFloat(itemValue):                                         # If raw value is numeric or float
             result = float(itemValue)                                       # Convert value as float
+            if int(result) == result:                                       # Is value an integer?
+                result = int(result)                                        # Force to integer
             multiplier = None
             digits = None
             if setMapping:                                                  # Are we in set operation?
@@ -462,7 +468,7 @@ class BasePlugin:
                         if  mappingDefault != None and mappingValues != None:
                             valueToSet = mappingDefault # Set default mapping
                             for testValue in mappingValues: # Scan all mapping values
-                                Domoticz.Log(f'testValue="{testValue}" ({type(testValue)}), readValue="{readValue}" ({type(readValue)})')
+                                Domoticz.Log(f'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
                                 if testValue == readValue:  # Is this the same value?
                                     valueToSet = mappingValues[testValue]   # Insert mapped value
                         else:
