@@ -216,6 +216,8 @@ class BasePlugin:
             return False
         if type(valueToTest).__name__ == "bool":
             return False
+        if type(valueToTest).__name__ in {"int", "float"}:
+            return True
         if valueToTest.lower() in {"false", "true"}:
             return False
         try:
