@@ -8,24 +8,25 @@ import pathlib
 import getopt
 import sys
 import json
+from typing import Any
 
 # Dumps a dictionary to screen
-def dumpToLog(value, Depth=""):
+def dumpToLog(value: Any, depth: str = "") -> None:
     if isinstance(value, dict) or isinstance(value, list):
         for x in value:
             if isinstance(value[x], dict):
-                print(Depth+"> Dict '"+x+"' ("+str(len(value[x]))+"):")
-                dumpToLog(value[x], Depth+"--")
+                print(depth+"> Dict '"+x+"' ("+str(len(value[x]))+"):")
+                dumpToLog(value[x], depth+"--")
             elif isinstance(value[x], list):
-                print(Depth+"> List '"+x+"' ("+str(len(value[x]))+"):")
-                dumpToLog(value[x], Depth+"--")
+                print(depth+"> List '"+x+"' ("+str(len(value[x]))+"):")
+                dumpToLog(value[x], depth+"--")
             elif isinstance(value[x], str):
-                print(Depth+">'" + x + "':'" + str(value[x]) + "'")
+                print(depth+">'" + x + "':'" + str(value[x]) + "'")
             else:
-                print(Depth+">'" + x + "': " + str(value[x]))
+                print(depth+">'" + x + "': " + str(value[x]))
 
 # Return a path in a dictionary (else None)
-def getPathValue (dict, path, separator = '/'):
+def getPathValue (dict: Any, path: str, separator: str = '/') -> Any:
     pathElements = path.split(separator)
     element = dict
     for pathElement in pathElements:
@@ -35,21 +36,21 @@ def getPathValue (dict, path, separator = '/'):
     return element
 
 # Returns a dictionary value giving a key or default value if not existing
-def getValue(dict, key, default=''):
+def getValue(dict: Any, key: str, default : Any = '') -> Any:
     if dict == None:
         return default
     else:
         if key in dict:
             if dict[key] == None:
-                return default #or None
+                return default
             else:
                 return dict[key]
         else:
-            return default #or None
+            return default
 
 
 # Check MqttMapper JSON mapping file jsonFile
-def checkJson(jsonData, jsonFile):
+def checkJson(jsonData: dict, jsonFile: str) -> None:
     # Iterating through the JSON list
     if traceFlag:
         dumpToLog(jsonData)
@@ -123,7 +124,7 @@ helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
 """
 try:
     opts, args = getopt.getopt(command, "hti=",["help", "trace", "input="])
-except getopt.GetopterrorText as excp:
+except getopt.GetoptError as excp:
     print(excp.msg)
     print('in >'+str(command)+'<')
     print(helpMsg)
