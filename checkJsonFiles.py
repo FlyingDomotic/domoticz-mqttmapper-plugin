@@ -2,6 +2,8 @@
 #   Parse MqttMapper configuration file
 #
 
+version = "1.2.0"
+
 import glob
 import os
 import pathlib
@@ -48,6 +50,75 @@ def getValue(dict: Any, key: str, default : Any = '') -> Any:
         else:
             return default
 
+# Check a json item against a definition dictinary
+def checkToken(tokenName: str, nodeItem: Any) -> str:
+    # Init errors
+    errorText = ""
+
+    # Load authorized token list
+    tokenList = dict({ 
+        "node/topic": {"mandatory": True, "type": "str"},
+        "node/type": {"mandatory": True, "type": ["int", "str"]},
+        "node/subtype": {"mandatory": True, "type": ["int", "str"]},
+        "node/mapping": {"mandatory": True, "type": "dict"},
+        "node/key": {"mandatory": False, "type": "str"},
+        "node/switchtype": {"mandatory": False, "type": ["int", "str"]},
+        "node/options": {"mandatory": False, "type": "Any"},
+        "node/initial": {"mandatory": False, "type": "dict"},
+        "node/visible": {"mandatory": False, "type": "bool"},
+        "node/set": {"mandatory": False, "type": "dict"},
+        "mapping/item": {"mandatory": True, "type": "str"},
+        "mapping/default": {"mandatory": False, "type": "str"},
+        "mapping/digits": {"mandatory": False, "type": "int"},
+        "mapping/multiplier": {"mandatory": False, "type": ["int", "float"]},
+        "mapping/values": {"mandatory": False, "type": "Any"},
+        "set/topic": {"mandatory": False, "type": "str"},
+        "set/payload": {"mandatory": False, "type": "Any"},
+        "set/command": {"mandatory": False, "type": "str"},
+        "set/digits": {"mandatory": False, "type": "int"},
+        "set/multiplier": {"mandatory": False, "type": "int"},
+        "initial/nvalue": {"mandatory": False, "type": "int"},
+        "initial/svalue": {"mandatory": False, "type": "str"}
+        })
+
+    #  Check for mandatory tokens
+    for token in tokenList:
+        elements = token.split("/")
+        # Is this token the one for our items?
+        if elements[0] == tokenName:
+            # If token mandatory?
+            if tokenList[token]['mandatory']:
+                # Is token not present in items?
+                if not elements[1] in nodeItem:
+                    errorText += F"\n{elements[1]} is mandatory"
+                    if elements[0] != "node":
+                        errorText += F" in {elements[0]}"
+
+    # Check for each item
+    for item in nodeItem:
+        # Compose key
+        key = tokenName + "/" + item
+        # if item in allowed token list?
+        if key in tokenList:
+            # Check for item type against token type
+            tokenType = tokenList[key]['type']
+            if tokenType != "Any":
+                # Get item type
+                itemType = type(nodeItem[item]).__name__
+                # Check for type 
+                if isinstance(tokenType, list):
+                    if itemType not in tokenType:
+                        errorText += F"\n{item} is {itemType} instead of {tokenType}"
+                else:
+                    if itemType != tokenType:
+                        errorText += F"\n{item} is {itemType} instead of {tokenType}"
+                if itemType in ['list', 'dict']:
+                    errorText += checkToken(item, nodeItem[item])
+        else:
+            errorText += F"\n{item} is unkown"
+            if tokenName != "node":
+                errorText += F" for {tokenName}"
+    return errorText
 
 # Check MqttMapper JSON mapping file jsonFile
 def checkJson(jsonData: dict, jsonFile: str) -> None:
@@ -61,32 +132,18 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
         nodeName = node[0]
         nodeItems = node[1]
         nodeTopic = getValue(nodeItems, 'topic', None)
-        nodeType = getValue(nodeItems, 'type', None)
         nodeKey = getValue(nodeItems, 'key', None)
-        nodeSubtype = getValue(nodeItems, 'subtype', None)
-        nodeSwitchtype = getValue(nodeItems, 'switchtype', None)
-        nodeOptions  = getValue(nodeItems, 'options', None)
-        nodeMapping = getValue(nodeItems, 'mapping', None)
-        mappingItem = getValue(nodeMapping, 'item', None)
-        mappingDefault = getValue(nodeMapping, 'default', None)
-        mappingValues = getValue(nodeMapping, 'values', None)
         errorText = ''
         if nodeName == None or nodeName == '':
-            errorText += ', no device name given'
+            errorText += '\nno device name given'
         elif nodeItems == None or nodeItems == '':
-            errorText += ', no items given'
+            errorText += '\nno items given'
         else:
-            if nodeType == None:
-                errorText += ', no type given'
-            if nodeSubtype == None:
-                errorText += ', no subtype given'
-                if nodeMapping == None:
-                    errorText += ", no mapping given"
-                else:
-                    if mappingItem == None:
-                        errorText += ', no mapping item given'
+            errorText += checkToken("node", nodeItems)
         if errorText:
-            print('Invalid data in "'+str(node)+'": '+errorText[1:])
+            print("    Invalid data in "+str(node))
+            for errorLine in errorText[1:].split('\n'):
+                print("    --> "+errorLine)
             errorSeen += 1
         device = nodeKey if nodeKey else nodeTopic
         if device in devices:
@@ -104,6 +161,7 @@ cdeFile = __file__
 if cdeFile[:2] == './':
     cdeFile = cdeFile[2:]
 
+print(F"{cdeFile} V{version}")
 inputFiles = []
 traceFlag = False
 
