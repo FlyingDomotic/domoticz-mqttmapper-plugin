@@ -2,7 +2,7 @@
 #   Parse MqttMapper configuration file
 #
 
-version = "1.2.0"
+version = "1.3.0"
 
 import glob
 import os
@@ -13,22 +13,50 @@ import json
 from typing import Any
 
 # Dumps a dictionary to screen
-def dumpToLog(value: Any, depth: str = "") -> None:
-    if isinstance(value, dict) or isinstance(value, list):
-        for x in value:
-            if isinstance(value[x], dict):
-                print(depth+"> Dict '"+x+"' ("+str(len(value[x]))+"):")
-                dumpToLog(value[x], depth+"--")
-            elif isinstance(value[x], list):
-                print(depth+"> List '"+x+"' ("+str(len(value[x]))+"):")
-                dumpToLog(value[x], depth+"--")
-            elif isinstance(value[x], str):
-                print(depth+">'" + x + "':'" + str(value[x]) + "'")
-            else:
-                print(depth+">'" + x + "': " + str(value[x]))
+def dumpToLog(value: Any) -> None:
+    if traceFlag:
+        print("")
+    for line in json.dumps(value, indent=4, ensure_ascii=False).split("\n"):
+        if not(line.startswith("[") or line.startswith("]")):
+            if '"type":' in line:
+                line += F" ({typeLib})"
+            if '"subtype":' in line:
+                line += F" ({subTypeLib})"
+            if '"switchtype":' in line:
+                line += F" ({switchTypeLib})"
+            if traceFlag:
+                print(line)
+
+# Returns a field value in a dictionary with a selection field and value (or None if not found)
+def getDictField(searchDict: dict, returnField: str, selectField: str, selectValue: Any, selectField2: str = "", selectValue2 : Any = None) -> Any:
+    # Scan all items
+    for item in searchDict.keys():
+        # Extract data
+        itemData = searchDict[item]
+        # Is select field in item?
+        if selectField in itemData:
+            # Is select field with required value?
+            if itemData[selectField] == selectValue:
+                if selectField2 != "":
+                    # Is select field 2 in item?
+                    if selectField2 in itemData:
+                        # Is select field 2 with required value?
+                        if itemData[selectField2] == selectValue2:
+                            # Return required field value
+                            if returnField != "":
+                                return getValue(itemData, returnField, None)
+                            else:
+                                return itemData
+                else:
+                    # Return required field value
+                    if returnField != "":
+                        return getValue(itemData, returnField, None)
+                    else:
+                        return itemData
+    return None
 
 # Return a path in a dictionary (else None)
-def getPathValue (dict: Any, path: str, separator: str = '/') -> Any:
+def getPathValue(dict: Any, path: str, separator: str = '/') -> Any:
     pathElements = path.split(separator)
     element = dict
     for pathElement in pathElements:
@@ -38,7 +66,7 @@ def getPathValue (dict: Any, path: str, separator: str = '/') -> Any:
     return element
 
 # Returns a dictionary value giving a key or default value if not existing
-def getValue(dict: Any, key: str, default : Any = '') -> Any:
+def getValue(dict: Any, key: str, default: Any = '') -> Any:
     if dict == None:
         return default
     else:
@@ -49,6 +77,10 @@ def getValue(dict: Any, key: str, default : Any = '') -> Any:
                 return dict[key]
         else:
             return default
+
+# Format json data, removing {} and ""
+def formatJson(jsonData: dict) -> str:
+    return json.dumps(jsonData, ensure_ascii=False).replace("{", "").replace("}","").replace('"', "")
 
 # Check a json item against a definition dictinary
 def checkToken(tokenName: str, nodeItem: Any) -> str:
@@ -122,12 +154,16 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
 
 # Check MqttMapper JSON mapping file jsonFile
 def checkJson(jsonData: dict, jsonFile: str) -> None:
+    # Don't check DomoticzTypes.json file
+    if jsonFile == domoticzTypesFile:
+        return
     # Iterating through the JSON list
-    if traceFlag:
-        dumpToLog(jsonData)
     print("Checking "+jsonFile)
     errorSeen = 0
     devices = []
+    global typeLib
+    global subTypeLib
+    global switchTypeLib
     for node in jsonData.items():
         nodeName = node[0]
         nodeItems = node[1]
@@ -140,6 +176,78 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             errorText += '\nno items given'
         else:
             errorText += checkToken("node", nodeItems)
+        if traceFlag:
+            dumpToLog(node)
+        type = None
+        typeLib = "???"
+        subType = None
+        subTypeLib = "???"
+        definitionItems = None
+        switchType = None
+        switchTypeLib = "???"
+
+        if "type" in nodeItems:
+            try:
+                type = int(nodeItems["type"])
+            except:
+                pass
+            else:
+                value = getDictField(domoticzTypes["types"], "name", "value", type)
+                if value != None:
+                    typeLib = value
+
+            if typeLib == "???":
+                errorText += F"\ntype {type} not known"
+
+        if "subtype" in nodeItems:
+            try:
+                subType = int(nodeItems["subtype"])
+            except:
+                pass
+            else:
+                value = getDictField(domoticzTypes["subTypes"], "name", "value", subType, "typeValue", type)
+                if value != None:
+                    subTypeLib = value
+
+            if subTypeLib == "???":
+                errorText += F"\nsubType {subType} not known with type {type}"
+
+        if "switchtype" in nodeItems:
+            try:
+                switchType = int(nodeItems["switchtype"])
+            except:
+                pass
+            else:
+                definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type, "subTypeValue", subType)
+                if definitionItems != None:
+                    if "switchType" in definitionItems:
+                        if definitionItems["switchType"] == "switch":
+                            value = getDictField(domoticzTypes["switchTypes"], "name", "value", switchType)
+                            if value != None:
+                                switchTypeLib = value
+                            else:
+                                errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
+                        elif definitionItems["switchType"] == "counter":
+                            value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
+                            if value != None:
+                                switchTypeLib = value
+                            else:
+                                errorText += F"\nswitchType {switchType} is not a known counter type for type {type}, sub type {subType}"
+                        elif switchType:
+                            errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                    else:
+                        if switchType != 0:
+                            errorText += F"\nswitchType should 0, not {switchType} for type {type}, sub type {subType}"
+                else:
+                    errorText += F"\nType {type}, sub type {subType} not supported!"
+
+        if traceFlag:
+            if definitionItems != None:
+                for item in definitionItems.keys():
+                    if item == "nValue" or item.startswith("sValue"):
+                        print(f"    {item}: {formatJson(definitionItems[item])}")
+                pass
+
         if errorText:
             print("    Invalid data in "+str(node))
             for errorLine in errorText[1:].split('\n'):
@@ -151,9 +259,9 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
         else:
             devices.append(device)
     if errorSeen:
-        print("    Errors in "+jsonFile+", fix them and recheck!!!")
+        print("  Errors in "+jsonFile+", fix them and recheck!!!")
     else:
-        print("    File seems good")
+        print("  File seems good")
 
 # *** Main code ***
 # Init arguments variables
@@ -161,9 +269,14 @@ cdeFile = __file__
 if cdeFile[:2] == './':
     cdeFile = cdeFile[2:]
 
-print(F"{cdeFile} V{version}")
+print(F"{cdeFile} V{version} - Use --trace to get details")
 inputFiles = []
 traceFlag = False
+domoticzTypesFile = "DomoticzTypes.json"
+domoticzTypes = {}
+typeLib = ""
+subTypeLib = ""
+switchTypeLib = ""
 
 # Use command line if given
 if sys.argv[1:]:
@@ -203,6 +316,13 @@ if not inputFiles:
 if traceFlag:
     print('Input file(s)->'+str(inputFiles))
 
+# Read Domoticz types
+with open(domoticzTypesFile, "rt", encoding="UTF-8") as typesStream:
+    try:
+        domoticzTypes = json.load(typesStream)
+    except Exception as error:
+        print(F"{error} when reading {domoticzTypesFile}")
+
 # Set current working directory to this python file folder
 os.chdir(pathlib.Path(__file__).parent.resolve())
 
@@ -211,6 +331,8 @@ for specs in inputFiles:
     for configFile in glob.glob(specs):
         try:
             with open(configFile, encoding = 'UTF-8') as configStream:
-                checkJson(json.load(configStream), configFile)
+                jsonData = json.load(configStream)
         except Exception as exception:
             print(str(exception)+" when loading "+configFile+". Fix error and retry check!!!")
+        else:
+            checkJson(jsonData, configFile)
