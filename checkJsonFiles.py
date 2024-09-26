@@ -2,7 +2,7 @@
 #   Parse MqttMapper configuration file
 #
 
-version = "1.3.0"
+version = "1.3.1"
 
 import glob
 import os
@@ -227,8 +227,8 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                                 switchTypeLib = value
                             else:
                                 errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
-                        elif definitionItems["switchType"] == "counter":
-                            value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
+                        elif definitionItems["switchType"] == "meter":
+                            value = getDictField(domoticzTypes["counterTypes"], "name", "value", switchType)
                             if value != None:
                                 switchTypeLib = value
                             else:
@@ -245,8 +245,11 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             if definitionItems != None:
                 for item in definitionItems.keys():
                     if item == "nValue" or item.startswith("sValue"):
-                        print(f"    {item}: {formatJson(definitionItems[item])}")
-                pass
+                        items = definitionItems[item]
+                        # Remove format item
+                        if "format" in items:
+                            del items["format"]
+                        print(f"    {item}: {formatJson(items)}")
 
         if errorText:
             print("    Invalid data in "+str(node))

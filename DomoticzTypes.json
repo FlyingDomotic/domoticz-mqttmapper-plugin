@@ -1,6 +1,6 @@
 {
     "config": {
-        "date": "2024-09-25T19:41:41.327000",
+        "date": "2024-09-26T14:06:32.040000",
         "version": "2024.7.0"
     },
     "types": {
@@ -5428,7 +5428,7 @@
     "definitions": {
         "85/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeRAIN",
+            "typeName": "RAIN",
             "typeValue": 85,
             "sValue": {
                 "name": "rainRate",
@@ -5446,7 +5446,7 @@
         },
         "86/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeWIND",
+            "typeName": "WIND",
             "typeValue": 86,
             "sValue": {
                 "name": "direction",
@@ -5490,7 +5490,7 @@
         },
         "80/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeTEMP",
+            "typeName": "TEMP",
             "typeValue": 80,
             "sValue": {
                 "name": "temp",
@@ -5524,7 +5524,7 @@
         },
         "81/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeHUM",
+            "typeName": "HUM",
             "typeValue": 81,
             "nValue": {
                 "name": "humidity",
@@ -5538,7 +5538,7 @@
         },
         "247/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeTEMP_BARO",
+            "typeName": "TEMP_BARO",
             "typeValue": 247,
             "sValue": {
                 "name": "temp",
@@ -5569,7 +5569,7 @@
         },
         "79/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeTEMP_RAIN",
+            "typeName": "TEMP_RAIN",
             "typeValue": 79,
             "sValue": {
                 "name": "temp",
@@ -5588,7 +5588,7 @@
         },
         "87/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeUV",
+            "typeName": "UV",
             "typeValue": 87,
             "sValue": {
                 "name": "level",
@@ -5607,7 +5607,7 @@
         },
         "114/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeFS20",
+            "typeName": "FS20",
             "typeValue": 114,
             "nValue": {
                 "name": "state"
@@ -5615,16 +5615,16 @@
         },
         "16/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeLighting1",
+            "typeName": "Lighting1",
             "typeValue": 16,
             "nValue": {
                 "name": "state"
             }
         },
         "17/62": {
-            "subTypeName": "sSwitchTypeSelector",
+            "subTypeName": "TypeSelector",
             "subTypeValue": 62,
-            "typeName": "pTypeLighting2",
+            "typeName": "Lighting2",
             "typeValue": 17,
             "comment": "Replace by GeneralSwitch (244)",
             "nValue": {
@@ -5632,9 +5632,9 @@
             }
         },
         "17/73": {
-            "subTypeName": "sSwitchGeneralSwitch",
+            "subTypeName": "GeneralSwitch",
             "subTypeValue": 73,
-            "typeName": "pTypeLighting2",
+            "typeName": "Lighting2",
             "typeValue": 17,
             "switchType": "switch",
             "comment": "Replace by GeneralSwitch (244)",
@@ -5644,7 +5644,7 @@
         },
         "19/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeLighting4",
+            "typeName": "Lighting4",
             "typeValue": 19,
             "nValue": {
                 "name": "state"
@@ -5658,7 +5658,7 @@
         },
         "20/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeLighting5",
+            "typeName": "Lighting5",
             "typeValue": 20,
             "nValue": {
                 "name": "state"
@@ -5672,7 +5672,7 @@
         },
         "21/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeLighting6",
+            "typeName": "Lighting6",
             "typeValue": 21,
             "nValue": {
                 "name": "state"
@@ -5686,7 +5686,7 @@
         },
         "23/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeFan",
+            "typeName": "Fan",
             "typeValue": 23,
             "nValue": {
                 "name": "state"
@@ -5694,7 +5694,7 @@
         },
         "27/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeHomeConfort",
+            "typeName": "HomeConfort",
             "typeValue": 27,
             "nValue": {
                 "name": "command"
@@ -5702,7 +5702,7 @@
         },
         "241/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeColorSwitch",
+            "typeName": "ColorSwitch",
             "typeValue": 241,
             "nValue": {
                 "name": "command"
@@ -5715,7 +5715,7 @@
         },
         "22/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeChime",
+            "typeName": "Chime",
             "typeValue": 22,
             "nValue": {
                 "name": "sound"
@@ -5723,7 +5723,7 @@
         },
         "24/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeCurtain",
+            "typeName": "Curtain",
             "typeValue": 24,
             "nValue": {
                 "name": "command"
@@ -5731,7 +5731,7 @@
         },
         "25/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeBlinds",
+            "typeName": "Blinds",
             "typeValue": 25,
             "nValue": {
                 "name": "command"
@@ -5739,7 +5739,7 @@
         },
         "26/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeRFY",
+            "typeName": "RFY",
             "typeValue": 26,
             "nValue": {
                 "name": "command"
@@ -5747,7 +5747,7 @@
         },
         "69/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeEvohome",
+            "typeName": "Evohome",
             "typeValue": 69,
             "nValue": {
                 "name": "status"
@@ -5760,7 +5760,7 @@
         },
         "71/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeEvohomeWater",
+            "typeName": "EvohomeWater",
             "typeValue": 71,
             "sValue": {
                 "name": "text",
@@ -5770,7 +5770,7 @@
         },
         "70/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeEvohomeZone",
+            "typeName": "EvohomeZone",
             "typeValue": 70,
             "sValue": {
                 "name": "text",
@@ -5780,7 +5780,7 @@
         },
         "68/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeEvohomeRelay",
+            "typeName": "EvohomeRelay",
             "typeValue": 68,
             "sValue": {
                 "name": "text",
@@ -5790,7 +5790,7 @@
         },
         "32/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeSecurity1",
+            "typeName": "Security1",
             "typeValue": 32,
             "nValue": {
                 "name": "status"
@@ -5798,12 +5798,12 @@
         },
         "33/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeSecurity2",
+            "typeName": "Security2",
             "typeValue": 33
         },
         "48/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeRemote",
+            "typeName": "Remote",
             "typeValue": 48,
             "nValue": {
                 "name": "state"
@@ -5811,7 +5811,7 @@
         },
         "242/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeSetpoint",
+            "typeName": "Setpoint",
             "typeValue": 242,
             "sValue": {
                 "name": "value",
@@ -5822,7 +5822,7 @@
         },
         "64/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeThermostat1",
+            "typeName": "Thermostat1",
             "typeValue": 64,
             "sValue": {
                 "name": "temp",
@@ -5847,7 +5847,7 @@
         },
         "65/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeThermostat2",
+            "typeName": "Thermostat2",
             "typeValue": 65,
             "nValue": {
                 "name": "command"
@@ -5855,7 +5855,7 @@
         },
         "66/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeThermostat3",
+            "typeName": "Thermostat3",
             "typeValue": 66,
             "nValue": {
                 "name": "command"
@@ -5863,7 +5863,7 @@
         },
         "67/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeThermostat4",
+            "typeName": "Thermostat4",
             "typeValue": 67,
             "sValue": {
                 "name": "beep",
@@ -5898,7 +5898,7 @@
         },
         "72/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeRadiator1",
+            "typeName": "Radiator1",
             "typeValue": 72,
             "nValue": {
                 "name": "command"
@@ -5916,7 +5916,7 @@
         },
         "89/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeCURRENT",
+            "typeName": "CURRENT",
             "typeValue": 89,
             "sValue": {
                 "name": "current",
@@ -5927,7 +5927,7 @@
         },
         "92/0": {
             "subTypeValue": 0,
-            "typeName": "pTypePOWER",
+            "typeName": "POWER",
             "typeValue": 92,
             "sValue": {
                 "name": "instant",
@@ -5945,7 +5945,7 @@
         },
         "91/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeCURRENTENERGY",
+            "typeName": "CURRENTENERGY",
             "typeValue": 91,
             "sValue": {
                 "name": "current",
@@ -5977,9 +5977,9 @@
             }
         },
         "90/2": {
-            "subTypeName": "sTypeELEC3",
+            "subTypeName": "ELEC3",
             "subTypeValue": 2,
-            "typeName": "pTypeENERGY",
+            "typeName": "ENERGY",
             "typeValue": 90,
             "sValue": {
                 "name": "instant",
@@ -5997,7 +5997,7 @@
         },
         "93/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeWEIGHT",
+            "typeName": "WEIGHT",
             "typeValue": 93,
             "sValue": {
                 "name": "weight",
@@ -6008,9 +6008,9 @@
             }
         },
         "112/0": {
-            "subTypeName": "sTypeRFXSensorTemp",
+            "subTypeName": "RFXSensorTemp",
             "subTypeValue": 0,
-            "typeName": "pTypeRFXSensor",
+            "typeName": "RFXSensor",
             "typeValue": 112,
             "sValue": {
                 "name": "temp",
@@ -6021,9 +6021,9 @@
             }
         },
         "112/1": {
-            "subTypeName": "sTypeRFXSensorAD",
+            "subTypeName": "RFXSensorAD",
             "subTypeValue": 1,
-            "typeName": "pTypeRFXSensor",
+            "typeName": "RFXSensor",
             "typeValue": 112,
             "sValue": {
                 "name": "voltage",
@@ -6033,9 +6033,9 @@
             }
         },
         "112/2": {
-            "subTypeName": "sTypeRFXSensorVolt",
+            "subTypeName": "RFXSensorVolt",
             "subTypeValue": 2,
-            "typeName": "pTypeRFXSensor",
+            "typeName": "RFXSensor",
             "typeValue": 112,
             "sValue": {
                 "name": "voltage",
@@ -6045,11 +6045,11 @@
             }
         },
         "113/0": {
-            "subTypeName": "sTypeRFXMeterCount",
+            "subTypeName": "RFXMeterCount",
             "subTypeValue": 0,
-            "typeName": "pTypeRFXMeter",
+            "typeName": "RFXMeter",
             "typeValue": 113,
-            "switchType": "counter",
+            "switchType": "meter",
             "sValue": {
                 "name": "counter",
                 "dataType": "positive number",
@@ -6058,7 +6058,7 @@
         },
         "250/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeP1Power",
+            "typeName": "P1Power",
             "typeValue": 250,
             "sValue": {
                 "name": "counter1",
@@ -6099,7 +6099,7 @@
         },
         "251/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeP1Gas",
+            "typeName": "P1Gas",
             "typeValue": 251,
             "sValue": {
                 "name": "counter",
@@ -6110,7 +6110,7 @@
         },
         "252/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeYouLess",
+            "typeName": "YouLess",
             "typeValue": 252,
             "sValue": {
                 "name": "counter",
@@ -6127,7 +6127,7 @@
         },
         "253/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeRego6XXTemp",
+            "typeName": "Rego6XXTemp",
             "typeValue": 253,
             "sValue": {
                 "name": "temperature",
@@ -6139,7 +6139,7 @@
         },
         "254/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeRego6XXValue",
+            "typeName": "Rego6XXValue",
             "typeValue": 254,
             "sValue": {
                 "name": "value",
@@ -6149,7 +6149,7 @@
         },
         "249/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeAirQuality",
+            "typeName": "AirQuality",
             "typeValue": 249,
             "nValue": {
                 "name": "airQuality",
@@ -6158,7 +6158,7 @@
         },
         "248/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeUsage",
+            "typeName": "Usage",
             "typeValue": 248,
             "sValue": {
                 "name": "instant",
@@ -6170,7 +6170,7 @@
         },
         "246/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeLux",
+            "typeName": "Lux",
             "typeValue": 246,
             "sValue": {
                 "name": "lux",
@@ -6181,9 +6181,9 @@
             }
         },
         "243/8": {
-            "subTypeName": "sTypeVoltage",
+            "subTypeName": "Voltage",
             "subTypeValue": 8,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "voltage",
@@ -6194,9 +6194,9 @@
             }
         },
         "243/6": {
-            "subTypeName": "sTypePercentage",
+            "subTypeName": "Percentage",
             "subTypeValue": 6,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "percentage",
@@ -6207,9 +6207,9 @@
             }
         },
         "243/1": {
-            "subTypeName": "sTypeVisibility",
+            "subTypeName": "Visibility",
             "subTypeValue": 1,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "visibility",
@@ -6220,9 +6220,9 @@
             }
         },
         "243/27": {
-            "subTypeName": "sTypeDistance",
+            "subTypeName": "Distance",
             "subTypeValue": 27,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "distance",
@@ -6233,9 +6233,9 @@
             }
         },
         "243/2": {
-            "subTypeName": "sTypeSolarRadiation",
+            "subTypeName": "SolarRadiation",
             "subTypeValue": 2,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "radiation",
@@ -6246,9 +6246,9 @@
             }
         },
         "243/3": {
-            "subTypeName": "sTypeSoilMoisture",
+            "subTypeName": "SoilMoisture",
             "subTypeValue": 3,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "nValue": {
                 "name": "moisture",
@@ -6256,18 +6256,18 @@
             }
         },
         "243/4": {
-            "subTypeName": "sTypeLeafWetness",
+            "subTypeName": "LeafWetness",
             "subTypeValue": 4,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "nValue": {
                 "name": "wetness"
             }
         },
         "243/23": {
-            "subTypeName": "sTypeCurrent",
+            "subTypeName": "Current",
             "subTypeValue": 23,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "current",
@@ -6278,9 +6278,9 @@
             }
         },
         "243/26": {
-            "subTypeName": "sTypeBaro",
+            "subTypeName": "Baro",
             "subTypeValue": 26,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "pressure",
@@ -6296,9 +6296,9 @@
             }
         },
         "243/9": {
-            "subTypeName": "sTypePressure",
+            "subTypeName": "Pressure",
             "subTypeValue": 9,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "pressure",
@@ -6309,9 +6309,9 @@
             }
         },
         "243/30": {
-            "subTypeName": "sTypeWaterflow",
+            "subTypeName": "Waterflow",
             "subTypeValue": 30,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "waterFlow",
@@ -6322,9 +6322,9 @@
             }
         },
         "243/7": {
-            "subTypeName": "sTypeFan",
+            "subTypeName": "Fan",
             "subTypeValue": 7,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "rpm",
@@ -6334,9 +6334,9 @@
             }
         },
         "243/24": {
-            "subTypeName": "sTypeSoundLevel",
+            "subTypeName": "SoundLevel",
             "subTypeValue": 24,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "sound",
@@ -6346,36 +6346,36 @@
             }
         },
         "243/20": {
-            "subTypeName": "sTypeZWaveThermostatMode",
+            "subTypeName": "ZWaveThermostatMode",
             "subTypeValue": 20,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "nValue": {
                 "name": "value"
             }
         },
         "243/21": {
-            "subTypeName": "sTypeZWaveThermostatFanMode",
+            "subTypeName": "ZWaveThermostatFanMode",
             "subTypeValue": 21,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "nValue": {
                 "name": "value"
             }
         },
         "243/35": {
-            "subTypeName": "sTypeZWaveThermostatOperatingState",
+            "subTypeName": "ZWaveThermostatOperatingState",
             "subTypeValue": 35,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "nValue": {
                 "name": "value"
             }
         },
         "243/32": {
-            "subTypeName": "sTypeZWaveAlarm",
+            "subTypeName": "ZWaveAlarm",
             "subTypeValue": 32,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "nValue": {
                 "name": "value"
@@ -6387,9 +6387,9 @@
             }
         },
         "243/29": {
-            "subTypeName": "sTypeKwh",
+            "subTypeName": "Kwh",
             "subTypeValue": 29,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "instant",
@@ -6407,9 +6407,9 @@
             }
         },
         "243/22": {
-            "subTypeName": "sTypeAlert",
+            "subTypeName": "Alert",
             "subTypeValue": 22,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "status",
@@ -6423,9 +6423,9 @@
             }
         },
         "243/31": {
-            "subTypeName": "sTypeCustom",
+            "subTypeName": "Custom",
             "subTypeValue": 31,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "value",
@@ -6435,9 +6435,9 @@
             }
         },
         "243/19": {
-            "subTypeName": "sTypeTextStatus",
+            "subTypeName": "TextStatus",
             "subTypeValue": 19,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
             "sValue": {
                 "name": "text",
@@ -6446,11 +6446,11 @@
             }
         },
         "243/28": {
-            "subTypeName": "sTypeCounterIncremental",
+            "subTypeName": "CounterIncremental",
             "subTypeValue": 28,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
-            "switchType": "counter",
+            "switchType": "meter",
             "sValue": {
                 "name": "counter",
                 "dataType": "number",
@@ -6458,11 +6458,11 @@
             }
         },
         "243/33": {
-            "subTypeName": "sTypeManagedCounter",
+            "subTypeName": "ManagedCounter",
             "subTypeValue": 33,
-            "typeName": "pTypeGeneral",
+            "typeName": "General",
             "typeValue": 243,
-            "switchType": "counter",
+            "switchType": "meter",
             "sValue": {
                 "name": "counter",
                 "dataType": "number",
@@ -6470,9 +6470,9 @@
             }
         },
         "244/62": {
-            "subTypeName": "sSwitchTypeSelector",
+            "subTypeName": "TypeSelector",
             "subTypeValue": 62,
-            "typeName": "pTypeGeneralSwitch",
+            "typeName": "GeneralSwitch",
             "typeValue": 244,
             "nValue": {
                 "name": "state"
@@ -6485,9 +6485,9 @@
             }
         },
         "244/73": {
-            "subTypeName": "sSwitchGeneralSwitch",
+            "subTypeName": "GeneralSwitch",
             "subTypeValue": 73,
-            "typeName": "pTypeGeneralSwitch",
+            "typeName": "GeneralSwitch",
             "typeValue": 244,
             "switchType": "switch",
             "nValue": {
@@ -6502,7 +6502,7 @@
         },
         "78/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeBBQ",
+            "typeName": "BBQ",
             "typeValue": 78,
             "sValue": {
                 "name": "temp1",
@@ -6521,7 +6521,7 @@
         },
         "31/0": {
             "subTypeValue": 0,
-            "typeName": "pTypeHunter",
+            "typeName": "Hunter",
             "typeValue": 31,
             "nValue": {
                 "name": "command"
