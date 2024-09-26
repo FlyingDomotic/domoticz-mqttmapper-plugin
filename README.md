@@ -335,6 +335,7 @@ Vous pouvez vérifier les erreurs les plus flagrantes des fichiers JSON avec le 
 
 ## Debug tool/Outil de déverminage
 
+### dumpMqttMapper
 To help debugging MqttMapper issues/configuration errors, a tool named dumpMqttMapperValues.py is available into plugin folder. It will scan plugin folder for configuration files, dump them with Domoticz API data, database content, and MQTT topics values. It will also check for device names duplicates, that often bring amazing side effects ;-) 
 
 Cut and past output (or redirect it to a file) and send it to me. 
@@ -363,7 +364,13 @@ Les options suivantes sont disponibles :
     [--debug]: affiche les messages de déverminage
     [--help]: affiche ce message d'aide (en version anglaise)
 
-Pour afficher l'ensemble des données, 2 etensions Python peuvent être installés sur la machine (le script peut fnctionner sans elles, mais seules des informations partielles seront affichées). Si elles ne sont pas installées, vous aurez un message. Vous pouvez les nstaller en utilisant les commandes "pip3 install paho-mqtt" et "pip3 install sqlite3". Si vous avez un environnement managé, remplacez ces commandes par "sudo apt install python3-paho-mqtt" et "sudo apt install python3-sqlite3".
+Pour afficher l'ensemble des données, 2 extensions Python peuvent être installées sur la machine (le script peut fonctionner sans elles, mais seules des informations partielles seront affichées). Si elles ne sont pas installées, vous aurez un message. Vous pouvez les nstaller en utilisant les commandes "pip3 install paho-mqtt" et "pip3 install sqlite3". Si vous avez un environnement managé, remplacez ces commandes par "sudo apt install python3-paho-mqtt" et "sudo apt install python3-sqlite3".
+
+### findDomoticzTypes
+
+This tool allow to find information about types, subtypes and switch type, giving integer value (in decimal or hexa-decimal), or string (using a regular expression). It's even possible to get full list of supported combinations. It will display values, names, nValue and sValue(s) for each supported configuration.
+
+Cet outil permet de trouver des informations sur les types, subtypes et switchtypes, à partir d'une valeur décimale, hexa-décimale ou chaîne de caractères (en utilisation une expression régulière) Il est même possible d'obtenir la liste des combinaisons supportées. Les valeurs, noms, nValue et sValue(s) pour chaque configuration supportées.
 
 # Examples / Exemples
 Here are some examples that may be useful. Each examples show (part of) setup file, content of topic used, Domoticz device value, and result description / Vous trouverez ci-dessous des exemples utiles. Chaque exemple montre (une partie de) la configuration, le contenu du topic utilisé, la valeur du dispositif Domoticz et la description du résultat
