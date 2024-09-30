@@ -73,7 +73,7 @@ os.chdir(currentPath)
 currentFileName = pathlib.Path(__file__).stem
 
 # Load Domoticz types dictionary
-typesFile = "domoticzTypes.json"
+typesFile = "DomoticzTypes.json"
 jsonData = {}
 try:
     with open(typesFile, "rt", encoding="UTF-8") as inpStream:
