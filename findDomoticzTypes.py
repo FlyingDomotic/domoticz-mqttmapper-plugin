@@ -8,7 +8,7 @@ import pathlib
 import os
 from typing import Any, Tuple, Union, Optional
 
-version = "1.0.0"
+version = "1.1.0"
 
 # Returns a dictionary value giving a key or default value if not existing
 def getValue(dict: Any, key: str, default : Optional[Any] = '') -> Any:
@@ -121,10 +121,13 @@ while 1:
                 typeList.append(item["typeValue"])
                 print(F'  Type {item["typeValue"]}: {item["typeName"]}')
             # Do we have a subType?
-            if "subTypeName" in item:
-                if (subType != None and item["subTypeValue"] == subType) or (subType == None and subTypeFind.match(item["subTypeName"]) != None):
+            if ("subTypeName" in item) or item["noSubType"]:
+                if (subType != None and item["subTypeValue"] == subType) or (subType == None and (item["noSubType"] or subTypeFind.match(item["subTypeName"]) != None)):
                     subTypeFound = True
-                    print(F'    Subtype {item["subTypeValue"]}: {item["subTypeName"]}')
+                    if "subTypeName" in item:
+                        print(F'    Subtype {item["subTypeValue"]}: {item["subTypeName"]}')
+                    else:
+                        print(F'    Subtype {item["subTypeValue"]}: [Generic value]')
                     if "switchType" in item:
                         for key2 in jsonData[F'{item["switchType"]}Types']:
                             item2 = jsonData[F'{item["switchType"]}Types'][key2]

@@ -1,6 +1,6 @@
 {
     "config": {
-        "date": "2024-09-26T14:06:32.040000",
+        "date": "2024-10-02T18:07:56.546000",
         "version": "2024.7.0"
     },
     "types": {
@@ -5426,8 +5426,446 @@
         }
     },
     "definitions": {
-        "85/0": {
-            "subTypeValue": 0,
+        "16/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Lighting1",
+            "typeValue": 16,
+            "nValue": {
+                "name": "state"
+            }
+        },
+        "17/62": {
+            "noSubType": false,
+            "subTypeName": "TypeSelector",
+            "subTypeValue": 62,
+            "typeName": "Lighting2",
+            "typeValue": 17,
+            "comment": "Replace by GeneralSwitch (244)",
+            "nValue": {
+                "name": "state"
+            }
+        },
+        "17/73": {
+            "noSubType": false,
+            "subTypeName": "GeneralSwitch",
+            "subTypeValue": 73,
+            "typeName": "Lighting2",
+            "typeValue": 17,
+            "switchType": "switch",
+            "comment": "Replace by GeneralSwitch (244)",
+            "nValue": {
+                "name": "state"
+            }
+        },
+        "19/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Lighting4",
+            "typeValue": 19,
+            "nValue": {
+                "name": "state"
+            },
+            "sValue": {
+                "name": "level",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "20/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Lighting5",
+            "typeValue": 20,
+            "nValue": {
+                "name": "state"
+            },
+            "sValue": {
+                "name": "level",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "21/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Lighting6",
+            "typeValue": 21,
+            "nValue": {
+                "name": "state"
+            },
+            "sValue": {
+                "name": "level",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "22/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Chime",
+            "typeValue": 22,
+            "nValue": {
+                "name": "sound"
+            }
+        },
+        "23/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Fan",
+            "typeValue": 23,
+            "nValue": {
+                "name": "state"
+            }
+        },
+        "24/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Curtain",
+            "typeValue": 24,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "25/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Blinds",
+            "typeValue": 25,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "26/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "RFY",
+            "typeValue": 26,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "27/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "HomeConfort",
+            "typeValue": 27,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "31/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Hunter",
+            "typeValue": 31,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "32/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Security1",
+            "typeValue": 32,
+            "nValue": {
+                "name": "status"
+            }
+        },
+        "33/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Security2",
+            "typeValue": 33
+        },
+        "48/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Remote",
+            "typeValue": 48,
+            "nValue": {
+                "name": "state"
+            }
+        },
+        "64/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Thermostat1",
+            "typeValue": 64,
+            "sValue": {
+                "name": "temp",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue2": {
+                "name": "set_point",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue3": {
+                "name": "mode",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "status",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "65/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Thermostat2",
+            "typeValue": 65,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "66/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Thermostat3",
+            "typeValue": 66,
+            "nValue": {
+                "name": "command"
+            }
+        },
+        "67/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Thermostat4",
+            "typeValue": 67,
+            "sValue": {
+                "name": "beep",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue2": {
+                "name": "speed1",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue3": {
+                "name": "speed2",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "speed3",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "flamePower",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue6": {
+                "name": "mode",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "68/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "EvohomeRelay",
+            "typeValue": 68,
+            "sValue": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "69/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Evohome",
+            "typeValue": 69,
+            "nValue": {
+                "name": "status"
+            },
+            "sValue": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "70/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "EvohomeZone",
+            "typeValue": 70,
+            "sValue": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "71/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "EvohomeWater",
+            "typeValue": 71,
+            "sValue": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "72/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Radiator1",
+            "typeValue": 72,
+            "nValue": {
+                "name": "command"
+            },
+            "sValue": {
+                "name": "temp1",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue2": {
+                "name": "temp2",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "78/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "BBQ",
+            "typeValue": 78,
+            "sValue": {
+                "name": "temp1",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.0f"
+            },
+            "sValue2": {
+                "name": "temp2",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.0f"
+            }
+        },
+        "79/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "TEMP_RAIN",
+            "typeValue": 79,
+            "sValue": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue2": {
+                "name": "totalRain",
+                "unit": "mm",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "80/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "TEMP",
+            "typeValue": 80,
+            "sValue": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "81/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "HUM",
+            "typeValue": 81,
+            "nValue": {
+                "name": "humidity",
+                "unit": "%"
+            },
+            "sValue": {
+                "name": "humidityStatus",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "82/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "TEMP_HUM",
+            "typeValue": 82,
+            "sValue": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue2": {
+                "name": "humidity",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue3": {
+                "name": "humidityStatus",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "84/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "TEMP_HUM_BARO",
+            "typeValue": 84,
+            "sValue": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue2": {
+                "name": "humidity",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue3": {
+                "name": "humidityStatus",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "barometer",
+                "unit": "hPa",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "forecast",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "85/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "RAIN",
             "typeValue": 85,
             "sValue": {
@@ -5444,8 +5882,9 @@
                 "format": "%.1f"
             }
         },
-        "86/0": {
-            "subTypeValue": 0,
+        "86/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "WIND",
             "typeValue": 86,
             "sValue": {
@@ -5488,106 +5927,9 @@
                 "format": "%.1f"
             }
         },
-        "80/0": {
-            "subTypeValue": 0,
-            "typeName": "TEMP",
-            "typeValue": 80,
-            "sValue": {
-                "name": "temp",
-                "unit": "°C",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            },
-            "sValue2": {
-                "name": "humidity",
-                "unit": "%",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue3": {
-                "name": "humidityStatus",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue4": {
-                "name": "barometer",
-                "unit": "hPa",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue5": {
-                "name": "forecast",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "81/0": {
-            "subTypeValue": 0,
-            "typeName": "HUM",
-            "typeValue": 81,
-            "nValue": {
-                "name": "humidity",
-                "unit": "%"
-            },
-            "sValue": {
-                "name": "humidityStatus",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "247/0": {
-            "subTypeValue": 0,
-            "typeName": "TEMP_BARO",
-            "typeValue": 247,
-            "sValue": {
-                "name": "temp",
-                "unit": "°C",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            },
-            "sValue2": {
-                "name": "barometer",
-                "unit": "hPa",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            },
-            "sValue3": {
-                "name": "forecast",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue4": {
-                "name": "altitude",
-                "unit": "m",
-                "dataType": "floating point number",
-                "digits": 2,
-                "format": "%.2f"
-            }
-        },
-        "79/0": {
-            "subTypeValue": 0,
-            "typeName": "TEMP_RAIN",
-            "typeValue": 79,
-            "sValue": {
-                "name": "temp",
-                "unit": "°C",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            },
-            "sValue2": {
-                "name": "totalRain",
-                "unit": "mm",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            }
-        },
-        "87/0": {
-            "subTypeValue": 0,
+        "87/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "UV",
             "typeValue": 87,
             "sValue": {
@@ -5605,317 +5947,9 @@
                 "format": "%.1f"
             }
         },
-        "114/0": {
-            "subTypeValue": 0,
-            "typeName": "FS20",
-            "typeValue": 114,
-            "nValue": {
-                "name": "state"
-            }
-        },
-        "16/0": {
-            "subTypeValue": 0,
-            "typeName": "Lighting1",
-            "typeValue": 16,
-            "nValue": {
-                "name": "state"
-            }
-        },
-        "17/62": {
-            "subTypeName": "TypeSelector",
-            "subTypeValue": 62,
-            "typeName": "Lighting2",
-            "typeValue": 17,
-            "comment": "Replace by GeneralSwitch (244)",
-            "nValue": {
-                "name": "state"
-            }
-        },
-        "17/73": {
-            "subTypeName": "GeneralSwitch",
-            "subTypeValue": 73,
-            "typeName": "Lighting2",
-            "typeValue": 17,
-            "switchType": "switch",
-            "comment": "Replace by GeneralSwitch (244)",
-            "nValue": {
-                "name": "state"
-            }
-        },
-        "19/0": {
-            "subTypeValue": 0,
-            "typeName": "Lighting4",
-            "typeValue": 19,
-            "nValue": {
-                "name": "state"
-            },
-            "sValue": {
-                "name": "level",
-                "unit": "%",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "20/0": {
-            "subTypeValue": 0,
-            "typeName": "Lighting5",
-            "typeValue": 20,
-            "nValue": {
-                "name": "state"
-            },
-            "sValue": {
-                "name": "level",
-                "unit": "%",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "21/0": {
-            "subTypeValue": 0,
-            "typeName": "Lighting6",
-            "typeValue": 21,
-            "nValue": {
-                "name": "state"
-            },
-            "sValue": {
-                "name": "level",
-                "unit": "%",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "23/0": {
-            "subTypeValue": 0,
-            "typeName": "Fan",
-            "typeValue": 23,
-            "nValue": {
-                "name": "state"
-            }
-        },
-        "27/0": {
-            "subTypeValue": 0,
-            "typeName": "HomeConfort",
-            "typeValue": 27,
-            "nValue": {
-                "name": "command"
-            }
-        },
-        "241/0": {
-            "subTypeValue": 0,
-            "typeName": "ColorSwitch",
-            "typeValue": 241,
-            "nValue": {
-                "name": "command"
-            },
-            "sValue": {
-                "name": "value",
-                "dataType": "positive number",
-                "format": "%u"
-            }
-        },
-        "22/0": {
-            "subTypeValue": 0,
-            "typeName": "Chime",
-            "typeValue": 22,
-            "nValue": {
-                "name": "sound"
-            }
-        },
-        "24/0": {
-            "subTypeValue": 0,
-            "typeName": "Curtain",
-            "typeValue": 24,
-            "nValue": {
-                "name": "command"
-            }
-        },
-        "25/0": {
-            "subTypeValue": 0,
-            "typeName": "Blinds",
-            "typeValue": 25,
-            "nValue": {
-                "name": "command"
-            }
-        },
-        "26/0": {
-            "subTypeValue": 0,
-            "typeName": "RFY",
-            "typeValue": 26,
-            "nValue": {
-                "name": "command"
-            }
-        },
-        "69/0": {
-            "subTypeValue": 0,
-            "typeName": "Evohome",
-            "typeValue": 69,
-            "nValue": {
-                "name": "status"
-            },
-            "sValue": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "71/0": {
-            "subTypeValue": 0,
-            "typeName": "EvohomeWater",
-            "typeValue": 71,
-            "sValue": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "70/0": {
-            "subTypeValue": 0,
-            "typeName": "EvohomeZone",
-            "typeValue": 70,
-            "sValue": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "68/0": {
-            "subTypeValue": 0,
-            "typeName": "EvohomeRelay",
-            "typeValue": 68,
-            "sValue": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "32/0": {
-            "subTypeValue": 0,
-            "typeName": "Security1",
-            "typeValue": 32,
-            "nValue": {
-                "name": "status"
-            }
-        },
-        "33/0": {
-            "subTypeValue": 0,
-            "typeName": "Security2",
-            "typeValue": 33
-        },
-        "48/0": {
-            "subTypeValue": 0,
-            "typeName": "Remote",
-            "typeValue": 48,
-            "nValue": {
-                "name": "state"
-            }
-        },
-        "242/0": {
-            "subTypeValue": 0,
-            "typeName": "Setpoint",
-            "typeValue": 242,
-            "sValue": {
-                "name": "value",
-                "dataType": "floating point number",
-                "digits": 2,
-                "format": "%.2f"
-            }
-        },
-        "64/0": {
-            "subTypeValue": 0,
-            "typeName": "Thermostat1",
-            "typeValue": 64,
-            "sValue": {
-                "name": "temp",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue2": {
-                "name": "set_point",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue3": {
-                "name": "mode",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue4": {
-                "name": "status",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "65/0": {
-            "subTypeValue": 0,
-            "typeName": "Thermostat2",
-            "typeValue": 65,
-            "nValue": {
-                "name": "command"
-            }
-        },
-        "66/0": {
-            "subTypeValue": 0,
-            "typeName": "Thermostat3",
-            "typeValue": 66,
-            "nValue": {
-                "name": "command"
-            }
-        },
-        "67/0": {
-            "subTypeValue": 0,
-            "typeName": "Thermostat4",
-            "typeValue": 67,
-            "sValue": {
-                "name": "beep",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue2": {
-                "name": "speed1",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue3": {
-                "name": "speed2",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue4": {
-                "name": "speed3",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue5": {
-                "name": "flamePower",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue6": {
-                "name": "mode",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "72/0": {
-            "subTypeValue": 0,
-            "typeName": "Radiator1",
-            "typeValue": 72,
-            "nValue": {
-                "name": "command"
-            },
-            "sValue": {
-                "name": "temp1",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue2": {
-                "name": "temp2",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "89/0": {
-            "subTypeValue": 0,
+        "89/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "CURRENT",
             "typeValue": 89,
             "sValue": {
@@ -5925,10 +5959,12 @@
                 "format": "%d"
             }
         },
-        "92/0": {
-            "subTypeValue": 0,
-            "typeName": "POWER",
-            "typeValue": 92,
+        "90/2": {
+            "noSubType": false,
+            "subTypeName": "ELEC3",
+            "subTypeValue": 2,
+            "typeName": "ENERGY",
+            "typeValue": 90,
             "sValue": {
                 "name": "instant",
                 "unit": "W",
@@ -5937,14 +5973,15 @@
             },
             "sValue2": {
                 "name": "counter",
-                "unit": "kWh",
+                "unit": "Wh",
                 "dataType": "floating point number",
                 "digits": 2,
                 "format": "%.2f"
             }
         },
-        "91/0": {
-            "subTypeValue": 0,
+        "91/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "CURRENTENERGY",
             "typeValue": 91,
             "sValue": {
@@ -5976,11 +6013,11 @@
                 "format": "%.3f"
             }
         },
-        "90/2": {
-            "subTypeName": "ELEC3",
-            "subTypeValue": 2,
-            "typeName": "ENERGY",
-            "typeValue": 90,
+        "92/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "POWER",
+            "typeValue": 92,
             "sValue": {
                 "name": "instant",
                 "unit": "W",
@@ -5989,14 +6026,15 @@
             },
             "sValue2": {
                 "name": "counter",
-                "unit": "Wh",
+                "unit": "kWh",
                 "dataType": "floating point number",
                 "digits": 2,
                 "format": "%.2f"
             }
         },
-        "93/0": {
-            "subTypeValue": 0,
+        "93/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "WEIGHT",
             "typeValue": 93,
             "sValue": {
@@ -6008,6 +6046,7 @@
             }
         },
         "112/0": {
+            "noSubType": false,
             "subTypeName": "RFXSensorTemp",
             "subTypeValue": 0,
             "typeName": "RFXSensor",
@@ -6021,6 +6060,7 @@
             }
         },
         "112/1": {
+            "noSubType": false,
             "subTypeName": "RFXSensorAD",
             "subTypeValue": 1,
             "typeName": "RFXSensor",
@@ -6033,6 +6073,7 @@
             }
         },
         "112/2": {
+            "noSubType": false,
             "subTypeName": "RFXSensorVolt",
             "subTypeValue": 2,
             "typeName": "RFXSensor",
@@ -6045,6 +6086,7 @@
             }
         },
         "113/0": {
+            "noSubType": false,
             "subTypeName": "RFXMeterCount",
             "subTypeValue": 0,
             "typeName": "RFXMeter",
@@ -6056,8 +6098,457 @@
                 "format": "%lu"
             }
         },
-        "250/0": {
-            "subTypeValue": 0,
+        "114/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "FS20",
+            "typeValue": 114,
+            "nValue": {
+                "name": "state"
+            }
+        },
+        "241/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "ColorSwitch",
+            "typeValue": 241,
+            "nValue": {
+                "name": "command"
+            },
+            "sValue": {
+                "name": "value",
+                "dataType": "positive number",
+                "format": "%u"
+            }
+        },
+        "242/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Setpoint",
+            "typeValue": 242,
+            "sValue": {
+                "name": "value",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            }
+        },
+        "243/1": {
+            "noSubType": false,
+            "subTypeName": "Visibility",
+            "subTypeValue": 1,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "visibility",
+                "unit": "km",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "243/2": {
+            "noSubType": false,
+            "subTypeName": "SolarRadiation",
+            "subTypeValue": 2,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "radiation",
+                "unit": "W/m²",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "243/3": {
+            "noSubType": false,
+            "subTypeName": "SoilMoisture",
+            "subTypeValue": 3,
+            "typeName": "General",
+            "typeValue": 243,
+            "nValue": {
+                "name": "moisture",
+                "unit": "cb"
+            }
+        },
+        "243/4": {
+            "noSubType": false,
+            "subTypeName": "LeafWetness",
+            "subTypeValue": 4,
+            "typeName": "General",
+            "typeValue": 243,
+            "nValue": {
+                "name": "wetness"
+            }
+        },
+        "243/6": {
+            "noSubType": false,
+            "subTypeName": "Percentage",
+            "subTypeValue": 6,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "percentage",
+                "unit": "%",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            }
+        },
+        "243/7": {
+            "noSubType": false,
+            "subTypeName": "Fan",
+            "subTypeValue": 7,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "rpm",
+                "unit": "RPM",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "243/8": {
+            "noSubType": false,
+            "subTypeName": "Voltage",
+            "subTypeValue": 8,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "voltage",
+                "unit": "V",
+                "dataType": "floating point number",
+                "digits": 3,
+                "format": "%.3f"
+            }
+        },
+        "243/9": {
+            "noSubType": false,
+            "subTypeName": "Pressure",
+            "subTypeValue": 9,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "pressure",
+                "unit": "bar",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "243/19": {
+            "noSubType": false,
+            "subTypeName": "TextStatus",
+            "subTypeValue": 19,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "243/20": {
+            "noSubType": false,
+            "subTypeName": "ZWaveThermostatMode",
+            "subTypeValue": 20,
+            "typeName": "General",
+            "typeValue": 243,
+            "nValue": {
+                "name": "value"
+            }
+        },
+        "243/21": {
+            "noSubType": false,
+            "subTypeName": "ZWaveThermostatFanMode",
+            "subTypeValue": 21,
+            "typeName": "General",
+            "typeValue": 243,
+            "nValue": {
+                "name": "value"
+            }
+        },
+        "243/22": {
+            "noSubType": false,
+            "subTypeName": "Alert",
+            "subTypeValue": 22,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "status",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue2": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "243/23": {
+            "noSubType": false,
+            "subTypeName": "Current",
+            "subTypeValue": 23,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "current",
+                "unit": "A",
+                "dataType": "floating point number",
+                "digits": 3,
+                "format": "%.3f"
+            }
+        },
+        "243/24": {
+            "noSubType": false,
+            "subTypeName": "SoundLevel",
+            "subTypeValue": 24,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "sound",
+                "unit": "dB",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "243/26": {
+            "noSubType": false,
+            "subTypeName": "Baro",
+            "subTypeValue": 26,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "pressure",
+                "unit": "hPa",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.02f"
+            },
+            "sValue2": {
+                "name": "forecast",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "243/27": {
+            "noSubType": false,
+            "subTypeName": "Distance",
+            "subTypeValue": 27,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "distance",
+                "unit": "cm",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "243/28": {
+            "noSubType": false,
+            "subTypeName": "CounterIncremental",
+            "subTypeValue": 28,
+            "typeName": "General",
+            "typeValue": 243,
+            "switchType": "meter",
+            "sValue": {
+                "name": "counter",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "243/29": {
+            "noSubType": false,
+            "subTypeName": "Kwh",
+            "subTypeValue": 29,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "instant",
+                "unit": "W",
+                "dataType": "floating point number",
+                "digits": 3,
+                "format": "%.3f"
+            },
+            "sValue2": {
+                "name": "counter",
+                "unit": "kWh",
+                "dataType": "floating point number",
+                "digits": 3,
+                "format": "%.3f"
+            }
+        },
+        "243/30": {
+            "noSubType": false,
+            "subTypeName": "Waterflow",
+            "subTypeValue": 30,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "waterFlow",
+                "unit": "l/mn",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            }
+        },
+        "243/31": {
+            "noSubType": false,
+            "subTypeName": "Custom",
+            "subTypeValue": 31,
+            "typeName": "General",
+            "typeValue": 243,
+            "sValue": {
+                "name": "value",
+                "dataType": "floating point number",
+                "digits": 4,
+                "format": "%.4f"
+            }
+        },
+        "243/32": {
+            "noSubType": false,
+            "subTypeName": "ZWaveAlarm",
+            "subTypeValue": 32,
+            "typeName": "General",
+            "typeValue": 243,
+            "nValue": {
+                "name": "value"
+            },
+            "sValue": {
+                "name": "text",
+                "dataType": "text",
+                "format": "%s"
+            }
+        },
+        "243/33": {
+            "noSubType": false,
+            "subTypeName": "ManagedCounter",
+            "subTypeValue": 33,
+            "typeName": "General",
+            "typeValue": 243,
+            "switchType": "meter",
+            "sValue": {
+                "name": "counter",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "243/35": {
+            "noSubType": false,
+            "subTypeName": "ZWaveThermostatOperatingState",
+            "subTypeValue": 35,
+            "typeName": "General",
+            "typeValue": 243,
+            "nValue": {
+                "name": "value"
+            }
+        },
+        "244/62": {
+            "noSubType": false,
+            "subTypeName": "TypeSelector",
+            "subTypeValue": 62,
+            "typeName": "GeneralSwitch",
+            "typeValue": 244,
+            "nValue": {
+                "name": "state"
+            },
+            "sValue": {
+                "name": "level",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "244/73": {
+            "noSubType": false,
+            "subTypeName": "GeneralSwitch",
+            "subTypeValue": 73,
+            "typeName": "GeneralSwitch",
+            "typeValue": 244,
+            "switchType": "switch",
+            "nValue": {
+                "name": "state"
+            },
+            "sValue": {
+                "name": "level",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
+            }
+        },
+        "246/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Lux",
+            "typeValue": 246,
+            "sValue": {
+                "name": "lux",
+                "unit": "lux",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.0f"
+            }
+        },
+        "247/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "TEMP_BARO",
+            "typeValue": 247,
+            "sValue": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue2": {
+                "name": "barometer",
+                "unit": "hPa",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue3": {
+                "name": "forecast",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "altitude",
+                "unit": "m",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            }
+        },
+        "248/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "Usage",
+            "typeValue": 248,
+            "sValue": {
+                "name": "instant",
+                "unit": "W",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "249/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
+            "typeName": "AirQuality",
+            "typeValue": 249,
+            "nValue": {
+                "name": "airQuality",
+                "unit": "CO2 ppm"
+            }
+        },
+        "250/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "P1Power",
             "typeValue": 250,
             "sValue": {
@@ -6097,8 +6588,9 @@
                 "format": "%u"
             }
         },
-        "251/0": {
-            "subTypeValue": 0,
+        "251/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "P1Gas",
             "typeValue": 251,
             "sValue": {
@@ -6108,8 +6600,9 @@
                 "format": "%u"
             }
         },
-        "252/0": {
-            "subTypeValue": 0,
+        "252/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "YouLess",
             "typeValue": 252,
             "sValue": {
@@ -6125,8 +6618,9 @@
                 "format": "%lu"
             }
         },
-        "253/0": {
-            "subTypeValue": 0,
+        "253/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "Rego6XXTemp",
             "typeValue": 253,
             "sValue": {
@@ -6137,394 +6631,15 @@
                 "format": "%.1f"
             }
         },
-        "254/0": {
-            "subTypeValue": 0,
+        "254/1": {
+            "noSubType": true,
+            "subTypeValue": 1,
             "typeName": "Rego6XXValue",
             "typeValue": 254,
             "sValue": {
                 "name": "value",
                 "dataType": "number",
                 "format": "%d"
-            }
-        },
-        "249/0": {
-            "subTypeValue": 0,
-            "typeName": "AirQuality",
-            "typeValue": 249,
-            "nValue": {
-                "name": "airQuality",
-                "unit": "CO2 ppm"
-            }
-        },
-        "248/0": {
-            "subTypeValue": 0,
-            "typeName": "Usage",
-            "typeValue": 248,
-            "sValue": {
-                "name": "instant",
-                "unit": "W",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            }
-        },
-        "246/0": {
-            "subTypeValue": 0,
-            "typeName": "Lux",
-            "typeValue": 246,
-            "sValue": {
-                "name": "lux",
-                "unit": "lux",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.0f"
-            }
-        },
-        "243/8": {
-            "subTypeName": "Voltage",
-            "subTypeValue": 8,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "voltage",
-                "unit": "V",
-                "dataType": "floating point number",
-                "digits": 3,
-                "format": "%.3f"
-            }
-        },
-        "243/6": {
-            "subTypeName": "Percentage",
-            "subTypeValue": 6,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "percentage",
-                "unit": "%",
-                "dataType": "floating point number",
-                "digits": 2,
-                "format": "%.2f"
-            }
-        },
-        "243/1": {
-            "subTypeName": "Visibility",
-            "subTypeValue": 1,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "visibility",
-                "unit": "km",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            }
-        },
-        "243/27": {
-            "subTypeName": "Distance",
-            "subTypeValue": 27,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "distance",
-                "unit": "cm",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            }
-        },
-        "243/2": {
-            "subTypeName": "SolarRadiation",
-            "subTypeValue": 2,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "radiation",
-                "unit": "W/m²",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            }
-        },
-        "243/3": {
-            "subTypeName": "SoilMoisture",
-            "subTypeValue": 3,
-            "typeName": "General",
-            "typeValue": 243,
-            "nValue": {
-                "name": "moisture",
-                "unit": "cb"
-            }
-        },
-        "243/4": {
-            "subTypeName": "LeafWetness",
-            "subTypeValue": 4,
-            "typeName": "General",
-            "typeValue": 243,
-            "nValue": {
-                "name": "wetness"
-            }
-        },
-        "243/23": {
-            "subTypeName": "Current",
-            "subTypeValue": 23,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "current",
-                "unit": "A",
-                "dataType": "floating point number",
-                "digits": 3,
-                "format": "%.3f"
-            }
-        },
-        "243/26": {
-            "subTypeName": "Baro",
-            "subTypeValue": 26,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "pressure",
-                "unit": "hPa",
-                "dataType": "floating point number",
-                "digits": 2,
-                "format": "%.02f"
-            },
-            "sValue2": {
-                "name": "forecast",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "243/9": {
-            "subTypeName": "Pressure",
-            "subTypeValue": 9,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "pressure",
-                "unit": "bar",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.1f"
-            }
-        },
-        "243/30": {
-            "subTypeName": "Waterflow",
-            "subTypeValue": 30,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "waterFlow",
-                "unit": "l/mn",
-                "dataType": "floating point number",
-                "digits": 2,
-                "format": "%.2f"
-            }
-        },
-        "243/7": {
-            "subTypeName": "Fan",
-            "subTypeValue": 7,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "rpm",
-                "unit": "RPM",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "243/24": {
-            "subTypeName": "SoundLevel",
-            "subTypeValue": 24,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "sound",
-                "unit": "dB",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "243/20": {
-            "subTypeName": "ZWaveThermostatMode",
-            "subTypeValue": 20,
-            "typeName": "General",
-            "typeValue": 243,
-            "nValue": {
-                "name": "value"
-            }
-        },
-        "243/21": {
-            "subTypeName": "ZWaveThermostatFanMode",
-            "subTypeValue": 21,
-            "typeName": "General",
-            "typeValue": 243,
-            "nValue": {
-                "name": "value"
-            }
-        },
-        "243/35": {
-            "subTypeName": "ZWaveThermostatOperatingState",
-            "subTypeValue": 35,
-            "typeName": "General",
-            "typeValue": 243,
-            "nValue": {
-                "name": "value"
-            }
-        },
-        "243/32": {
-            "subTypeName": "ZWaveAlarm",
-            "subTypeValue": 32,
-            "typeName": "General",
-            "typeValue": 243,
-            "nValue": {
-                "name": "value"
-            },
-            "sValue": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "243/29": {
-            "subTypeName": "Kwh",
-            "subTypeValue": 29,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "instant",
-                "unit": "W",
-                "dataType": "floating point number",
-                "digits": 3,
-                "format": "%.3f"
-            },
-            "sValue2": {
-                "name": "counter",
-                "unit": "kWh",
-                "dataType": "floating point number",
-                "digits": 3,
-                "format": "%.3f"
-            }
-        },
-        "243/22": {
-            "subTypeName": "Alert",
-            "subTypeValue": 22,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "status",
-                "dataType": "number",
-                "format": "%d"
-            },
-            "sValue2": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "243/31": {
-            "subTypeName": "Custom",
-            "subTypeValue": 31,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "value",
-                "dataType": "floating point number",
-                "digits": 4,
-                "format": "%.4f"
-            }
-        },
-        "243/19": {
-            "subTypeName": "TextStatus",
-            "subTypeValue": 19,
-            "typeName": "General",
-            "typeValue": 243,
-            "sValue": {
-                "name": "text",
-                "dataType": "text",
-                "format": "%s"
-            }
-        },
-        "243/28": {
-            "subTypeName": "CounterIncremental",
-            "subTypeValue": 28,
-            "typeName": "General",
-            "typeValue": 243,
-            "switchType": "meter",
-            "sValue": {
-                "name": "counter",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "243/33": {
-            "subTypeName": "ManagedCounter",
-            "subTypeValue": 33,
-            "typeName": "General",
-            "typeValue": 243,
-            "switchType": "meter",
-            "sValue": {
-                "name": "counter",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "244/62": {
-            "subTypeName": "TypeSelector",
-            "subTypeValue": 62,
-            "typeName": "GeneralSwitch",
-            "typeValue": 244,
-            "nValue": {
-                "name": "state"
-            },
-            "sValue": {
-                "name": "level",
-                "unit": "%",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "244/73": {
-            "subTypeName": "GeneralSwitch",
-            "subTypeValue": 73,
-            "typeName": "GeneralSwitch",
-            "typeValue": 244,
-            "switchType": "switch",
-            "nValue": {
-                "name": "state"
-            },
-            "sValue": {
-                "name": "level",
-                "unit": "%",
-                "dataType": "number",
-                "format": "%d"
-            }
-        },
-        "78/0": {
-            "subTypeValue": 0,
-            "typeName": "BBQ",
-            "typeValue": 78,
-            "sValue": {
-                "name": "temp1",
-                "unit": "°C",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.0f"
-            },
-            "sValue2": {
-                "name": "temp2",
-                "unit": "°C",
-                "dataType": "floating point number",
-                "digits": 1,
-                "format": "%.0f"
-            }
-        },
-        "31/0": {
-            "subTypeValue": 0,
-            "typeName": "Hunter",
-            "typeValue": 31,
-            "nValue": {
-                "name": "command"
             }
         }
     }
