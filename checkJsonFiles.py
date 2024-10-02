@@ -2,7 +2,7 @@
 #   Parse MqttMapper configuration file
 #
 
-version = "1.3.2"
+version = "1.3.4"
 
 import glob
 import os
@@ -212,37 +212,47 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             if subTypeLib == "???":
                 errorText += F"\nsubType {subType} not known with type {type}"
 
-        if "switchtype" in nodeItems:
-            try:
-                switchType = int(nodeItems["switchtype"])
-            except:
-                pass
-            else:
+        # Look for type definition
+        definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type)
+        # If we have at least one type definition
+        if definitionItems != None:
+            # Is this type not associated with a particular sub type?
+            if not definitionItems["noSubType"]:
+                # Type has specific sub type, search for this sub type
                 definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type, "subTypeValue", subType)
                 if definitionItems != None:
-                    if "switchType" in definitionItems:
-                        if definitionItems["switchType"] == "switch":
-                            value = getDictField(domoticzTypes["switchTypes"], "name", "value", switchType)
-                            if value != None:
-                                switchTypeLib = value
+                    # Do we have an associated switch type?
+                    if "switchtype" in nodeItems:
+                        try:
+                            switchType = int(nodeItems["switchtype"])
+                        except:
+                            pass
+                        else:
+                            if definitionItems != None:
+                                if "switchType" in definitionItems:
+                                    if definitionItems["switchType"] == "switch":
+                                        value = getDictField(domoticzTypes["switchTypes"], "name", "value", switchType)
+                                        if value != None:
+                                            switchTypeLib = value
+                                        else:
+                                            errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
+                                    elif definitionItems["switchType"] == "meter":
+                                        value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
+                                        if value != None:
+                                            switchTypeLib = value
+                                        else:
+                                            errorText += F"\nswitchType {switchType} is not a known meter type for type {type}, sub type {subType}"
+                                    elif switchType:
+                                        errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                                else:
+                                    if switchType != 0:
+                                        errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
                             else:
-                                errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
-                        elif definitionItems["switchType"] == "meter":
-                            value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
-                            if value != None:
-                                switchTypeLib = value
-                            else:
-                                errorText += F"\nswitchType {switchType} is not a known meter type for type {type}, sub type {subType}"
-                        elif switchType:
-                            errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
-                    else:
-                        if switchType != 0:
-                            errorText += F"\nswitchType should 0, not {switchType} for type {type}, sub type {subType}"
-                else:
-                    errorText += F"\nType {type}, sub type {subType} not supported!"
+                                errorText += F"\nType {type}, sub type {subType} not supported!"
 
         if traceFlag:
             if definitionItems != None:
+                # List all nValue and sValue
                 for item in definitionItems.keys():
                     if item == "nValue" or item.startswith("sValue"):
                         items = definitionItems[item]

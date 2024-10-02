@@ -8,7 +8,7 @@ import pathlib
 import os
 from typing import Any, Tuple, Union, Optional
 
-version = "1.1.0"
+version = "1.1.1"
 
 # Returns a dictionary value giving a key or default value if not existing
 def getValue(dict: Any, key: str, default : Optional[Any] = '') -> Any:
@@ -134,11 +134,11 @@ while 1:
                             if (switchType != None and item2["value"] == switchType) or (switchType == None and switchTypeFind.match(item2["name"]) != None):
                                     switchTypeFound = True
                                     print(F'      Switchtype {item2["value"]}: {item2["name"]}')
-            # Print nValue and sValue(s)
-            for item2 in item.keys():
-                if item2 == "nValue" or item2.startswith("sValue"):
-                    items = item[item2]
-                    # Remove format item
-                    if "format" in items:
-                        del items["format"]
-                    print(f"        {item2}: {formatJson(items)}")
+                    # Print nValue and sValue(s)
+                    for item2 in item.keys():
+                        if item2 == "nValue" or item2.startswith("sValue"):
+                            items = item[item2]
+                            # Remove format item
+                            if "format" in items:
+                                del items["format"]
+                            print(f"        {item2}: {formatJson(items)}")
