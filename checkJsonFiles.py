@@ -1,8 +1,10 @@
 #!/usr/bin/python3
 #   Parse MqttMapper configuration file
 #
+#   Flying Domotic
+#   GPL 3.0 license
 
-version = "1.3.4"
+version = "1.3.5"
 
 import glob
 import os
@@ -160,22 +162,29 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
     # Iterating through the JSON list
     print("Checking "+jsonFile)
     errorSeen = 0
+    warningSeen = 0
     devices = []
     global typeLib
     global subTypeLib
     global switchTypeLib
     for node in jsonData.items():
+        errors = 0
+        warnings = 0
         nodeName = node[0]
         nodeItems = node[1]
         nodeTopic = getValue(nodeItems, 'topic', None)
         nodeKey = getValue(nodeItems, 'key', None)
         errorText = ''
+        warningText = ''
         if nodeName == None or nodeName == '':
             errorText += '\nno device name given'
+            errors += 1
         elif nodeItems == None or nodeItems == '':
             errorText += '\nno items given'
+            errors += 1
         else:
             errorText += checkToken("node", nodeItems)
+            errors += 1
         if traceFlag:
             dumpToLog(node)
         type = None
@@ -198,6 +207,7 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
 
             if typeLib == "???":
                 errorText += F"\ntype {type} not known"
+                errors += 1
 
         if "subtype" in nodeItems:
             try:
@@ -211,6 +221,7 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
 
             if subTypeLib == "???":
                 errorText += F"\nsubType {subType} not known with type {type}"
+                errors += 1
 
         # Look for type definition
         definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type)
@@ -241,7 +252,8 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                                             switchTypeLib = value
                                         else:
                                             errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
-                                    #  There is a switch type in definition, value is meter
+                                            errors += 1
+                                #  There is a switch type in definition, value is meter
                                     elif definitionItems["switchType"] == "meter":
                                         # Check that configuration value exists in switch types definition
                                         value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
@@ -250,17 +262,25 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                                             switchTypeLib = value
                                         else:
                                             errorText += F"\nswitchType {switchType} is not a known meter type for type {type}, sub type {subType}"
+                                            errors += 1
                                     # User specified a switch type while no defined
                                     elif switchType:
-                                        errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                                        warningText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                                        warnings += 1
                                 else:
                                     # User specified a switch type while no defined
                                     if switchType != 0:
-                                        errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                                        warningText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                                        warnings += 1
                                 # Check for multiple sValues
+                                if "sValue2" in definitionItems:
+                                    if "svalue" not in nodeItems:
+                                        warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
+                                        warnings += 1
                                 # Check for number of digits
                             else:
                                 errorText += F"\nType {type}, sub type {subType} not supported!"
+                                errors += 1
 
         if traceFlag:
             if definitionItems != None:
@@ -274,17 +294,25 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                         print(f"    {item}: {formatJson(items)}")
 
         if errorText:
-            print("    Invalid data in "+str(node))
+            print(F"    Error{'s'[:errors^1]} in {node}")
             for errorLine in errorText[1:].split('\n'):
                 print("    --> "+errorLine)
-            errorSeen += 1
+            errorSeen += errors
+        if warningText:
+            print(F"    Warning{'s'[:warnings^1]} in {node}")
+            for warningLine in warningText[1:].split('\n'):
+                print("    --> "+warningLine)
+            warningSeen += warnings
         device = nodeKey if nodeKey else nodeTopic
         if device in devices:
             print('Duplicate '+str(device)+ ' node/key found')
+            errorSeen += 1
         else:
             devices.append(device)
     if errorSeen:
-        print("  Errors in "+jsonFile+", fix them and recheck!!!")
+        print(F"  Error{'s'[:errorSeen^1]} found in {jsonFile}, fix them and recheck!!!")
+    elif warningSeen:
+        print(F"  Warning{'s'[:warningSeen^1]} detected in {jsonFile}")
     else:
         print("  File seems good")
 
