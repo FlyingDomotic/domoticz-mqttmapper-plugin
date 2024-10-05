@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.46" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.47" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -33,13 +33,16 @@
 </plugin>
 """
 import Domoticz
-from datetime import datetime
-from itertools import count, filterfalse
+# This line is used by VsCodium when running outside Domoticz environment
+try:
+    from Domoticz import *
+except:
+    pass
 import json
 import time
-import traceback
 import subprocess
 import os
+from typing import Any
 
 class MqttClient:
     Address = ""
@@ -160,7 +163,7 @@ class BasePlugin:
     initDone = False
 
     # Returns a dictionary value giving a key or default value if not existing
-    def getValue(self, dict, key, default=''):
+    def getValue(self, dict, key, default: Any =''):
         if dict == None:
             return default
         else:
@@ -174,7 +177,7 @@ class BasePlugin:
 
     # Return a path in a dictionary or default value if not existing
     #   When value is a list, [sub]path can be either "*" to test all list elements, or a numerical index, starting from 1) 
-    def getPathValue (self, dict, path, separator = '/', default=''):
+    def getPathValue (self, dict, path, separator = '/', default: Any =''):
         try:
             pathElements = path.split(separator) # Split path with separator
             pathElement = pathElements[0] # Extract first part of path
@@ -317,7 +320,10 @@ class BasePlugin:
             try:
                 self.jsonData = json.load(configStream)
             except Exception as e:
-                Domoticz.Error(f"Error loading {jsonFile} - {type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
+                errorLine = 0
+                if e.__traceback__ != None:
+                    errorLine = e.__traceback__.tb_lineno
+                Domoticz.Error(f"Error loading {jsonFile} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
                 return
         # Go through Json file to create devices
         deviceList = []
@@ -349,7 +355,8 @@ class BasePlugin:
                         sValue = self.getValue(initialData, 'svalue', '')
                         Domoticz.Log(f"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
                         device = self.getDevice(nodeKey if nodeKey else nodeTopic)
-                        device.Update(nValue = nValue, sValue = sValue)
+                        if device != None:
+                            device.Update(nValue = nValue, sValue = sValue)
                 else:
                     Domoticz.Log("Updating device " + nodeName)
                     device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
@@ -377,25 +384,25 @@ class BasePlugin:
 
     def onConnect(self, Connection, Status, Description):
         # Exit if init not properly done
-        if not self.initDone:
+        if not self.initDone or self.mqttClient == None:
             return
         self.mqttClient.onConnect(Connection, Status, Description)
 
     def onDisconnect(self, Connection):
         # Exit if init not properly done
-        if not self.initDone:
+        if not self.initDone or self.mqttClient == None:
             return
         self.mqttClient.onDisconnect(Connection)
 
     def onMessage(self, Connection, Data):
         # Exit if init not properly done
-        if not self.initDone:
+        if not self.initDone or self.mqttClient == None:
             return
         self.mqttClient.onMessage(Connection, Data)
 
     def onMQTTConnected(self):
         # Exit if init not properly done
-        if not self.initDone:
+        if not self.initDone or self.mqttClient == None:
             return
         Domoticz.Debug("onMQTTConnected")
         self.mqttClient.Subscribe(self.getTopics())
@@ -408,7 +415,7 @@ class BasePlugin:
 
     def onMQTTPublish(self, topic, rawmessage):
         # Exit if init not properly done
-        if not self.initDone:
+        if not self.initDone or self.jsonData == None:
             return
         message = ""
         try:
@@ -416,7 +423,10 @@ class BasePlugin:
         except ValueError:
             message = rawmessage.decode('utf8')
         except Exception as e:
-            Domoticz.Error(f"Error decoding {rawmessage} - {type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e}")
+            errorLine = 0
+            if e.__traceback__ != None:
+                errorLine = e.__traceback__.tb_lineno
+            Domoticz.Error(f"Error decoding {rawmessage} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
 
         topiclist = topic.split('/')
         if self.debugging == "Extra verbose":
@@ -429,6 +439,9 @@ class BasePlugin:
             nodeKey = self.getValue(nodeItems, 'key', None) # Get device key
             if nodeTopic == topic:  # Is this the right topic?
                 device = self.getDevice(nodeKey if nodeKey else nodeTopic)
+                if device == None:
+                    Domoticz.Error(F"Can't find device key {nodeKey if nodeKey else nodeTopic}")
+                    return
                 Domoticz.Debug("onMQTTPublish found "+str(topic)+", Device '" + device.Name + "', message '" + str(message) + "'")
                 nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
                 nodeSubtype = self.getValue(nodeItems, 'subtype', None)
@@ -503,7 +516,6 @@ class BasePlugin:
             return
         # (Re)subscribed, refresh device info
         Domoticz.Debug("onMQTTSubscribed")
-        topics = set()
 
 # ==========================================================DASHBOARD COMMAND=============================================================
     def onCommand(self, Unit, Command, Level, sColor):
@@ -511,7 +523,7 @@ class BasePlugin:
         if not self.initDone:
             return
         device = Devices[Unit]
-        Domoticz.Log(self.deviceStr(Unit) + ", "+device.DeviceID+": Command: '" + str(Command) + "', Level: " + str(Level) + ", Color:" + str(sColor))
+        Domoticz.Log(F"{self.deviceStr(Unit)}, {device.DeviceID}: Command: '{Command}', Level: {Level}, Color: {sColor}")
         targetValue = None
         if Command == 'Off':
             targetValue = '0'
@@ -526,7 +538,7 @@ class BasePlugin:
         self.setTargetValue (targetValue, device)
 
     def setTargetValue(self, targetValue, device):
-        if targetValue != None: # Only if a target value has been given
+        if targetValue != None and self.jsonData != None and self.mqttClient != None: # Only if a target value has been given, and jsonData loaded
             # Iterating through the JSON list
             for node in self.jsonData.items():
                 nodeItems = node[1]
@@ -537,6 +549,8 @@ class BasePlugin:
                 if device.DeviceID == (nodeKey if nodeKey else nodeTopic):          # Is this the right topic?
                     nodeMapping = self.getValue(nodeItems, 'mapping', None)
                     nodeSet = self.getValue(nodeItems, 'set', None)
+                    setTopic = None
+                    setPayload = None
                     if nodeSet != None:  # Do we have some SET parameters?
                         localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
                         setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
@@ -567,8 +581,9 @@ class BasePlugin:
                         localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace # in command by value
                         Domoticz.Log(F"Executing {localCommand}")
                         localProcess = subprocess.Popen(localCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                        for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
-                            Domoticz.Log(F">{line}")
+                        if localProcess.stdout != None:
+                            for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
+                                Domoticz.Log(F">{line}")
                         finalStatus = localProcess.wait()   # Get final status
                         if (finalStatus):   # Did we got an error?
                             Domoticz.Error(F"Error {finalStatus} executing {localCommand}")
@@ -596,7 +611,7 @@ class BasePlugin:
 
     def onHeartbeat(self):
         # Exit if init not properly done
-        if not self.initDone:
+        if not self.initDone or self.mqttClient == None:
             return
         if self.debugging == "Extra verbose":
             Domoticz.Debug("Heartbeating...")
@@ -612,13 +627,13 @@ class BasePlugin:
     def getTopics(self):
         topics = set()
         # Go through Json file to extract topics
-        for node in self.jsonData.items():
-            nodeName = node[0]
-            nodeItems = node[1]
-            nodeTopic = self.getValue(nodeItems, 'topic', None)
-            # Add topic if not already in list (as multiple devices on the same topic are allowed)
-            if nodeTopic not in topics:
-                topics.add(nodeTopic)
+        if self.jsonData != None:
+            for node in self.jsonData.items():
+                nodeItems = node[1]
+                nodeTopic = self.getValue(nodeItems, 'topic', None)
+                # Add topic if not already in list (as multiple devices on the same topic are allowed)
+                if nodeTopic not in topics:
+                    topics.add(nodeTopic)
         Domoticz.Debug("getTopics: '" + str(topics) +"'")
         return list(topics)
 
