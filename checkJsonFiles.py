@@ -228,25 +228,37 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                         except:
                             pass
                         else:
+                            # When having definition items
                             if definitionItems != None:
+                                # Check for switch type
                                 if "switchType" in definitionItems:
+                                    #  There is a switch type in definition, value is switch
                                     if definitionItems["switchType"] == "switch":
+                                        # Check that configuration value exists in switch types definition
                                         value = getDictField(domoticzTypes["switchTypes"], "name", "value", switchType)
+                                        # Save value or put an error message
                                         if value != None:
                                             switchTypeLib = value
                                         else:
                                             errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
+                                    #  There is a switch type in definition, value is meter
                                     elif definitionItems["switchType"] == "meter":
+                                        # Check that configuration value exists in switch types definition
                                         value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
+                                        # Save value or put an error message
                                         if value != None:
                                             switchTypeLib = value
                                         else:
                                             errorText += F"\nswitchType {switchType} is not a known meter type for type {type}, sub type {subType}"
+                                    # User specified a switch type while no defined
                                     elif switchType:
                                         errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
                                 else:
+                                    # User specified a switch type while no defined
                                     if switchType != 0:
                                         errorText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
+                                # Check for multiple sValues
+                                # Check for number of digits
                             else:
                                 errorText += F"\nType {type}, sub type {subType} not supported!"
 
