@@ -1,10 +1,24 @@
 #!/usr/bin/python3
+#
 #   Parse MqttMapper configuration file
 #
-#   Flying Domotic
-#   GPL 3.0 license
+#   This file reads all JSON files in its home folder
+#       and analyze them as MqttMapper configuration files.
+#
+#   It checks for:
+#       - JSON syntax,
+#       - JSON items (all items should be known, with all mandatory items present),
+#       - Item type (integer, floating number, string, list...) are also checked,
+#       - Type, sub type and switch type should be known and their association supported,
+#       - Initial/svalue present when device has multiple sValue items,
+#       - [ToDo] Initial, multiplier and digits values for devices with multiple sValue items,
+#       - [ToDo] Digit count for devices with floating point sValue item(s),
+#       - Duplicate Domoticz device names.
+#
+#   Author: Flying Domotic
+#   License: GPL 3.0
 
-version = "1.3.6"
+version = "1.3.7"
 
 import glob
 import os
@@ -84,7 +98,7 @@ def getValue(dict: Any, key: str, default: Any = '') -> Any:
 def formatJson(jsonData: dict) -> str:
     return json.dumps(jsonData, ensure_ascii=False).replace("{", "").replace("}","").replace('"', "")
 
-# Check a json item against a definition dictinary
+# Check a json item against a definition dictionary
 def checkToken(tokenName: str, nodeItem: Any) -> str:
     # Init errors
     errorText = ""
@@ -149,7 +163,7 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
                 if itemType in ['list', 'dict']:
                     errorText += checkToken(item, nodeItem[item])
         else:
-            errorText += F"\n{item} is unkown"
+            errorText += F"\n{item} is unknown"
             if tokenName != "node":
                 errorText += F" for {tokenName}"
     return errorText
@@ -183,8 +197,10 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             errorText += '\nno items given'
             errors += 1
         else:
-            errorText += checkToken("node", nodeItems)
-            errors += 1
+            newErrors = checkToken("node", nodeItems)
+            if newErrors != "":
+                errorText += newErrors
+                errors += 1
         if traceFlag:
             dumpToLog(node)
         type = None
@@ -281,11 +297,13 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                                     else:
                                         warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
                                         warnings += 1
-
                                 # Check for number of digits
                             else:
                                 errorText += F"\nType {type}, sub type {subType} not supported!"
                                 errors += 1
+            # Check for initial sValue items if given [ToDo]
+            # Check for multiplier count if given [ToDo]
+            # Check for digits count if given [ToDo]
 
         if traceFlag:
             if definitionItems != None:
