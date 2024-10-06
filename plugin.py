@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.47" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.48" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -233,7 +233,8 @@ class BasePlugin:
     #   If setMapping is specified, we're about to set the value.
     #   Multiplier and/or digits should be taken from setMapping first, if they exists.
     #   Else, they'll be taken from nodeMapping
-    def computeValue(self, itemValue, nodeMapping, setMapping=None):
+    #   If multiplier/digit contains a list separated by ";", then itemNumber is used as index
+    def computeValue(self, itemValue, nodeMapping, itemNumber, setMapping=None):
         if self.isFloat(itemValue):                                         # If raw value is numeric or float
             result = float(itemValue)                                       # Convert value as float
             if int(result) == result:                                       # Is value an integer?
@@ -246,6 +247,10 @@ class BasePlugin:
             if multiplier == None:                                          # Multiplier not given in setMapping
                 multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier from node parameters
             if multiplier !=None:                                           # Do we have a multiplier?
+                if type(multiplier).__name__ == "str":                      # Is multiplier a string?
+                    parts = multiplier.split(";")                           # Split string giving ";"
+                    if itemNumber < len(parts):                             # Is itemNumber within parts?
+                        multiplier = float(parts[itemNumber])               # Isolate this part and use it as multiplier
                 if setMapping:                                              # Is this a set operation?
                     result /= float(multiplier)                             # Yes, divide by multiplier
                 else:
@@ -254,6 +259,10 @@ class BasePlugin:
                 digits = self.getValue(nodeMapping, 'digits', None)         # Extract digits from node parameters
             if digits == None:                                              # Digits not defined elsewhere
                 return result                                               # Return float not rounded
+            if type(digits).__name__ == "str":                              # Is digits a string?
+                parts = digits.split(";")                                   # Split string giving ";"
+                if itemNumber < len(parts):                                 # Is itemNumber within parts?
+                    digits = parts[itemNumber]                              # Isolate this part and use it as digits
             if int(digits) <= 0:                                            # Digits is negative or zero
                 return int(result)                                          # Return integer
             else:                                                           # Digits defined and positive
@@ -469,7 +478,7 @@ class BasePlugin:
                                     valueToSet = '' # No, use empty string
                                 readValue += str(valueToSet)    # Insert the value
                             elif item == "~*":  # Item is ~*, insert topic content
-                                readValue += str(self.computeValue(message, nodeMapping))
+                                readValue += str(self.computeValue(message, nodeMapping, itemIndex))
                             else:
                                 readValue += item[1:]   # Add item, removing initial '~'
                         else:
@@ -477,7 +486,7 @@ class BasePlugin:
                             if itemValue == None:
                                 Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
                             else:   # Add extracted value
-                                readValue += str(self.computeValue(itemValue, nodeMapping))
+                                readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                     readValue = readValue[1:]   # Remove first ';'
                     if nodeType == '244':   # This is a switch
                         if  mappingDefault != None and mappingValues != None:
@@ -565,7 +574,7 @@ class BasePlugin:
                                 if valueToSet == None:  # No mapping value found
                                     Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
                             else: # No mapping given, use command value
-                                valueToSet = str(self.computeValue(targetValue, nodeMapping, nodeSet))
+                                valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
                         else:   # Not a switch
                             Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
                     else:   # No set given

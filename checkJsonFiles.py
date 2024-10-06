@@ -4,7 +4,7 @@
 #   Flying Domotic
 #   GPL 3.0 license
 
-version = "1.3.5"
+version = "1.3.6"
 
 import glob
 import os
@@ -103,14 +103,14 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
         "node/set": {"mandatory": False, "type": "dict"},
         "mapping/item": {"mandatory": True, "type": "str"},
         "mapping/default": {"mandatory": False, "type": "str"},
-        "mapping/digits": {"mandatory": False, "type": "int"},
-        "mapping/multiplier": {"mandatory": False, "type": ["int", "float"]},
+        "mapping/digits": {"mandatory": False, "type": ["int", "str"]},
+        "mapping/multiplier": {"mandatory": False, "type": ["int", "float", "str"]},
         "mapping/values": {"mandatory": False, "type": "Any"},
         "set/topic": {"mandatory": False, "type": "str"},
         "set/payload": {"mandatory": False, "type": "Any"},
         "set/command": {"mandatory": False, "type": "str"},
-        "set/digits": {"mandatory": False, "type": "int"},
-        "set/multiplier": {"mandatory": False, "type": "int"},
+        "set/digits": {"mandatory": False, "type": ["int", "str"]},
+        "set/multiplier": {"mandatory": False, "type": ["int", "float", "str"]},
         "initial/nvalue": {"mandatory": False, "type": "int"},
         "initial/svalue": {"mandatory": False, "type": "str"}
         })
@@ -274,9 +274,14 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                                         warnings += 1
                                 # Check for multiple sValues
                                 if "sValue2" in definitionItems:
-                                    if "svalue" not in nodeItems:
+                                    if "initial" in nodeItems:
+                                        if "svalue" not in nodeItems["initial"]:
+                                            warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
+                                            warnings += 1
+                                    else:
                                         warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
                                         warnings += 1
+
                                 # Check for number of digits
                             else:
                                 errorText += F"\nType {type}, sub type {subType} not supported!"
