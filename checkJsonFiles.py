@@ -2,8 +2,7 @@
 #
 #   Parse MqttMapper configuration file
 #
-#   This file reads all JSON files in its home folder
-#       and analyze them as MqttMapper configuration files.
+#   This script analyzes all MqttMapper configuration files in its home folder
 #
 #   It checks for:
 #       - JSON syntax,
@@ -11,14 +10,14 @@
 #       - Item type (integer, floating number, string, list...) are also checked,
 #       - Type, sub type and switch type should be known and their association supported,
 #       - Initial/svalue present when device has multiple sValue items,
-#       - [ToDo] Initial, multiplier and digits values for devices with multiple sValue items,
-#       - [ToDo] Digit count for devices with floating point sValue item(s),
+#       - Initial, multiplier and digits values for devices with multiple sValue items,
+#       - Digit count for devices with floating point sValue item(s),
 #       - Duplicate Domoticz device names.
 #
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "1.3.7"
+version = "1.3.9"
 
 import glob
 import os
@@ -70,6 +69,13 @@ def getDictField(searchDict: dict, returnField: str, selectField: str, selectVal
                     else:
                         return itemData
     return None
+
+# Return number of items in a ";" separated string (or zero if not string)
+def getItemCount(item: Any) -> int:
+    if type(item).__name__ == "str":                            # Is item a string?
+        parts = item.split(";")                                 # Split string giving ";"
+        return len(parts)                                       # Return item count (1 if no ";" found)
+    return 0                                                    # Not a string, return 0
 
 # Return a path in a dictionary (else None)
 def getPathValue(dict: Any, path: str, separator: str = '/') -> Any:
@@ -200,7 +206,7 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             newErrors = checkToken("node", nodeItems)
             if newErrors != "":
                 errorText += newErrors
-                errors += 1
+                errors += len(errorText.split("\n")) - 1
         if traceFlag:
             dumpToLog(node)
         type = None
@@ -297,14 +303,91 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                                     else:
                                         warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
                                         warnings += 1
-                                # Check for number of digits
                             else:
                                 errorText += F"\nType {type}, sub type {subType} not supported!"
                                 errors += 1
-            # Check for initial sValue items if given [ToDo]
-            # Check for multiplier count if given [ToDo]
-            # Check for digits count if given [ToDo]
+            # Compute sValue item count associated with this type/sub type
+            sValueCount = 0
+            # Count all sValue dans save each digit count for floats
+            if definitionItems != None:
+                digitsList = []
+            for item in definitionItems.keys():
+                if item.startswith("sValue"):
+                        if definitionItems[item]["dataType"] == "floating point number":
+                            if "digits" in definitionItems[item]:
+                                # Insert digit count
+                                digitsList.append(definitionItems[item]["digits"])
+                            else:
+                                # 0 means float without decimals
+                                digitsList.append(0)
+                        else:
+                            # -1 means not float
+                            digitsList.append(-1)
+                    sValueCount += 1
+            # Check for initial sValue items if given
+            if "initial" in nodeItems:
+                if "svalue" in nodeItems["initial"]:
+                    givenValueCount = getItemCount(nodeItems["initial"]["svalue"])
+                    if givenValueCount != sValueCount:
+                            errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'initial/svalue' while {sValueCount} required"
+                        errors += 1
+            # Check for multiplier count if given
+            if "mapping" in nodeItems:
+                if "multiplier" in nodeItems["mapping"]:
+                    givenValueCount = getItemCount(nodeItems["mapping"]["multiplier"])
+                    if givenValueCount > 1 and givenValueCount != sValueCount:
+                            errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'mapping/multiplier' while {sValueCount} required"
+                        errors += 1
+            # Check for digits count if given
+            if "mapping" in nodeItems:
+                if "digits" in nodeItems["mapping"]:
+                    givenValueCount = getItemCount(nodeItems["mapping"]["digits"])
+                    if givenValueCount > 1 and givenValueCount != sValueCount:
+                            errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'mapping/digits' while {sValueCount} required"
+                        errors += 1
+                        else:
 
+                            # Check any given digit count less or equal of max digit, for floats (or zero for others)
+                            if givenValueCount:
+                                # Scan all elements in digits
+                                i = -1
+                                for part in nodeItems["mapping"]["digits"].split(";"):
+                                    i += 1
+                                    try:
+                                        if part != "":
+                                            digitValue = int(part)
+                                        else:
+                                            digitValue = 0
+                                    except:
+                                        errorText += F'\ninvalid numeric value in "digits": {nodeItems["mapping"]["digits"]}, element {i+1}'
+                                        errors += 1
+                                    else:
+                                        # If this float value?
+                                        if digitsList[i] != -1:
+                                            # If given value is not zero
+                                            if digitValue > digitsList[i]:
+                                                warningText += F"\nDigit {i+1} is {digitValue}, should be no more than {digitsList[i]}"
+                                                warnings += 1
+                                        else:
+                                            if digitValue > 0:
+                                                warningText += F"\nDigit {i+1} is {digitValue}, should be zero for non float values"
+                                                warnings += 1
+                            else:
+                                # Only one value given on digits
+                                try:
+                                    digitValue = int(nodeItems["mapping"]["digits"])
+                                except:
+                                    errorText += F'\ninvalid numeric value in "digits": {nodeItems["mapping"]["digits"]}'
+                                    errors += 1
+                                else:
+                                    # For all sValues
+                                    for i in range(len(digitsList)):
+                                        # If this float value?
+                                        if digitsList[i] != -1:
+                                            # If given value is not zero
+                                            if digitValue > digitsList[i]:
+                                                warningText += F"\nDigit {i+1} is {digitValue}, should be no more than {digitsList[i]}"
+                                                warnings += 1
         if traceFlag:
             if definitionItems != None:
                 # List all nValue and sValue
@@ -315,7 +398,12 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                         if "format" in items:
                             del items["format"]
                         print(f"    {item}: {formatJson(items)}")
-
+        device = nodeKey if nodeKey else nodeTopic
+        if device in devices:
+            errorText += F"\nduplicate topic '{device}' node/key found"
+            errors += 1
+        else:
+            devices.append(device)
         if errorText:
             print(F"    Error{'s'[:errors^1]} in {node}")
             for errorLine in errorText[1:].split('\n'):
@@ -326,12 +414,6 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             for warningLine in warningText[1:].split('\n'):
                 print("    --> "+warningLine)
             warningSeen += warnings
-        device = nodeKey if nodeKey else nodeTopic
-        if device in devices:
-            print('Duplicate '+str(device)+ ' node/key found')
-            errorSeen += 1
-        else:
-            devices.append(device)
     if errorSeen:
         print(F"  Error{'s'[:errorSeen^1]} found in {jsonFile}, fix them and recheck!!!")
     elif warningSeen:
@@ -340,6 +422,7 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
         print("  File seems good")
 
 # *** Main code ***
+
 # Init arguments variables
 cdeFile = __file__
 if cdeFile[:2] == './':
