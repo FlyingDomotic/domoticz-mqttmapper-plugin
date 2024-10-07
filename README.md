@@ -130,7 +130,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
         "initial": {"svalue": "0;0;0"},
-        "mapping": {"item": "temperature;humidity;~0"}
+        "mapping": {"item": "temperature;humidity;~0", "multiplier": "0.1;1;1", "digits": "1;0;0"}
     },
     "Boiler power": {
         "topic": "boiler/SENSOR",
@@ -195,19 +195,19 @@ Dans cet exemple, `options` contient les options utilisées pour créer le dispo
 
 This time, payload is in JSON format (`item` is not empty). This mean that the value will be extracted from `temperature` payload item, at the root level. `ENERGY/Power` in later example means that value will be extracted in `Power` item of `Energy` root item.
 
-`multiplier` is optional, and gives the factor to apply to numeric value (here `0.1`, equivalent to divided by 10).
-'digits' is also optional, and gives the number of decimal digits to round value to.
+`multiplier` is optional, and gives the factor to apply to numeric value (here `0.1`, equivalent to divided by 10). When having multiple items in sValue, you can use multiplier like "0.1;10;1".
+'digits' is also optional, and gives the number of decimal digits to round value to. When having digits items in sValue, you can use digits like "1;2;0".
 
 Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur extraite sera prise dans l'item `temperature` du contenu, au niveau supérieur. `ENERGY/Power` dans l'exemple suivant indique que la valeur sera extraite de l'item `Power` de l'item `Energy`.
 
-`multiplier` est optionnel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, équivalent à diviser par 10).
-'digits' est également optionnel et indique le nombre de décimales à utiliser pour arrondir la valeur.
+`multiplier` est optionnel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, équivalent à diviser par 10). Lorsque vous avez plusieurs multiplicateurs à indiquer,, vous pouvez les spécifier comme "0.1;10;1"
+'digits' est également optionnel et indique le nombre de décimales à utiliser pour arrondir la valeur. Là encore, vous pouvez utiliser "1;2;0" si vous avez plusieurs valeurs à donner.
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
-        "initial": {"svalue": "0.0;0;0"},
-        "mapping": {"item": "temperature;humidity;~0"}
+        "initial": {"svalue": "0;0;0"},
+        "mapping": {"item": "temperature;humidity;~0", "multiplier": "0.1;1;1", "digits": "1;0;0"}
     }
 ```
 
