@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "1.3.9"
+version = "1.3.10"
 
 import glob
 import os
@@ -244,6 +244,13 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             if subTypeLib == "???":
                 errorText += F"\nsubType {subType} not known with type {type}"
                 errors += 1
+
+        # Put a warning if no default specified when values are given in mapping
+        if "mapping" in nodeItems:
+            mappingItems = nodeItems["mapping"]
+            if "values" in nodeItems and "default" not in nodeItems:
+                warningText += "\nIt may be a good idea to specify 'mapping/default' when using 'mapping/values'"
+                warnings += 1
 
         # Look for type definition
         definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type)
