@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "1.3.11"
+version = "1.3.12"
 
 import glob
 import os
@@ -126,6 +126,7 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
         "mapping/digits": {"mandatory": False, "type": ["int", "str"]},
         "mapping/multiplier": {"mandatory": False, "type": ["int", "float", "str"]},
         "mapping/values": {"mandatory": False, "type": "Any"},
+        "mapping/battery": {"mandatory": False, "type": "str"},
         "set/topic": {"mandatory": False, "type": "str"},
         "set/payload": {"mandatory": False, "type": "Any"},
         "set/command": {"mandatory": False, "type": "str"},
