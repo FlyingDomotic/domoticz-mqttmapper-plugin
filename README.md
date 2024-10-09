@@ -130,7 +130,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
         "initial": {"svalue": "0;0;0"},
-        "mapping": {"item": "temperature;humidity;~0", "multiplier": "0.1;1;1", "digits": "1;0;0"}
+        "mapping": {"item": "temperature;humidity;~0", "multiplier": "0.1;1;1", "digits": "1;0;0", "battery": "batLevel"}
     },
     "Boiler power": {
         "topic": "boiler/SENSOR",
@@ -207,7 +207,7 @@ Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur ext
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
         "initial": {"svalue": "0;0;0"},
-        "mapping": {"item": "temperature;humidity;~0", "multiplier": "0.1;1;1", "digits": "1;0;0"}
+        "mapping": {"item": "temperature;humidity;~0", "multiplier": "0.1;1;1", "digits": "1;0;0", "battery": "batLevel"}
     }
 ```
 
@@ -219,6 +219,8 @@ Should you want to change only part of sValue, you may use `~` alone to keep cur
 
 To set initial sValue or nValue, you can use "initial": {"nvalue": 123} or "initial": {"svalue": "abc"} or both.
 
+You can also specify "battery" followed by payload name to extract (here "batLevel") with same specification as "item"
+
 Pour indiquer des valeurs multiples, séparez-les par des `;`, comme dans `temperature;humidity`. La valeur chargée sera la concaténation des deux items.
 
 Noter que vous pouvez aussi insérer des constantes, en les préfixant par `~`. Par exemple `total;~0;~0;~0;power;~0` pour spécifier le contenu de type sValue d'un compteur en KWh.
@@ -226,6 +228,8 @@ Noter que vous pouvez aussi insérer des constantes, en les préfixant par `~`. 
 Si vous voulez ne changer qu'une partie de la variable sValue d'un dispositif, vous pouvez utiliser `~` seul pour conserver une partie existante. Par exemple, `value;~` va insérer le contenu de l'item value et conserver la seconde partie de sValue.
 
 Pour définir une valeur initiale pour nvalue ou svalue sur un dispositif, vous pouvez utiliser "initial": {"nvalue": 123} ou "initial": {"svalue": "abc"} ou les deux.
+
+Vous pouvez aussi utiliser specify "battery" suivi du nom extrait du contenu JSON (ici "batLevel"), de la même façon qu'"item"
 
 You may need to create multiple devices from the same topic. In this case, use optional `key` item to specify a "virtual" key. This key can be anything, as long as it is unique and different from topics. For example:
 
