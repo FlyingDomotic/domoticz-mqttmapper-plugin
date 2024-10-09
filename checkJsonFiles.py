@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "1.3.10"
+version = "1.3.11"
 
 import glob
 import os
@@ -245,10 +245,10 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                 errorText += F"\nsubType {subType} not known with type {type}"
                 errors += 1
 
-        # Put a warning if no default specified when values are given in mapping
+       # Put a warning if no default specified when values are given in mapping
         if "mapping" in nodeItems:
             mappingItems = nodeItems["mapping"]
-            if "values" in nodeItems and "default" not in nodeItems:
+            if "values" in mappingItems and "default" not in mappingItems:
                 warningText += "\nIt may be a good idea to specify 'mapping/default' when using 'mapping/values'"
                 warnings += 1
 
@@ -318,8 +318,8 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             # Count all sValue dans save each digit count for floats
             if definitionItems != None:
                 digitsList = []
-            for item in definitionItems.keys():
-                if item.startswith("sValue"):
+                for item in definitionItems.keys():
+                    if item.startswith("sValue"):
                         if definitionItems[item]["dataType"] == "floating point number":
                             if "digits" in definitionItems[item]:
                                 # Insert digit count
@@ -330,30 +330,29 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                         else:
                             # -1 means not float
                             digitsList.append(-1)
-                    sValueCount += 1
-            # Check for initial sValue items if given
-            if "initial" in nodeItems:
-                if "svalue" in nodeItems["initial"]:
-                    givenValueCount = getItemCount(nodeItems["initial"]["svalue"])
-                    if givenValueCount != sValueCount:
+                        sValueCount += 1
+                # Check for initial sValue items if given
+                if "initial" in nodeItems:
+                    if "svalue" in nodeItems["initial"]:
+                        givenValueCount = getItemCount(nodeItems["initial"]["svalue"])
+                        if givenValueCount != sValueCount:
                             errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'initial/svalue' while {sValueCount} required"
-                        errors += 1
-            # Check for multiplier count if given
-            if "mapping" in nodeItems:
-                if "multiplier" in nodeItems["mapping"]:
-                    givenValueCount = getItemCount(nodeItems["mapping"]["multiplier"])
-                    if givenValueCount > 1 and givenValueCount != sValueCount:
+                            errors += 1
+                # Check for multiplier count if given
+                if "mapping" in nodeItems:
+                    if "multiplier" in nodeItems["mapping"]:
+                        givenValueCount = getItemCount(nodeItems["mapping"]["multiplier"])
+                        if givenValueCount > 1 and givenValueCount != sValueCount:
                             errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'mapping/multiplier' while {sValueCount} required"
-                        errors += 1
-            # Check for digits count if given
-            if "mapping" in nodeItems:
-                if "digits" in nodeItems["mapping"]:
-                    givenValueCount = getItemCount(nodeItems["mapping"]["digits"])
-                    if givenValueCount > 1 and givenValueCount != sValueCount:
+                            errors += 1
+                # Check for digits count if given
+                if "mapping" in nodeItems:
+                    if "digits" in nodeItems["mapping"]:
+                        givenValueCount = getItemCount(nodeItems["mapping"]["digits"])
+                        if givenValueCount > 1 and givenValueCount != sValueCount:
                             errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'mapping/digits' while {sValueCount} required"
-                        errors += 1
+                            errors += 1
                         else:
-
                             # Check any given digit count less or equal of max digit, for floats (or zero for others)
                             if givenValueCount:
                                 # Scan all elements in digits
