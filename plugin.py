@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.48" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.49" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -310,8 +310,8 @@ class BasePlugin:
         # Parse options
         self.debugging = Parameters["Mode6"]
         DumpConfigToLog()
-        if self.debugging == "Extra verbose":
-            Domoticz.Debugging(2+4+8+16+64)
+        if self.debugging == "Verbose+":
+            Domoticz.Debugging(2+4+8+16+64+128)
         elif self.debugging == "Verbose":
             Domoticz.Debugging(2+4+8+16+64)
         elif self.debugging == "Debug":
