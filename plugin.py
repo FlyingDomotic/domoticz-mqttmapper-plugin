@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.49" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.50" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -489,8 +489,8 @@ class BasePlugin:
                                 readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                     readValue = readValue[1:]   # Remove first ';'
                     if nodeType == '244':   # This is a switch
-                        if  mappingDefault != None and mappingValues != None:
-                            valueToSet = mappingDefault # Set default mapping
+                        if  mappingValues != None:
+                            valueToSet = mappingDefault or 0 # Set default mapping (or 0)
                             for testValue in mappingValues: # Scan all mapping values
                                 Domoticz.Log(f'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
                                 if testValue == readValue:  # Is this the same value?
