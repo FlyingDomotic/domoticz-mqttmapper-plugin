@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.50" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.51" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -459,6 +459,7 @@ class BasePlugin:
                 mappingItem = self.getValue(nodeMapping, 'item', None)
                 mappingDefault = self.getValue(nodeMapping, 'default', None)
                 mappingValues = self.getValue(nodeMapping, 'values', None)
+                mappingBattery = self.getValue(nodeMapping, 'battery', None)
                 valueToSet = None
                 if mappingItem !=None:
                     if mappingItem == '':   # Empty mapping means (not json) full message
@@ -502,6 +503,17 @@ class BasePlugin:
                 else:   # No mapping given
                     Domoticz.Error('No mapping for '+device.Name)
                 if valueToSet != None: # Value given, set it
+                    batteryValue = 255
+                    if mappingBattery != None:
+                        batteryValue = self.getPathValue(message, mappingBattery, '/', 255) # Extract battery value from message
+                    if batteryValue < 0:
+                        batteryValue = 0
+                    elif batteryValue > 100 and batteryValue != 255:
+                        batteryValue = 100
+                    if batteryValue != 255:
+                        batteryText = F", batteryLevel: {batteryValue}"
+                    else:
+                        batteryText =""
                     if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
                         readValue = str(valueToSet) # Force read value as string
                         if nodeType == '244':   # This is a switch
@@ -513,11 +525,11 @@ class BasePlugin:
                         else:
                             nValueToSet = int(round(float(valueToSet),0))
                             sValueToSet = readValue
-                        Domoticz.Log('Setting '+device.Name+' to '+str(nValueToSet)+'/'+sValueToSet)  # Value is numeric or float
-                        device.Update(nValue=nValueToSet, sValue=sValueToSet)
+                        Domoticz.Log(F'Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}')  # Value is numeric or float
+                        device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
                     else:   # Value is not numeric
-                        Domoticz.Log('Setting '+device.Name+' to >'+valueToSet+'<') 
-                        device.Update(nValue=0, sValue=str(valueToSet))
+                        Domoticz.Log(F'Setting {device.Name} to >{valueToSet}<{batteryText}') 
+                        device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
 
     def onMQTTSubscribed(self):
         # Exit if init not properly done
