@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.51" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.52" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -325,6 +325,10 @@ class BasePlugin:
         # Load JSON mapping file
         jsonFile = Parameters['HomeFolder'] + Parameters["Mode1"]
         self.jsonData = None
+        # Check for configuration file
+        if not os.path.isfile(jsonFile):
+            Domoticz.Error(f"Can't find {jsonFile} file!")
+            return
         with open(jsonFile, encoding = 'UTF-8') as configStream:
             try:
                 self.jsonData = json.load(configStream)
@@ -333,6 +337,7 @@ class BasePlugin:
                 if e.__traceback__ != None:
                     errorLine = e.__traceback__.tb_lineno
                 Domoticz.Error(f"Error loading {jsonFile} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
+                Domoticz.Error(f"You should probably use any online 'json format checker' to locate JSON syntax error in {jsonFile}")
                 return
         # Go through Json file to create devices
         deviceList = []
