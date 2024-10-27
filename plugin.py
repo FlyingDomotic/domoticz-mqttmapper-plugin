@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.52" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.53" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -494,7 +494,7 @@ class BasePlugin:
                             else:   # Add extracted value
                                 readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                     readValue = readValue[1:]   # Remove first ';'
-                    if nodeType == '244':   # This is a switch
+                    if int(nodeType) == 244:   # This is a switch
                         if  mappingValues != None:
                             valueToSet = mappingDefault or 0 # Set default mapping (or 0)
                             for testValue in mappingValues: # Scan all mapping values
@@ -521,7 +521,7 @@ class BasePlugin:
                         batteryText =""
                     if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
                         readValue = str(valueToSet) # Force read value as string
-                        if nodeType == '244':   # This is a switch
+                        if int(nodeType) == 244:   # This is a switch
                             if nodeSwitchtype == '0': # This is an On/Off switch
                                 nValueToSet = 0 if str(valueToSet) == '0' else 1
                             else:   # Not a switch, use given value
@@ -529,6 +529,10 @@ class BasePlugin:
                             sValueToSet = str(valueToSet)
                         else:
                             nValueToSet = int(round(float(valueToSet),0))
+                            if int(nodeType) == 84:
+                                nValueToSet = 0
+                            if int(nodeType) == 243 and int(nodeSubtype) in [26, 28, 29, 31, 33]:
+                                nValueToSet = 0
                             sValueToSet = readValue
                         Domoticz.Log(F'Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}')  # Value is numeric or float
                         device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
@@ -583,7 +587,7 @@ class BasePlugin:
                         setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
                         mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
                         nodeType = str(self.getValue(nodeItems, 'type', None))      # Get device type
-                        if nodeType >= '242' and nodeType <= '244':               # Select valid types
+                        if int(nodeType) >= 242 and int(nodeType) <= 244:               # Select valid types
                             if mappingValues != None:
                                 for testValue in mappingValues: # Scan all mapping values
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
@@ -593,7 +597,7 @@ class BasePlugin:
                             else: # No mapping given, use command value
                                 valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
                         else:   # Not a switch
-                            Domoticz.Error('Can\'t set device type '+nodeType+' yet. Please ask for support.')
+                            Domoticz.Error(F"Can't set device type {nodeType} yet. Please ask for support.")
                     else:   # No set given
                         Domoticz.Error('No SET parameters for '+device.Name+"/"+device.DeviceID+" in "+str(node))
                     if valueToSet != None and setTopic != None: # Value and topic given, set it
