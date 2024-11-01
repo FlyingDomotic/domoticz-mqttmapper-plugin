@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.53" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.54" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -346,8 +346,8 @@ class BasePlugin:
             nodeItems = node[1]
             nodeTopic = self.getValue(nodeItems, 'topic', None)
             nodeKey = self.getValue(nodeItems, 'key', None)
-            nodeType = self.getValue(nodeItems, 'type', None)
-            nodeSubtype = self.getValue(nodeItems, 'subtype', None)
+            nodeType = self.getValue(nodeItems, 'type', "0")
+            nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
             nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
             nodeOptions  = self.getValue(nodeItems, 'options', None)
             nodeVisible  = self.getValue(nodeItems, 'visible', True)
@@ -371,9 +371,13 @@ class BasePlugin:
                         device = self.getDevice(nodeKey if nodeKey else nodeTopic)
                         if device != None:
                             device.Update(nValue = nValue, sValue = sValue)
+                        else:
+                                    Domoticz.Error(F"Can't find device {nodeKey if nodeKey else nodeTopic}")
                 else:
-                    Domoticz.Log("Updating device " + nodeName)
-                    device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
+                    # Update device only if something changed
+                    if device.Type != int(nodeType) or device.SubType != int(nodeSubtype) or device.SwitchType != int(nodeSwitchtype):
+                        Domoticz.Log("Updating device " + nodeName)
+                        device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
 
         # Connect to MQTT server
         self.mqttClient = MqttClient(self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed)
@@ -457,8 +461,8 @@ class BasePlugin:
                     Domoticz.Error(F"Can't find device key {nodeKey if nodeKey else nodeTopic}")
                     return
                 Domoticz.Debug("onMQTTPublish found "+str(topic)+", Device '" + device.Name + "', message '" + str(message) + "'")
-                nodeType = self.getValue(nodeItems, 'type', None)   # Read some values for this device
-                nodeSubtype = self.getValue(nodeItems, 'subtype', None)
+                nodeType = self.getValue(nodeItems, 'type', "0")   # Read some values for this device
+                nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
                 nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
                 nodeMapping = self.getValue(nodeItems, 'mapping', None)
                 mappingItem = self.getValue(nodeMapping, 'item', None)
