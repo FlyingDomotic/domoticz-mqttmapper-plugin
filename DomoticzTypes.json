@@ -1,6 +1,6 @@
 {
     "config": {
-        "date": "2024-10-02T18:07:56.546000",
+        "date": "2024-11-01T10:14:59.874000",
         "version": "2024.7.0"
     },
     "types": {
@@ -9,616 +9,539 @@
             "name": "InterfaceControl",
             "value": 0,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 457
+            "fileName": "RFXtrx.h"
         },
         "InterfaceMessage": {
             "fullName": "pTypeInterfaceMessage",
             "name": "InterfaceMessage",
             "value": 1,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 466
+            "fileName": "RFXtrx.h"
         },
         "RecXmitMessage": {
             "fullName": "pTypeRecXmitMessage",
             "name": "RecXmitMessage",
             "value": 2,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 580
+            "fileName": "RFXtrx.h"
         },
         "Undecoded": {
             "fullName": "pTypeUndecoded",
             "name": "Undecoded",
             "value": 3,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 585
+            "fileName": "RFXtrx.h"
         },
         "Lighting1": {
             "fullName": "pTypeLighting1",
             "name": "Lighting1",
             "value": 16,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 618
+            "fileName": "RFXtrx.h"
         },
         "Lighting2": {
             "fullName": "pTypeLighting2",
             "name": "Lighting2",
             "value": 17,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 642
+            "fileName": "RFXtrx.h"
         },
         "Lighting3": {
             "fullName": "pTypeLighting3",
             "name": "Lighting3",
             "value": 18,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 655
+            "fileName": "RFXtrx.h"
         },
         "Lighting4": {
             "fullName": "pTypeLighting4",
             "name": "Lighting4",
             "value": 19,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 672
+            "fileName": "RFXtrx.h"
         },
         "Lighting5": {
             "fullName": "pTypeLighting5",
             "name": "Lighting5",
             "value": 20,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 675
+            "fileName": "RFXtrx.h"
         },
         "Lighting6": {
             "fullName": "pTypeLighting6",
             "name": "Lighting6",
             "value": 21,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 778
+            "fileName": "RFXtrx.h"
         },
         "Chime": {
             "fullName": "pTypeChime",
             "name": "Chime",
             "value": 22,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 786
+            "fileName": "RFXtrx.h"
         },
         "Fan": {
             "fullName": "pTypeFan",
             "name": "Fan",
             "value": 23,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 804
+            "fileName": "RFXtrx.h"
         },
         "Curtain": {
             "fullName": "pTypeCurtain",
             "name": "Curtain",
             "value": 24,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 944
+            "fileName": "RFXtrx.h"
         },
         "Blinds": {
             "fullName": "pTypeBlinds",
             "name": "Blinds",
             "value": 25,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 952
+            "fileName": "RFXtrx.h"
         },
         "RFY": {
             "fullName": "pTypeRFY",
             "name": "RFY",
             "value": 26,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1018
+            "fileName": "RFXtrx.h"
         },
         "HomeConfort": {
             "fullName": "pTypeHomeConfort",
             "name": "HomeConfort",
             "value": 27,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1045
+            "fileName": "RFXtrx.h"
         },
         "Funkbus": {
             "fullName": "pTypeFunkbus",
             "name": "Funkbus",
             "value": 30,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1053
+            "fileName": "RFXtrx.h"
         },
         "Hunter": {
             "fullName": "pTypeHunter",
             "name": "Hunter",
             "value": 31,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1065
+            "fileName": "RFXtrx.h"
         },
         "Edisio": {
             "fullName": "pTypeEdisio",
             "name": "Edisio",
             "value": 28,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1075
+            "fileName": "RFXtrx.h"
         },
         "Honeywell_AL": {
             "fullName": "pTypeHoneywell_AL",
             "name": "Honeywell_AL",
             "value": 29,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1107
+            "fileName": "RFXtrx.h"
         },
         "Security1": {
             "fullName": "pTypeSecurity1",
             "name": "Security1",
             "value": 32,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1112
+            "fileName": "RFXtrx.h"
         },
         "Security2": {
             "fullName": "pTypeSecurity2",
             "name": "Security2",
             "value": 33,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1156
+            "fileName": "RFXtrx.h"
         },
         "Camera": {
             "fullName": "pTypeCamera",
             "name": "Camera",
             "value": 40,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1160
+            "fileName": "RFXtrx.h"
         },
         "Remote": {
             "fullName": "pTypeRemote",
             "name": "Remote",
             "value": 48,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1180
+            "fileName": "RFXtrx.h"
         },
         "DDxxxx": {
             "fullName": "pTypeDDxxxx",
             "name": "DDxxxx",
             "value": 49,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1188
+            "fileName": "RFXtrx.h"
         },
         "Thermostat1": {
             "fullName": "pTypeThermostat1",
             "name": "Thermostat1",
             "value": 64,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1204
+            "fileName": "RFXtrx.h"
         },
         "Thermostat2": {
             "fullName": "pTypeThermostat2",
             "name": "Thermostat2",
             "value": 65,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1212
+            "fileName": "RFXtrx.h"
         },
         "Thermostat3": {
             "fullName": "pTypeThermostat3",
             "name": "Thermostat3",
             "value": 66,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1219
+            "fileName": "RFXtrx.h"
         },
         "Thermostat4": {
             "fullName": "pTypeThermostat4",
             "name": "Thermostat4",
             "value": 67,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1234
+            "fileName": "RFXtrx.h"
         },
         "Thermostat5": {
             "fullName": "pTypeThermostat5",
             "name": "Thermostat5",
             "value": 68,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1243
+            "fileName": "RFXtrx.h"
         },
         "Radiator1": {
             "fullName": "pTypeRadiator1",
             "name": "Radiator1",
             "value": 72,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1252
+            "fileName": "RFXtrx.h"
         },
         "BBQ": {
             "fullName": "pTypeBBQ",
             "name": "BBQ",
             "value": 78,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1260
+            "fileName": "RFXtrx.h"
         },
         "TEMP_RAIN": {
             "fullName": "pTypeTEMP_RAIN",
             "name": "TEMP_RAIN",
             "value": 79,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1264
+            "fileName": "RFXtrx.h"
         },
         "TEMP": {
             "fullName": "pTypeTEMP",
             "name": "TEMP",
             "value": 80,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1268
+            "fileName": "RFXtrx.h"
         },
         "HUM": {
             "fullName": "pTypeHUM",
             "name": "HUM",
             "value": 81,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1282
+            "fileName": "RFXtrx.h"
         },
         "TEMP_HUM": {
             "fullName": "pTypeTEMP_HUM",
             "name": "TEMP_HUM",
             "value": 82,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1294
+            "fileName": "RFXtrx.h"
         },
         "BARO": {
             "fullName": "pTypeBARO",
             "name": "BARO",
             "value": 83,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1311
+            "fileName": "RFXtrx.h"
         },
         "TEMP_HUM_BARO": {
             "fullName": "pTypeTEMP_HUM_BARO",
             "name": "TEMP_HUM_BARO",
             "value": 84,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1314
+            "fileName": "RFXtrx.h"
         },
         "RAIN": {
             "fullName": "pTypeRAIN",
             "name": "RAIN",
             "value": 85,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1324
+            "fileName": "RFXtrx.h"
         },
         "WIND": {
             "fullName": "pTypeWIND",
             "name": "WIND",
             "value": 86,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1337
+            "fileName": "RFXtrx.h"
         },
         "UV": {
             "fullName": "pTypeUV",
             "name": "UV",
             "value": 87,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1347
+            "fileName": "RFXtrx.h"
         },
         "DT": {
             "fullName": "pTypeDT",
             "name": "DT",
             "value": 88,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1353
+            "fileName": "RFXtrx.h"
         },
         "CURRENT": {
             "fullName": "pTypeCURRENT",
             "name": "CURRENT",
             "value": 89,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1357
+            "fileName": "RFXtrx.h"
         },
         "ENERGY": {
             "fullName": "pTypeENERGY",
             "name": "ENERGY",
             "value": 90,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1361
+            "fileName": "RFXtrx.h"
         },
         "CURRENTENERGY": {
             "fullName": "pTypeCURRENTENERGY",
             "name": "CURRENTENERGY",
             "value": 91,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1366
+            "fileName": "RFXtrx.h"
         },
         "POWER": {
             "fullName": "pTypePOWER",
             "name": "POWER",
             "value": 92,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1370
+            "fileName": "RFXtrx.h"
         },
         "WEIGHT": {
             "fullName": "pTypeWEIGHT",
             "name": "WEIGHT",
             "value": 93,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1374
+            "fileName": "RFXtrx.h"
         },
         "GAS": {
             "fullName": "pTypeGAS",
             "name": "GAS",
             "value": 94,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1379
+            "fileName": "RFXtrx.h"
         },
         "WATER": {
             "fullName": "pTypeWATER",
             "name": "WATER",
             "value": 95,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1382
+            "fileName": "RFXtrx.h"
         },
         "CARTELECTRONIC": {
             "fullName": "pTypeCARTELECTRONIC",
             "name": "CARTELECTRONIC",
             "value": 96,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1385
+            "fileName": "RFXtrx.h"
         },
         "ASYNCPORT": {
             "fullName": "pTypeASYNCPORT",
             "name": "ASYNCPORT",
             "value": 97,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1391
+            "fileName": "RFXtrx.h"
         },
         "ASYNCDATA": {
             "fullName": "pTypeASYNCDATA",
             "name": "ASYNCDATA",
             "value": 98,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1421
+            "fileName": "RFXtrx.h"
         },
         "RFXSensor": {
             "fullName": "pTypeRFXSensor",
             "name": "RFXSensor",
             "value": 112,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1428
+            "fileName": "RFXtrx.h"
         },
         "RFXMeter": {
             "fullName": "pTypeRFXMeter",
             "name": "RFXMeter",
             "value": 113,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1435
+            "fileName": "RFXtrx.h"
         },
         "FS20": {
             "fullName": "pTypeFS20",
             "name": "FS20",
             "value": 114,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1448
+            "fileName": "RFXtrx.h"
         },
         "LEVELSENSOR": {
             "fullName": "pTypeLEVELSENSOR",
             "name": "LEVELSENSOR",
             "value": 115,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1482
+            "fileName": "RFXtrx.h"
         },
         "LIGHTNING": {
             "fullName": "pTypeLIGHTNING",
             "name": "LIGHTNING",
             "value": 116,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1486
+            "fileName": "RFXtrx.h"
         },
         "WEATHER": {
             "fullName": "pTypeWEATHER",
             "name": "WEATHER",
             "value": 118,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1490
+            "fileName": "RFXtrx.h"
         },
         "SOLAR": {
             "fullName": "pTypeSOLAR",
             "name": "SOLAR",
             "value": 119,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1496
+            "fileName": "RFXtrx.h"
         },
         "RAW": {
             "fullName": "pTypeRAW",
             "name": "RAW",
             "value": 127,
             "comment": "",
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1500
+            "fileName": "RFXtrx.h"
         },
         "ColorSwitch": {
             "fullName": "pTypeColorSwitch",
             "name": "ColorSwitch",
             "value": 241,
             "comment": "",
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 8
+            "fileName": "ColorSwitch.h"
         },
         "Setpoint": {
             "fullName": "pTypeSetpoint",
             "name": "Setpoint",
             "value": 242,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 37
+            "fileName": "hardwaretypes.h"
         },
         "General": {
             "fullName": "pTypeGeneral",
             "name": "General",
             "value": 243,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 41
+            "fileName": "hardwaretypes.h"
         },
         "GeneralSwitch": {
             "fullName": "pTypeGeneralSwitch",
             "name": "GeneralSwitch",
             "value": 244,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 73
+            "fileName": "hardwaretypes.h"
         },
         "Lux": {
             "fullName": "pTypeLux",
             "name": "Lux",
             "value": 246,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 238
+            "fileName": "hardwaretypes.h"
         },
         "TEMP_BARO": {
             "fullName": "pTypeTEMP_BARO",
             "name": "TEMP_BARO",
             "value": 247,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 241
+            "fileName": "hardwaretypes.h"
         },
         "Usage": {
             "fullName": "pTypeUsage",
             "name": "Usage",
             "value": 248,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 244
+            "fileName": "hardwaretypes.h"
         },
         "AirQuality": {
             "fullName": "pTypeAirQuality",
             "name": "AirQuality",
             "value": 249,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 247
+            "fileName": "hardwaretypes.h"
         },
         "P1Power": {
             "fullName": "pTypeP1Power",
             "name": "P1Power",
             "value": 250,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 250
+            "fileName": "hardwaretypes.h"
         },
         "P1Gas": {
             "fullName": "pTypeP1Gas",
             "name": "P1Gas",
             "value": 251,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 255
+            "fileName": "hardwaretypes.h"
         },
         "YouLess": {
             "fullName": "pTypeYouLess",
             "name": "YouLess",
             "value": 252,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 258
+            "fileName": "hardwaretypes.h"
         },
         "Rego6XXTemp": {
             "fullName": "pTypeRego6XXTemp",
             "name": "Rego6XXTemp",
             "value": 253,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 261
+            "fileName": "hardwaretypes.h"
         },
         "Rego6XXValue": {
             "fullName": "pTypeRego6XXValue",
             "name": "Rego6XXValue",
             "value": 254,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 264
+            "fileName": "hardwaretypes.h"
         },
         "Evohome": {
             "fullName": "pTypeEvohome",
             "name": "Evohome",
             "value": 69,
             "comment": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 272
+            "fileName": "hardwaretypes.h"
         },
         "EvohomeZone": {
             "fullName": "pTypeEvohomeZone",
             "name": "EvohomeZone",
             "value": 70,
             "comment": "Seems easier to define a new type here",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 275
+            "fileName": "hardwaretypes.h"
         },
         "EvohomeWater": {
             "fullName": "pTypeEvohomeWater",
             "name": "EvohomeWater",
             "value": 71,
             "comment": "Seems easier to define a new type here",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 278
+            "fileName": "hardwaretypes.h"
         },
         "EvohomeRelay": {
             "fullName": "pTypeEvohomeRelay",
             "name": "EvohomeRelay",
             "value": 68,
             "comment": "Relay",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 281
+            "fileName": "hardwaretypes.h"
         }
     },
     "subTypes": {
@@ -629,8 +552,7 @@
             "comment": "",
             "typeName": "InterfaceControl",
             "typeValue": 0,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 458
+            "fileName": "RFXtrx.h"
         },
         "InterfaceResponse": {
             "fullName": "sTypeInterfaceResponse",
@@ -639,8 +561,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 467
+            "fileName": "RFXtrx.h"
         },
         "UnknownRFYremote": {
             "fullName": "sTypeUnknownRFYremote",
@@ -649,8 +570,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 468
+            "fileName": "RFXtrx.h"
         },
         "ExtError": {
             "fullName": "sTypeExtError",
@@ -659,8 +579,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 469
+            "fileName": "RFXtrx.h"
         },
         "RFYremoteList": {
             "fullName": "sTypeRFYremoteList",
@@ -669,8 +588,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 470
+            "fileName": "RFXtrx.h"
         },
         "ASAremoteList": {
             "fullName": "sTypeASAremoteList",
@@ -679,8 +597,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 471
+            "fileName": "RFXtrx.h"
         },
         "CherubiniRemoteList": {
             "fullName": "sTypeCherubiniRemoteList",
@@ -689,8 +606,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 472
+            "fileName": "RFXtrx.h"
         },
         "OzrollRemoteList": {
             "fullName": "sTypeOzrollRemoteList",
@@ -699,8 +615,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 473
+            "fileName": "RFXtrx.h"
         },
         "RecStarted": {
             "fullName": "sTypeRecStarted",
@@ -709,8 +624,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 474
+            "fileName": "RFXtrx.h"
         },
         "InterfaceWrongCommand": {
             "fullName": "sTypeInterfaceWrongCommand",
@@ -719,8 +633,7 @@
             "comment": "",
             "typeName": "InterfaceMessage",
             "typeValue": 1,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 475
+            "fileName": "RFXtrx.h"
         },
         "ReceiverLockError": {
             "fullName": "sTypeReceiverLockError",
@@ -729,8 +642,7 @@
             "comment": "",
             "typeName": "RecXmitMessage",
             "typeValue": 2,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 581
+            "fileName": "RFXtrx.h"
         },
         "TransmitterResponse": {
             "fullName": "sTypeTransmitterResponse",
@@ -739,8 +651,7 @@
             "comment": "",
             "typeName": "RecXmitMessage",
             "typeValue": 2,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 582
+            "fileName": "RFXtrx.h"
         },
         "Uac": {
             "fullName": "sTypeUac",
@@ -749,8 +660,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 586
+            "fileName": "RFXtrx.h"
         },
         "Uarc": {
             "fullName": "sTypeUarc",
@@ -759,8 +669,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 587
+            "fileName": "RFXtrx.h"
         },
         "Uati": {
             "fullName": "sTypeUati",
@@ -769,8 +678,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 588
+            "fileName": "RFXtrx.h"
         },
         "Uhideki": {
             "fullName": "sTypeUhideki",
@@ -779,8 +687,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 589
+            "fileName": "RFXtrx.h"
         },
         "Ulacrosse": {
             "fullName": "sTypeUlacrosse",
@@ -789,8 +696,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 590
+            "fileName": "RFXtrx.h"
         },
         "Uad": {
             "fullName": "sTypeUad",
@@ -799,8 +705,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 591
+            "fileName": "RFXtrx.h"
         },
         "Umertik": {
             "fullName": "sTypeUmertik",
@@ -809,8 +714,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 592
+            "fileName": "RFXtrx.h"
         },
         "Uoregon1": {
             "fullName": "sTypeUoregon1",
@@ -819,8 +723,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 593
+            "fileName": "RFXtrx.h"
         },
         "Uoregon2": {
             "fullName": "sTypeUoregon2",
@@ -829,8 +732,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 594
+            "fileName": "RFXtrx.h"
         },
         "Uoregon3": {
             "fullName": "sTypeUoregon3",
@@ -839,8 +741,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 595
+            "fileName": "RFXtrx.h"
         },
         "Uproguard": {
             "fullName": "sTypeUproguard",
@@ -849,8 +750,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 596
+            "fileName": "RFXtrx.h"
         },
         "Uvisonic": {
             "fullName": "sTypeUvisonic",
@@ -859,8 +759,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 597
+            "fileName": "RFXtrx.h"
         },
         "Unec": {
             "fullName": "sTypeUnec",
@@ -869,8 +768,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 598
+            "fileName": "RFXtrx.h"
         },
         "Ufs20": {
             "fullName": "sTypeUfs20",
@@ -879,8 +777,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 599
+            "fileName": "RFXtrx.h"
         },
         "Ursl": {
             "fullName": "sTypeUrsl",
@@ -889,8 +786,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 600
+            "fileName": "RFXtrx.h"
         },
         "Ublinds": {
             "fullName": "sTypeUblinds",
@@ -899,8 +795,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 601
+            "fileName": "RFXtrx.h"
         },
         "Urubicson": {
             "fullName": "sTypeUrubicson",
@@ -909,8 +804,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 602
+            "fileName": "RFXtrx.h"
         },
         "Uae": {
             "fullName": "sTypeUae",
@@ -919,8 +813,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 603
+            "fileName": "RFXtrx.h"
         },
         "Ufineoffset": {
             "fullName": "sTypeUfineoffset",
@@ -929,8 +822,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 604
+            "fileName": "RFXtrx.h"
         },
         "Urgb": {
             "fullName": "sTypeUrgb",
@@ -939,8 +831,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 605
+            "fileName": "RFXtrx.h"
         },
         "Urfy": {
             "fullName": "sTypeUrfy",
@@ -949,8 +840,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 606
+            "fileName": "RFXtrx.h"
         },
         "Uselectplus": {
             "fullName": "sTypeUselectplus",
@@ -959,8 +849,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 607
+            "fileName": "RFXtrx.h"
         },
         "Uhomeconfort": {
             "fullName": "sTypeUhomeconfort",
@@ -969,8 +858,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 608
+            "fileName": "RFXtrx.h"
         },
         "Uedisio": {
             "fullName": "sTypeUedisio",
@@ -979,8 +867,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 609
+            "fileName": "RFXtrx.h"
         },
         "Uhoneywell": {
             "fullName": "sTypeUhoneywell",
@@ -989,8 +876,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 610
+            "fileName": "RFXtrx.h"
         },
         "Ufunkbus": {
             "fullName": "sTypeUfunkbus",
@@ -999,8 +885,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 611
+            "fileName": "RFXtrx.h"
         },
         "Ubyronsx": {
             "fullName": "sTypeUbyronsx",
@@ -1009,8 +894,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 612
+            "fileName": "RFXtrx.h"
         },
         "Uddxxxx": {
             "fullName": "sTypeUddxxxx",
@@ -1019,8 +903,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 613
+            "fileName": "RFXtrx.h"
         },
         "Uitho": {
             "fullName": "sTypeUitho",
@@ -1029,8 +912,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 614
+            "fileName": "RFXtrx.h"
         },
         "Uorcon": {
             "fullName": "sTypeUorcon",
@@ -1039,8 +921,7 @@
             "comment": "",
             "typeName": "Undecoded",
             "typeValue": 3,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 615
+            "fileName": "RFXtrx.h"
         },
         "X10": {
             "fullName": "sTypeX10",
@@ -1049,8 +930,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 619
+            "fileName": "RFXtrx.h"
         },
         "ARC": {
             "fullName": "sTypeARC",
@@ -1059,8 +939,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 620
+            "fileName": "RFXtrx.h"
         },
         "AB400D": {
             "fullName": "sTypeAB400D",
@@ -1069,8 +948,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 621
+            "fileName": "RFXtrx.h"
         },
         "Waveman": {
             "fullName": "sTypeWaveman",
@@ -1079,8 +957,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 622
+            "fileName": "RFXtrx.h"
         },
         "EMW200": {
             "fullName": "sTypeEMW200",
@@ -1089,8 +966,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 623
+            "fileName": "RFXtrx.h"
         },
         "IMPULS": {
             "fullName": "sTypeIMPULS",
@@ -1099,8 +975,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 624
+            "fileName": "RFXtrx.h"
         },
         "RisingSun": {
             "fullName": "sTypeRisingSun",
@@ -1109,8 +984,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 625
+            "fileName": "RFXtrx.h"
         },
         "Philips": {
             "fullName": "sTypePhilips",
@@ -1119,8 +993,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 626
+            "fileName": "RFXtrx.h"
         },
         "Energenie": {
             "fullName": "sTypeEnergenie",
@@ -1129,8 +1002,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 627
+            "fileName": "RFXtrx.h"
         },
         "Energenie5": {
             "fullName": "sTypeEnergenie5",
@@ -1139,8 +1011,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 628
+            "fileName": "RFXtrx.h"
         },
         "GDR2": {
             "fullName": "sTypeGDR2",
@@ -1149,8 +1020,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 629
+            "fileName": "RFXtrx.h"
         },
         "HQ": {
             "fullName": "sTypeHQ",
@@ -1159,8 +1029,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 630
+            "fileName": "RFXtrx.h"
         },
         "Oase": {
             "fullName": "sTypeOase",
@@ -1169,8 +1038,7 @@
             "comment": "",
             "typeName": "Lighting1",
             "typeValue": 16,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 631
+            "fileName": "RFXtrx.h"
         },
         "AC": {
             "fullName": "sTypeAC",
@@ -1179,8 +1047,7 @@
             "comment": "",
             "typeName": "Lighting2",
             "typeValue": 17,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 643
+            "fileName": "RFXtrx.h"
         },
         "HEU": {
             "fullName": "sTypeHEU",
@@ -1189,8 +1056,7 @@
             "comment": "",
             "typeName": "Lighting2",
             "typeValue": 17,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 644
+            "fileName": "RFXtrx.h"
         },
         "ANSLUT": {
             "fullName": "sTypeANSLUT",
@@ -1199,8 +1065,7 @@
             "comment": "",
             "typeName": "Lighting2",
             "typeValue": 17,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 645
+            "fileName": "RFXtrx.h"
         },
         "Kambrook": {
             "fullName": "sTypeKambrook",
@@ -1209,8 +1074,7 @@
             "comment": "",
             "typeName": "Lighting2",
             "typeValue": 17,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 646
+            "fileName": "RFXtrx.h"
         },
         "Koppla": {
             "fullName": "sTypeKoppla",
@@ -1219,8 +1083,7 @@
             "comment": "",
             "typeName": "Lighting3",
             "typeValue": 18,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 656
+            "fileName": "RFXtrx.h"
         },
         "PT2262": {
             "fullName": "sTypePT2262",
@@ -1229,8 +1092,7 @@
             "comment": "",
             "typeName": "Lighting4",
             "typeValue": 19,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 673
+            "fileName": "RFXtrx.h"
         },
         "LightwaveRF": {
             "fullName": "sTypeLightwaveRF",
@@ -1239,8 +1101,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 676
+            "fileName": "RFXtrx.h"
         },
         "EMW100": {
             "fullName": "sTypeEMW100",
@@ -1249,8 +1110,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 677
+            "fileName": "RFXtrx.h"
         },
         "BBSB": {
             "fullName": "sTypeBBSB",
@@ -1259,8 +1119,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 678
+            "fileName": "RFXtrx.h"
         },
         "MDREMOTE": {
             "fullName": "sTypeMDREMOTE",
@@ -1269,8 +1128,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 679
+            "fileName": "RFXtrx.h"
         },
         "RSL": {
             "fullName": "sTypeRSL",
@@ -1279,8 +1137,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 680
+            "fileName": "RFXtrx.h"
         },
         "Livolo": {
             "fullName": "sTypeLivolo",
@@ -1289,8 +1146,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 681
+            "fileName": "RFXtrx.h"
         },
         "TRC02": {
             "fullName": "sTypeTRC02",
@@ -1299,8 +1155,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 682
+            "fileName": "RFXtrx.h"
         },
         "Aoke": {
             "fullName": "sTypeAoke",
@@ -1309,8 +1164,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 683
+            "fileName": "RFXtrx.h"
         },
         "TRC02_2": {
             "fullName": "sTypeTRC02_2",
@@ -1319,8 +1173,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 684
+            "fileName": "RFXtrx.h"
         },
         "Eurodomest": {
             "fullName": "sTypeEurodomest",
@@ -1329,8 +1182,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 685
+            "fileName": "RFXtrx.h"
         },
         "Livolo1to10": {
             "fullName": "sTypeLivolo1to10",
@@ -1339,8 +1191,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 686
+            "fileName": "RFXtrx.h"
         },
         "RGB432W": {
             "fullName": "sTypeRGB432W",
@@ -1349,8 +1200,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 687
+            "fileName": "RFXtrx.h"
         },
         "MDREMOTE107": {
             "fullName": "sTypeMDREMOTE107",
@@ -1359,8 +1209,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 688
+            "fileName": "RFXtrx.h"
         },
         "LegrandCAD": {
             "fullName": "sTypeLegrandCAD",
@@ -1369,8 +1218,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 689
+            "fileName": "RFXtrx.h"
         },
         "Avantek": {
             "fullName": "sTypeAvantek",
@@ -1379,8 +1227,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 690
+            "fileName": "RFXtrx.h"
         },
         "IT": {
             "fullName": "sTypeIT",
@@ -1389,8 +1236,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 691
+            "fileName": "RFXtrx.h"
         },
         "MDREMOTE108": {
             "fullName": "sTypeMDREMOTE108",
@@ -1399,8 +1245,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 692
+            "fileName": "RFXtrx.h"
         },
         "Kangtai": {
             "fullName": "sTypeKangtai",
@@ -1409,8 +1254,7 @@
             "comment": "",
             "typeName": "Lighting5",
             "typeValue": 20,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 693
+            "fileName": "RFXtrx.h"
         },
         "Blyss": {
             "fullName": "sTypeBlyss",
@@ -1419,8 +1263,7 @@
             "comment": "",
             "typeName": "Lighting6",
             "typeValue": 21,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 779
+            "fileName": "RFXtrx.h"
         },
         "Cuveo": {
             "fullName": "sTypeCuveo",
@@ -1429,8 +1272,7 @@
             "comment": "",
             "typeName": "Lighting6",
             "typeValue": 21,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 780
+            "fileName": "RFXtrx.h"
         },
         "ByronSX": {
             "fullName": "sTypeByronSX",
@@ -1439,8 +1281,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 787
+            "fileName": "RFXtrx.h"
         },
         "ByronMP001": {
             "fullName": "sTypeByronMP001",
@@ -1449,8 +1290,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 788
+            "fileName": "RFXtrx.h"
         },
         "SelectPlus": {
             "fullName": "sTypeSelectPlus",
@@ -1459,8 +1299,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 789
+            "fileName": "RFXtrx.h"
         },
         "ByronBY": {
             "fullName": "sTypeByronBY",
@@ -1469,8 +1308,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 790
+            "fileName": "RFXtrx.h"
         },
         "Envivo": {
             "fullName": "sTypeEnvivo",
@@ -1479,8 +1317,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 791
+            "fileName": "RFXtrx.h"
         },
         "Alfawise": {
             "fullName": "sTypeAlfawise",
@@ -1489,8 +1326,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 792
+            "fileName": "RFXtrx.h"
         },
         "1byOne": {
             "fullName": "sType1byOne",
@@ -1499,8 +1335,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 793
+            "fileName": "RFXtrx.h"
         },
         "ByronDBY": {
             "fullName": "sTypeByronDBY",
@@ -1509,8 +1344,7 @@
             "comment": "",
             "typeName": "Chime",
             "typeValue": 22,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 794
+            "fileName": "RFXtrx.h"
         },
         "SiemensSF01": {
             "fullName": "sTypeSiemensSF01",
@@ -1519,8 +1353,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 805
+            "fileName": "RFXtrx.h"
         },
         "Itho": {
             "fullName": "sTypeItho",
@@ -1529,8 +1362,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 806
+            "fileName": "RFXtrx.h"
         },
         "LucciAir": {
             "fullName": "sTypeLucciAir",
@@ -1539,8 +1371,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 807
+            "fileName": "RFXtrx.h"
         },
         "SeavTXS4": {
             "fullName": "sTypeSeavTXS4",
@@ -1549,8 +1380,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 808
+            "fileName": "RFXtrx.h"
         },
         "Westinghouse": {
             "fullName": "sTypeWestinghouse",
@@ -1559,8 +1389,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 809
+            "fileName": "RFXtrx.h"
         },
         "LucciAirDC": {
             "fullName": "sTypeLucciAirDC",
@@ -1569,8 +1398,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 810
+            "fileName": "RFXtrx.h"
         },
         "Casafan": {
             "fullName": "sTypeCasafan",
@@ -1579,8 +1407,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 811
+            "fileName": "RFXtrx.h"
         },
         "FT1211R": {
             "fullName": "sTypeFT1211R",
@@ -1589,8 +1416,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 812
+            "fileName": "RFXtrx.h"
         },
         "Falmec": {
             "fullName": "sTypeFalmec",
@@ -1599,8 +1425,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 813
+            "fileName": "RFXtrx.h"
         },
         "LucciAirDCII": {
             "fullName": "sTypeLucciAirDCII",
@@ -1609,8 +1434,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 814
+            "fileName": "RFXtrx.h"
         },
         "IthoECO": {
             "fullName": "sTypeIthoECO",
@@ -1619,8 +1443,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 815
+            "fileName": "RFXtrx.h"
         },
         "Novy": {
             "fullName": "sTypeNovy",
@@ -1629,8 +1452,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 816
+            "fileName": "RFXtrx.h"
         },
         "Orcon": {
             "fullName": "sTypeOrcon",
@@ -1639,8 +1461,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 817
+            "fileName": "RFXtrx.h"
         },
         "IthoHRU400": {
             "fullName": "sTypeIthoHRU400",
@@ -1649,8 +1470,7 @@
             "comment": "",
             "typeName": "Fan",
             "typeValue": 23,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 818
+            "fileName": "RFXtrx.h"
         },
         "Harrison": {
             "fullName": "sTypeHarrison",
@@ -1659,8 +1479,7 @@
             "comment": "",
             "typeName": "Curtain",
             "typeValue": 24,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 945
+            "fileName": "RFXtrx.h"
         },
         "BlindsT0": {
             "fullName": "sTypeBlindsT0",
@@ -1669,8 +1488,7 @@
             "comment": "RollerTrol, Hasta new",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 953
+            "fileName": "RFXtrx.h"
         },
         "BlindsT1": {
             "fullName": "sSwitchBlindsT1",
@@ -1679,8 +1497,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 147
+            "fileName": "hardwaretypes.h"
         },
         "BlindsT2": {
             "fullName": "sSwitchBlindsT2",
@@ -1689,8 +1506,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 173
+            "fileName": "hardwaretypes.h"
         },
         "BlindsT3": {
             "fullName": "sTypeBlindsT3",
@@ -1699,8 +1515,7 @@
             "comment": "A-OK AC114",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 956
+            "fileName": "RFXtrx.h"
         },
         "BlindsT4": {
             "fullName": "sTypeBlindsT4",
@@ -1709,8 +1524,7 @@
             "comment": "RAEX YR1326",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 957
+            "fileName": "RFXtrx.h"
         },
         "BlindsT5": {
             "fullName": "sTypeBlindsT5",
@@ -1719,8 +1533,7 @@
             "comment": "Media Mount",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 958
+            "fileName": "RFXtrx.h"
         },
         "BlindsT6": {
             "fullName": "sTypeBlindsT6",
@@ -1729,8 +1542,7 @@
             "comment": "DC106, YOOHA, Rohrmotor24 RMF",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 959
+            "fileName": "RFXtrx.h"
         },
         "BlindsT7": {
             "fullName": "sTypeBlindsT7",
@@ -1739,8 +1551,7 @@
             "comment": "Forest",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 960
+            "fileName": "RFXtrx.h"
         },
         "BlindsT8": {
             "fullName": "sTypeBlindsT8",
@@ -1749,8 +1560,7 @@
             "comment": "Chamberlain CS4330CN",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 961
+            "fileName": "RFXtrx.h"
         },
         "BlindsT9": {
             "fullName": "sTypeBlindsT9",
@@ -1759,8 +1569,7 @@
             "comment": "Sunpery",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 962
+            "fileName": "RFXtrx.h"
         },
         "BlindsT10": {
             "fullName": "sTypeBlindsT10",
@@ -1769,8 +1578,7 @@
             "comment": "Dolat DLM-1",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 963
+            "fileName": "RFXtrx.h"
         },
         "BlindsT11": {
             "fullName": "sTypeBlindsT11",
@@ -1779,8 +1587,7 @@
             "comment": "ASP",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 964
+            "fileName": "RFXtrx.h"
         },
         "BlindsT12": {
             "fullName": "sTypeBlindsT12",
@@ -1789,8 +1596,7 @@
             "comment": "Confexx",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 965
+            "fileName": "RFXtrx.h"
         },
         "BlindsT13": {
             "fullName": "sTypeBlindsT13",
@@ -1799,8 +1605,7 @@
             "comment": "Screenline",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 966
+            "fileName": "RFXtrx.h"
         },
         "BlindsT14": {
             "fullName": "sTypeBlindsT14",
@@ -1809,8 +1614,7 @@
             "comment": "Hualite",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 967
+            "fileName": "RFXtrx.h"
         },
         "BlindsT15": {
             "fullName": "sTypeBlindsT15",
@@ -1819,8 +1623,7 @@
             "comment": "Motostar",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 968
+            "fileName": "RFXtrx.h"
         },
         "BlindsT16": {
             "fullName": "sTypeBlindsT16",
@@ -1829,8 +1632,7 @@
             "comment": "Zemismart",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 969
+            "fileName": "RFXtrx.h"
         },
         "BlindsT17": {
             "fullName": "sTypeBlindsT17",
@@ -1839,8 +1641,7 @@
             "comment": "Gaposa",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 970
+            "fileName": "RFXtrx.h"
         },
         "BlindsT18": {
             "fullName": "sTypeBlindsT18",
@@ -1849,8 +1650,7 @@
             "comment": "Cherubini",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 971
+            "fileName": "RFXtrx.h"
         },
         "BlindsT19": {
             "fullName": "sTypeBlindsT19",
@@ -1859,8 +1659,7 @@
             "comment": "Louvolite vertical",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 972
+            "fileName": "RFXtrx.h"
         },
         "BlindsT20": {
             "fullName": "sTypeBlindsT20",
@@ -1869,8 +1668,7 @@
             "comment": "Ozroll E-Trans",
             "typeName": "Blinds",
             "typeValue": 25,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 973
+            "fileName": "RFXtrx.h"
         },
         "RFY": {
             "fullName": "sTypeRFY",
@@ -1879,8 +1677,7 @@
             "comment": "RFY",
             "typeName": "RFY",
             "typeValue": 26,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1019
+            "fileName": "RFXtrx.h"
         },
         "RFYext": {
             "fullName": "sTypeRFYext",
@@ -1889,8 +1686,7 @@
             "comment": "RFY extended",
             "typeName": "RFY",
             "typeValue": 26,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1020
+            "fileName": "RFXtrx.h"
         },
         "ASA": {
             "fullName": "sTypeASA",
@@ -1899,8 +1695,7 @@
             "comment": "ASA",
             "typeName": "RFY",
             "typeValue": 26,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1021
+            "fileName": "RFXtrx.h"
         },
         "HomeConfortTEL010": {
             "fullName": "sTypeHomeConfortTEL010",
@@ -1909,8 +1704,7 @@
             "comment": "",
             "typeName": "HomeConfort",
             "typeValue": 27,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1046
+            "fileName": "RFXtrx.h"
         },
         "FunkbusRemoteGira": {
             "fullName": "sTypeFunkbusRemoteGira",
@@ -1919,8 +1713,7 @@
             "comment": "",
             "typeName": "Funkbus",
             "typeValue": 30,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1054
+            "fileName": "RFXtrx.h"
         },
         "FunkbusRemoteInsta": {
             "fullName": "sTypeFunkbusRemoteInsta",
@@ -1929,8 +1722,7 @@
             "comment": "",
             "typeName": "Funkbus",
             "typeValue": 30,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1055
+            "fileName": "RFXtrx.h"
         },
         "Hunterfan": {
             "fullName": "sTypeHunterfan",
@@ -1939,8 +1731,7 @@
             "comment": "",
             "typeName": "Hunter",
             "typeValue": 31,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1066
+            "fileName": "RFXtrx.h"
         },
         "EdisioGateway": {
             "fullName": "sTypeEdisioGateway",
@@ -1949,8 +1740,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1076
+            "fileName": "RFXtrx.h"
         },
         "EdisioEmitter": {
             "fullName": "sTypeEdisioEmitter",
@@ -1959,8 +1749,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1077
+            "fileName": "RFXtrx.h"
         },
         "EdisioEmit230": {
             "fullName": "sTypeEdisioEmit230",
@@ -1969,8 +1758,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1078
+            "fileName": "RFXtrx.h"
         },
         "EdisioMotion": {
             "fullName": "sTypeEdisioMotion",
@@ -1979,8 +1767,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1079
+            "fileName": "RFXtrx.h"
         },
         "EdisioDoor": {
             "fullName": "sTypeEdisioDoor",
@@ -1989,8 +1776,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1080
+            "fileName": "RFXtrx.h"
         },
         "EdisioTemp": {
             "fullName": "sTypeEdisioTemp",
@@ -1999,8 +1785,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1081
+            "fileName": "RFXtrx.h"
         },
         "EdisioLighting": {
             "fullName": "sTypeEdisioLighting",
@@ -2009,8 +1794,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1082
+            "fileName": "RFXtrx.h"
         },
         "EdisioDimmer": {
             "fullName": "sTypeEdisioDimmer",
@@ -2019,8 +1803,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1083
+            "fileName": "RFXtrx.h"
         },
         "EdisioLightOnOff": {
             "fullName": "sTypeEdisioLightOnOff",
@@ -2029,8 +1812,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1084
+            "fileName": "RFXtrx.h"
         },
         "EdisioShutter": {
             "fullName": "sTypeEdisioShutter",
@@ -2039,8 +1821,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1085
+            "fileName": "RFXtrx.h"
         },
         "EdisioShutterOSC": {
             "fullName": "sTypeEdisioShutterOSC",
@@ -2049,8 +1830,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1086
+            "fileName": "RFXtrx.h"
         },
         "EdisioHeatCool": {
             "fullName": "sTypeEdisioHeatCool",
@@ -2059,8 +1839,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1087
+            "fileName": "RFXtrx.h"
         },
         "EdisioPilot": {
             "fullName": "sTypeEdisioPilot",
@@ -2069,8 +1848,7 @@
             "comment": "",
             "typeName": "Edisio",
             "typeValue": 28,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1088
+            "fileName": "RFXtrx.h"
         },
         "Series5": {
             "fullName": "sTypeSeries5",
@@ -2079,8 +1857,7 @@
             "comment": "",
             "typeName": "Honeywell_AL",
             "typeValue": 29,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1108
+            "fileName": "RFXtrx.h"
         },
         "PIR": {
             "fullName": "sTypePIR",
@@ -2089,8 +1866,7 @@
             "comment": "",
             "typeName": "Honeywell_AL",
             "typeValue": 29,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1109
+            "fileName": "RFXtrx.h"
         },
         "SecX10": {
             "fullName": "sTypeSecX10",
@@ -2099,8 +1875,7 @@
             "comment": "X10 security",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1113
+            "fileName": "RFXtrx.h"
         },
         "SecX10M": {
             "fullName": "sTypeSecX10M",
@@ -2109,8 +1884,7 @@
             "comment": "X10 security motion",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1114
+            "fileName": "RFXtrx.h"
         },
         "SecX10R": {
             "fullName": "sTypeSecX10R",
@@ -2119,8 +1893,7 @@
             "comment": "X10 security remote",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1115
+            "fileName": "RFXtrx.h"
         },
         "KD101": {
             "fullName": "sTypeKD101",
@@ -2129,8 +1902,7 @@
             "comment": "KD101 smoke detector",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1116
+            "fileName": "RFXtrx.h"
         },
         "PowercodeSensor": {
             "fullName": "sTypePowercodeSensor",
@@ -2139,8 +1911,7 @@
             "comment": "Visonic PowerCode sensor - primary contact",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1117
+            "fileName": "RFXtrx.h"
         },
         "PowercodeMotion": {
             "fullName": "sTypePowercodeMotion",
@@ -2149,8 +1920,7 @@
             "comment": "Visonic PowerCode motion",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1118
+            "fileName": "RFXtrx.h"
         },
         "Codesecure": {
             "fullName": "sTypeCodesecure",
@@ -2159,8 +1929,7 @@
             "comment": "Visonic CodeSecure",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1119
+            "fileName": "RFXtrx.h"
         },
         "PowercodeAux": {
             "fullName": "sTypePowercodeAux",
@@ -2169,8 +1938,7 @@
             "comment": "Visonic PowerCode sensor - auxiliary contact",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1120
+            "fileName": "RFXtrx.h"
         },
         "Meiantech": {
             "fullName": "sTypeMeiantech",
@@ -2179,8 +1947,7 @@
             "comment": "Meiantech",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1121
+            "fileName": "RFXtrx.h"
         },
         "SA30": {
             "fullName": "sTypeSA30",
@@ -2189,8 +1956,7 @@
             "comment": "SA30 smoke detector",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1122
+            "fileName": "RFXtrx.h"
         },
         "RM174RF": {
             "fullName": "sTypeRM174RF",
@@ -2199,8 +1965,7 @@
             "comment": "RM174RF smoke detector",
             "typeName": "Security1",
             "typeValue": 32,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1123
+            "fileName": "RFXtrx.h"
         },
         "Sec2Classic": {
             "fullName": "sTypeSec2Classic",
@@ -2209,8 +1974,7 @@
             "comment": "",
             "typeName": "Security2",
             "typeValue": 33,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1157
+            "fileName": "RFXtrx.h"
         },
         "Ninja": {
             "fullName": "sTypeNinja",
@@ -2219,8 +1983,7 @@
             "comment": "X10 Ninja/Robocam",
             "typeName": "Camera",
             "typeValue": 40,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1161
+            "fileName": "RFXtrx.h"
         },
         "ATI": {
             "fullName": "sTypeATI",
@@ -2229,8 +1992,7 @@
             "comment": "ATI Remote Wonder",
             "typeName": "Remote",
             "typeValue": 48,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1181
+            "fileName": "RFXtrx.h"
         },
         "ATIplus": {
             "fullName": "sTypeATIplus",
@@ -2239,8 +2001,7 @@
             "comment": "ATI Remote Wonder Plus",
             "typeName": "Remote",
             "typeValue": 48,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1182
+            "fileName": "RFXtrx.h"
         },
         "Medion": {
             "fullName": "sTypeMedion",
@@ -2249,8 +2010,7 @@
             "comment": "Medion Remote",
             "typeName": "Remote",
             "typeValue": 48,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1183
+            "fileName": "RFXtrx.h"
         },
         "PCremote": {
             "fullName": "sTypePCremote",
@@ -2259,8 +2019,7 @@
             "comment": "PC Remote",
             "typeName": "Remote",
             "typeValue": 48,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1184
+            "fileName": "RFXtrx.h"
         },
         "ATIrw2": {
             "fullName": "sTypeATIrw2",
@@ -2269,8 +2028,7 @@
             "comment": "ATI Remote Wonder II",
             "typeName": "Remote",
             "typeValue": 48,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1185
+            "fileName": "RFXtrx.h"
         },
         "DDxxxx": {
             "fullName": "sTypeDDxxxx",
@@ -2279,8 +2037,7 @@
             "comment": "",
             "typeName": "DDxxxx",
             "typeValue": 49,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1189
+            "fileName": "RFXtrx.h"
         },
         "Digimax": {
             "fullName": "sTypeDigimax",
@@ -2289,8 +2046,7 @@
             "comment": "Digimax",
             "typeName": "Thermostat1",
             "typeValue": 64,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1205
+            "fileName": "RFXtrx.h"
         },
         "DigimaxShort": {
             "fullName": "sTypeDigimaxShort",
@@ -2299,8 +2055,7 @@
             "comment": "Digimax with short format",
             "typeName": "Thermostat1",
             "typeValue": 64,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1206
+            "fileName": "RFXtrx.h"
         },
         "HE105": {
             "fullName": "sTypeHE105",
@@ -2309,8 +2064,7 @@
             "comment": "",
             "typeName": "Thermostat2",
             "typeValue": 65,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1213
+            "fileName": "RFXtrx.h"
         },
         "RTS10": {
             "fullName": "sTypeRTS10",
@@ -2319,8 +2073,7 @@
             "comment": "",
             "typeName": "Thermostat2",
             "typeValue": 65,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1214
+            "fileName": "RFXtrx.h"
         },
         "MertikG6RH4T1": {
             "fullName": "sTypeMertikG6RH4T1",
@@ -2329,8 +2082,7 @@
             "comment": "Mertik G6R-H4T1",
             "typeName": "Thermostat3",
             "typeValue": 66,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1220
+            "fileName": "RFXtrx.h"
         },
         "MertikG6RH4TB": {
             "fullName": "sTypeMertikG6RH4TB",
@@ -2339,8 +2091,7 @@
             "comment": "Mertik G6R-H4TB",
             "typeName": "Thermostat3",
             "typeValue": 66,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1221
+            "fileName": "RFXtrx.h"
         },
         "MertikG6RH4TD": {
             "fullName": "sTypeMertikG6RH4TD",
@@ -2349,8 +2100,7 @@
             "comment": "Mertik G6R-H4TD",
             "typeName": "Thermostat3",
             "typeValue": 66,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1222
+            "fileName": "RFXtrx.h"
         },
         "MertikG6RH4S": {
             "fullName": "sTypeMertikG6RH4S",
@@ -2359,8 +2109,7 @@
             "comment": "Mertik G6R-H4S",
             "typeName": "Thermostat3",
             "typeValue": 66,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1223
+            "fileName": "RFXtrx.h"
         },
         "MCZ1": {
             "fullName": "sTypeMCZ1",
@@ -2369,8 +2118,7 @@
             "comment": "MCZ 1 fan model",
             "typeName": "Thermostat4",
             "typeValue": 67,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1235
+            "fileName": "RFXtrx.h"
         },
         "MCZ2": {
             "fullName": "sTypeMCZ2",
@@ -2379,8 +2127,7 @@
             "comment": "MCZ 2 fan model",
             "typeName": "Thermostat4",
             "typeValue": 67,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1236
+            "fileName": "RFXtrx.h"
         },
         "MCZ3": {
             "fullName": "sTypeMCZ3",
@@ -2389,8 +2136,7 @@
             "comment": "MCZ 3 fan model",
             "typeName": "Thermostat4",
             "typeValue": 67,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1237
+            "fileName": "RFXtrx.h"
         },
         "Gazco": {
             "fullName": "sTypeGazco",
@@ -2399,8 +2145,7 @@
             "comment": "",
             "typeName": "Thermostat5",
             "typeValue": 68,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1244
+            "fileName": "RFXtrx.h"
         },
         "Smartwares": {
             "fullName": "sTypeSmartwares",
@@ -2409,8 +2154,7 @@
             "comment": "Homewizard smartwares",
             "typeName": "Radiator1",
             "typeValue": 72,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1253
+            "fileName": "RFXtrx.h"
         },
         "BBQ1": {
             "fullName": "sTypeBBQ1",
@@ -2419,8 +2163,7 @@
             "comment": "Maverick ET-732",
             "typeName": "BBQ",
             "typeValue": 78,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1261
+            "fileName": "RFXtrx.h"
         },
         "TR1": {
             "fullName": "sTypeTR1",
@@ -2429,8 +2172,7 @@
             "comment": "WS1200",
             "typeName": "TEMP_RAIN",
             "typeValue": 79,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1265
+            "fileName": "RFXtrx.h"
         },
         "TEMP1": {
             "fullName": "sTypeTEMP1",
@@ -2439,8 +2181,7 @@
             "comment": "THR128/138,THC138, Davis",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1269
+            "fileName": "RFXtrx.h"
         },
         "TEMP2": {
             "fullName": "sTypeTEMP2",
@@ -2449,8 +2190,7 @@
             "comment": "THC238/268,THN132,THWR288,THRN122,THN122,AW129/131",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1270
+            "fileName": "RFXtrx.h"
         },
         "TEMP3": {
             "fullName": "sTypeTEMP3",
@@ -2459,8 +2199,7 @@
             "comment": "THWR800",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1271
+            "fileName": "RFXtrx.h"
         },
         "TEMP4": {
             "fullName": "sTypeTEMP4",
@@ -2469,8 +2208,7 @@
             "comment": "RTHN318",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1272
+            "fileName": "RFXtrx.h"
         },
         "TEMP5": {
             "fullName": "sTypeTEMP5",
@@ -2479,8 +2217,7 @@
             "comment": "LaCrosse TX3",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1273
+            "fileName": "RFXtrx.h"
         },
         "TEMP6": {
             "fullName": "sTypeTEMP6",
@@ -2489,8 +2226,7 @@
             "comment": "TS15C",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1274
+            "fileName": "RFXtrx.h"
         },
         "TEMP7": {
             "fullName": "sTypeTEMP7",
@@ -2499,8 +2235,7 @@
             "comment": "Viking 02811,TSS330",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1275
+            "fileName": "RFXtrx.h"
         },
         "TEMP8": {
             "fullName": "sTypeTEMP8",
@@ -2509,8 +2244,7 @@
             "comment": "LaCrosse WS2300",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1276
+            "fileName": "RFXtrx.h"
         },
         "TEMP9": {
             "fullName": "sTypeTEMP9",
@@ -2519,8 +2253,7 @@
             "comment": "RUBiCSON",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1277
+            "fileName": "RFXtrx.h"
         },
         "TEMP10": {
             "fullName": "sTypeTEMP10",
@@ -2529,8 +2262,7 @@
             "comment": "TFA 30.3133",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1278
+            "fileName": "RFXtrx.h"
         },
         "TEMP11": {
             "fullName": "sTypeTEMP11",
@@ -2539,8 +2271,7 @@
             "comment": "WT0122",
             "typeName": "TEMP",
             "typeValue": 80,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1279
+            "fileName": "RFXtrx.h"
         },
         "HUM1": {
             "fullName": "sTypeHUM1",
@@ -2549,8 +2280,7 @@
             "comment": "LaCrosse TX3, Davis",
             "typeName": "HUM",
             "typeValue": 81,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1283
+            "fileName": "RFXtrx.h"
         },
         "HUM2": {
             "fullName": "sTypeHUM2",
@@ -2559,8 +2289,7 @@
             "comment": "LaCrosse WS2300",
             "typeName": "HUM",
             "typeValue": 81,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1284
+            "fileName": "RFXtrx.h"
         },
         "HUM3": {
             "fullName": "sTypeHUM3",
@@ -2569,8 +2298,7 @@
             "comment": "Inovalley S80 plant humidity sensor",
             "typeName": "HUM",
             "typeValue": 81,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1285
+            "fileName": "RFXtrx.h"
         },
         "TH1": {
             "fullName": "sTypeTH1",
@@ -2579,8 +2307,7 @@
             "comment": "THGN122/123,THGN132,THGR122/228/238/268",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1295
+            "fileName": "RFXtrx.h"
         },
         "TH2": {
             "fullName": "sTypeTH2",
@@ -2589,8 +2316,7 @@
             "comment": "THGR810,THGN800",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1296
+            "fileName": "RFXtrx.h"
         },
         "TH3": {
             "fullName": "sTypeTH3",
@@ -2599,8 +2325,7 @@
             "comment": "RTGR328",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1297
+            "fileName": "RFXtrx.h"
         },
         "TH4": {
             "fullName": "sTypeTH4",
@@ -2609,8 +2334,7 @@
             "comment": "THGR328",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1298
+            "fileName": "RFXtrx.h"
         },
         "TH5": {
             "fullName": "sTypeTH5",
@@ -2619,8 +2343,7 @@
             "comment": "WTGR800",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1299
+            "fileName": "RFXtrx.h"
         },
         "TH6": {
             "fullName": "sTypeTH6",
@@ -2629,8 +2352,7 @@
             "comment": "THGR918,THGRN228,THGN500",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1300
+            "fileName": "RFXtrx.h"
         },
         "TH7": {
             "fullName": "sTypeTH7",
@@ -2639,8 +2361,7 @@
             "comment": "TFA TS34C, Cresta",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1301
+            "fileName": "RFXtrx.h"
         },
         "TH8": {
             "fullName": "sTypeTH8",
@@ -2649,8 +2370,7 @@
             "comment": "WT450H",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1302
+            "fileName": "RFXtrx.h"
         },
         "TH9": {
             "fullName": "sTypeTH9",
@@ -2659,8 +2379,7 @@
             "comment": "Viking 02035,02038 (02035 has no humidity), TSS320",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1303
+            "fileName": "RFXtrx.h"
         },
         "TH10": {
             "fullName": "sTypeTH10",
@@ -2669,8 +2388,7 @@
             "comment": "Rubicson",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1304
+            "fileName": "RFXtrx.h"
         },
         "TH11": {
             "fullName": "sTypeTH11",
@@ -2679,8 +2397,7 @@
             "comment": "EW109",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1305
+            "fileName": "RFXtrx.h"
         },
         "TH12": {
             "fullName": "sTypeTH12",
@@ -2689,8 +2406,7 @@
             "comment": "Imagintronix",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1306
+            "fileName": "RFXtrx.h"
         },
         "TH13": {
             "fullName": "sTypeTH13",
@@ -2699,8 +2415,7 @@
             "comment": "Alecto WS1700 and compatibles",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1307
+            "fileName": "RFXtrx.h"
         },
         "TH14": {
             "fullName": "sTypeTH14",
@@ -2709,8 +2424,7 @@
             "comment": "Alecto",
             "typeName": "TEMP_HUM",
             "typeValue": 82,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1308
+            "fileName": "RFXtrx.h"
         },
         "THB1": {
             "fullName": "sTypeTHB1",
@@ -2719,8 +2433,7 @@
             "comment": "BTHR918,BTHGN129",
             "typeName": "TEMP_HUM_BARO",
             "typeValue": 84,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1315
+            "fileName": "RFXtrx.h"
         },
         "THB2": {
             "fullName": "sTypeTHB2",
@@ -2729,8 +2442,7 @@
             "comment": "BTHR918N,BTHR968",
             "typeName": "TEMP_HUM_BARO",
             "typeValue": 84,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1316
+            "fileName": "RFXtrx.h"
         },
         "RAIN1": {
             "fullName": "sTypeRAIN1",
@@ -2739,8 +2451,7 @@
             "comment": "RGR126/682/918",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1325
+            "fileName": "RFXtrx.h"
         },
         "RAIN2": {
             "fullName": "sTypeRAIN2",
@@ -2749,8 +2460,7 @@
             "comment": "PCR800",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1326
+            "fileName": "RFXtrx.h"
         },
         "RAIN3": {
             "fullName": "sTypeRAIN3",
@@ -2759,8 +2469,7 @@
             "comment": "TFA",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1327
+            "fileName": "RFXtrx.h"
         },
         "RAIN4": {
             "fullName": "sTypeRAIN4",
@@ -2769,8 +2478,7 @@
             "comment": "UPM",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1328
+            "fileName": "RFXtrx.h"
         },
         "RAIN5": {
             "fullName": "sTypeRAIN5",
@@ -2779,8 +2487,7 @@
             "comment": "WS2300",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1329
+            "fileName": "RFXtrx.h"
         },
         "RAIN6": {
             "fullName": "sTypeRAIN6",
@@ -2789,8 +2496,7 @@
             "comment": "TX5",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1330
+            "fileName": "RFXtrx.h"
         },
         "RAIN7": {
             "fullName": "sTypeRAIN7",
@@ -2799,8 +2505,7 @@
             "comment": "Alecto",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1331
+            "fileName": "RFXtrx.h"
         },
         "RAIN8": {
             "fullName": "sTypeRAIN8",
@@ -2809,8 +2514,7 @@
             "comment": "Davis",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1332
+            "fileName": "RFXtrx.h"
         },
         "RAIN9": {
             "fullName": "sTypeRAIN9",
@@ -2819,8 +2523,7 @@
             "comment": "TFA 30.3233.01",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1333
+            "fileName": "RFXtrx.h"
         },
         "RAIN10": {
             "fullName": "sTypeRAIN10",
@@ -2829,8 +2532,7 @@
             "comment": "FineOffset WH5360,EcoWitt WH40",
             "typeName": "RAIN",
             "typeValue": 85,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1334
+            "fileName": "RFXtrx.h"
         },
         "WIND1": {
             "fullName": "sTypeWIND1",
@@ -2839,8 +2541,7 @@
             "comment": "WTGR800",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1338
+            "fileName": "RFXtrx.h"
         },
         "WIND2": {
             "fullName": "sTypeWIND2",
@@ -2849,8 +2550,7 @@
             "comment": "WGR800",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1339
+            "fileName": "RFXtrx.h"
         },
         "WIND3": {
             "fullName": "sTypeWIND3",
@@ -2859,8 +2559,7 @@
             "comment": "STR918,WGR918",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1340
+            "fileName": "RFXtrx.h"
         },
         "WIND4": {
             "fullName": "sTypeWIND4",
@@ -2869,8 +2568,7 @@
             "comment": "TFA",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1341
+            "fileName": "RFXtrx.h"
         },
         "WIND5": {
             "fullName": "sTypeWIND5",
@@ -2879,8 +2577,7 @@
             "comment": "UPM, Davis",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1342
+            "fileName": "RFXtrx.h"
         },
         "WIND6": {
             "fullName": "sTypeWIND6",
@@ -2889,8 +2586,7 @@
             "comment": "WS2300",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1343
+            "fileName": "RFXtrx.h"
         },
         "WIND7": {
             "fullName": "sTypeWIND7",
@@ -2899,8 +2595,7 @@
             "comment": "Alecto WS4500",
             "typeName": "WIND",
             "typeValue": 86,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1344
+            "fileName": "RFXtrx.h"
         },
         "UV1": {
             "fullName": "sTypeUV1",
@@ -2909,8 +2604,7 @@
             "comment": "UVN128,UV138, Davis",
             "typeName": "UV",
             "typeValue": 87,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1348
+            "fileName": "RFXtrx.h"
         },
         "UV2": {
             "fullName": "sTypeUV2",
@@ -2919,8 +2613,7 @@
             "comment": "UVN800",
             "typeName": "UV",
             "typeValue": 87,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1349
+            "fileName": "RFXtrx.h"
         },
         "UV3": {
             "fullName": "sTypeUV3",
@@ -2929,8 +2622,7 @@
             "comment": "TFA",
             "typeName": "UV",
             "typeValue": 87,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1350
+            "fileName": "RFXtrx.h"
         },
         "DT1": {
             "fullName": "sTypeDT1",
@@ -2939,8 +2631,7 @@
             "comment": "RTGR328N",
             "typeName": "DT",
             "typeValue": 88,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1354
+            "fileName": "RFXtrx.h"
         },
         "ELEC1": {
             "fullName": "sTypeELEC1",
@@ -2949,8 +2640,7 @@
             "comment": "CM113,Electrisave",
             "typeName": "CURRENT",
             "typeValue": 89,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1358
+            "fileName": "RFXtrx.h"
         },
         "ELEC2": {
             "fullName": "sTypeELEC2",
@@ -2959,8 +2649,7 @@
             "comment": "CM119/160",
             "typeName": "ENERGY",
             "typeValue": 90,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1362
+            "fileName": "RFXtrx.h"
         },
         "ELEC3": {
             "fullName": "sTypeELEC3",
@@ -2969,8 +2658,7 @@
             "comment": "CM180",
             "typeName": "ENERGY",
             "typeValue": 90,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1363
+            "fileName": "RFXtrx.h"
         },
         "ELEC4": {
             "fullName": "sTypeELEC4",
@@ -2979,8 +2667,7 @@
             "comment": "CM180i",
             "typeName": "CURRENTENERGY",
             "typeValue": 91,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1367
+            "fileName": "RFXtrx.h"
         },
         "ELEC5": {
             "fullName": "sTypeELEC5",
@@ -2989,8 +2676,7 @@
             "comment": "revolt",
             "typeName": "POWER",
             "typeValue": 92,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1371
+            "fileName": "RFXtrx.h"
         },
         "WEIGHT1": {
             "fullName": "sTypeWEIGHT1",
@@ -2999,8 +2685,7 @@
             "comment": "BWR102",
             "typeName": "WEIGHT",
             "typeValue": 93,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1375
+            "fileName": "RFXtrx.h"
         },
         "WEIGHT2": {
             "fullName": "sTypeWEIGHT2",
@@ -3009,8 +2694,7 @@
             "comment": "GR101",
             "typeName": "WEIGHT",
             "typeValue": 93,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1376
+            "fileName": "RFXtrx.h"
         },
         "TIC": {
             "fullName": "sTypeTIC",
@@ -3019,8 +2703,7 @@
             "comment": "",
             "typeName": "CARTELECTRONIC",
             "typeValue": 96,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1386
+            "fileName": "RFXtrx.h"
         },
         "CEencoder": {
             "fullName": "sTypeCEencoder",
@@ -3029,8 +2712,7 @@
             "comment": "",
             "typeName": "CARTELECTRONIC",
             "typeValue": 96,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1387
+            "fileName": "RFXtrx.h"
         },
         "Linky": {
             "fullName": "sTypeLinky",
@@ -3039,8 +2721,7 @@
             "comment": "",
             "typeName": "CARTELECTRONIC",
             "typeValue": 96,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1388
+            "fileName": "RFXtrx.h"
         },
         "ASYNCconfig": {
             "fullName": "sTypeASYNCconfig",
@@ -3049,8 +2730,7 @@
             "comment": "",
             "typeName": "ASYNCPORT",
             "typeValue": 97,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1392
+            "fileName": "RFXtrx.h"
         },
         "ASYNCoverrun": {
             "fullName": "sTypeASYNCoverrun",
@@ -3059,8 +2739,7 @@
             "comment": "",
             "typeName": "ASYNCDATA",
             "typeValue": 98,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1422
+            "fileName": "RFXtrx.h"
         },
         "ASYNCp1": {
             "fullName": "sTypeASYNCp1",
@@ -3069,8 +2748,7 @@
             "comment": "",
             "typeName": "ASYNCDATA",
             "typeValue": 98,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1423
+            "fileName": "RFXtrx.h"
         },
         "ASYNCteleinfo": {
             "fullName": "sTypeASYNCteleinfo",
@@ -3079,8 +2757,7 @@
             "comment": "",
             "typeName": "ASYNCDATA",
             "typeValue": 98,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1424
+            "fileName": "RFXtrx.h"
         },
         "ASYNCraw": {
             "fullName": "sTypeASYNCraw",
@@ -3089,8 +2766,7 @@
             "comment": "",
             "typeName": "ASYNCDATA",
             "typeValue": 98,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1425
+            "fileName": "RFXtrx.h"
         },
         "RFXSensorTemp": {
             "fullName": "sTypeRFXSensorTemp",
@@ -3099,8 +2775,7 @@
             "comment": "",
             "typeName": "RFXSensor",
             "typeValue": 112,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1429
+            "fileName": "RFXtrx.h"
         },
         "RFXSensorAD": {
             "fullName": "sTypeRFXSensorAD",
@@ -3109,8 +2784,7 @@
             "comment": "",
             "typeName": "RFXSensor",
             "typeValue": 112,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1430
+            "fileName": "RFXtrx.h"
         },
         "RFXSensorVolt": {
             "fullName": "sTypeRFXSensorVolt",
@@ -3119,8 +2793,7 @@
             "comment": "",
             "typeName": "RFXSensor",
             "typeValue": 112,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1431
+            "fileName": "RFXtrx.h"
         },
         "RFXSensorMessage": {
             "fullName": "sTypeRFXSensorMessage",
@@ -3129,8 +2802,7 @@
             "comment": "",
             "typeName": "RFXSensor",
             "typeValue": 112,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1432
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterCount": {
             "fullName": "sTypeRFXMeterCount",
@@ -3139,8 +2811,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1436
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterInterval": {
             "fullName": "sTypeRFXMeterInterval",
@@ -3149,8 +2820,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1437
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterCalib": {
             "fullName": "sTypeRFXMeterCalib",
@@ -3159,8 +2829,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1438
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterAddr": {
             "fullName": "sTypeRFXMeterAddr",
@@ -3169,8 +2838,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1439
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterCounterReset": {
             "fullName": "sTypeRFXMeterCounterReset",
@@ -3179,8 +2847,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1440
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterCounterSet": {
             "fullName": "sTypeRFXMeterCounterSet",
@@ -3189,8 +2856,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1441
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterSetInterval": {
             "fullName": "sTypeRFXMeterSetInterval",
@@ -3199,8 +2865,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1442
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterSetCalib": {
             "fullName": "sTypeRFXMeterSetCalib",
@@ -3209,8 +2874,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1443
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterSetAddr": {
             "fullName": "sTypeRFXMeterSetAddr",
@@ -3219,8 +2883,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1444
+            "fileName": "RFXtrx.h"
         },
         "RFXMeterIdent": {
             "fullName": "sTypeRFXMeterIdent",
@@ -3229,8 +2892,7 @@
             "comment": "",
             "typeName": "RFXMeter",
             "typeValue": 113,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1445
+            "fileName": "RFXtrx.h"
         },
         "FS20": {
             "fullName": "sTypeFS20",
@@ -3239,8 +2901,7 @@
             "comment": "",
             "typeName": "FS20",
             "typeValue": 114,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1449
+            "fileName": "RFXtrx.h"
         },
         "FHT8V": {
             "fullName": "sTypeFHT8V",
@@ -3249,8 +2910,7 @@
             "comment": "",
             "typeName": "FS20",
             "typeValue": 114,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1450
+            "fileName": "RFXtrx.h"
         },
         "FHT80": {
             "fullName": "sTypeFHT80",
@@ -3259,8 +2919,7 @@
             "comment": "",
             "typeName": "FS20",
             "typeValue": 114,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1451
+            "fileName": "RFXtrx.h"
         },
         "0": {
             "fullName": "sType0",
@@ -3269,8 +2928,7 @@
             "comment": "",
             "typeName": "LEVELSENSOR",
             "typeValue": 115,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1483
+            "fileName": "RFXtrx.h"
         },
         "LIGHTNING1": {
             "fullName": "sTypeLIGHTNING1",
@@ -3279,8 +2937,7 @@
             "comment": "Ecowitt WH57",
             "typeName": "LIGHTNING",
             "typeValue": 116,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1487
+            "fileName": "RFXtrx.h"
         },
         "WEATHER0": {
             "fullName": "sTypeWEATHER0",
@@ -3289,8 +2946,7 @@
             "comment": "Ecowitt WS90",
             "typeName": "WEATHER",
             "typeValue": 118,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1491
+            "fileName": "RFXtrx.h"
         },
         "WEATHER1": {
             "fullName": "sTypeWEATHER1",
@@ -3299,8 +2955,7 @@
             "comment": "Alecto ACH2010",
             "typeName": "WEATHER",
             "typeValue": 118,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1492
+            "fileName": "RFXtrx.h"
         },
         "WEATHER2": {
             "fullName": "sTypeWEATHER2",
@@ -3309,8 +2964,7 @@
             "comment": "Alecto WS5500",
             "typeName": "WEATHER",
             "typeValue": 118,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1493
+            "fileName": "RFXtrx.h"
         },
         "SOLAR1": {
             "fullName": "sTypeSOLAR1",
@@ -3319,8 +2973,7 @@
             "comment": "Davis",
             "typeName": "SOLAR",
             "typeValue": 119,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1497
+            "fileName": "RFXtrx.h"
         },
         "RAW1": {
             "fullName": "sTypeRAW1",
@@ -3329,8 +2982,7 @@
             "comment": "",
             "typeName": "RAW",
             "typeValue": 127,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1501
+            "fileName": "RFXtrx.h"
         },
         "RAW2": {
             "fullName": "sTypeRAW2",
@@ -3339,8 +2991,7 @@
             "comment": "",
             "typeName": "RAW",
             "typeValue": 127,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1502
+            "fileName": "RFXtrx.h"
         },
         "RAW3": {
             "fullName": "sTypeRAW3",
@@ -3349,8 +3000,7 @@
             "comment": "",
             "typeName": "RAW",
             "typeValue": 127,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1503
+            "fileName": "RFXtrx.h"
         },
         "RAW4": {
             "fullName": "sTypeRAW4",
@@ -3359,8 +3009,7 @@
             "comment": "",
             "typeName": "RAW",
             "typeValue": 127,
-            "fileName": "RFXtrx.h",
-            "lineNumber": 1504
+            "fileName": "RFXtrx.h"
         },
         "Color_RGB_W": {
             "fullName": "sTypeColor_RGB_W",
@@ -3369,8 +3018,7 @@
             "comment": "RGB + white, either RGB or white can be lit",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 9
+            "fileName": "ColorSwitch.h"
         },
         "Color_RGB": {
             "fullName": "sTypeColor_RGB",
@@ -3379,8 +3027,7 @@
             "comment": "RGB",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 10
+            "fileName": "ColorSwitch.h"
         },
         "Color_White": {
             "fullName": "sTypeColor_White",
@@ -3389,8 +3036,7 @@
             "comment": "Monochrome white",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 11
+            "fileName": "ColorSwitch.h"
         },
         "Color_RGB_CW_WW": {
             "fullName": "sTypeColor_RGB_CW_WW",
@@ -3399,8 +3045,7 @@
             "comment": "RGB + cold white + warm white, either RGB or white can be lit",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 12
+            "fileName": "ColorSwitch.h"
         },
         "Color_LivCol": {
             "fullName": "sTypeColor_LivCol",
@@ -3409,8 +3054,7 @@
             "comment": "",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 13
+            "fileName": "ColorSwitch.h"
         },
         "Color_RGB_W_Z": {
             "fullName": "sTypeColor_RGB_W_Z",
@@ -3419,8 +3063,7 @@
             "comment": "Like RGBW, but allows combining RGB and white",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 14
+            "fileName": "ColorSwitch.h"
         },
         "Color_RGB_CW_WW_Z": {
             "fullName": "sTypeColor_RGB_CW_WW_Z",
@@ -3429,8 +3072,7 @@
             "comment": "Like RGBWW, but allows combining RGB and white",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 15
+            "fileName": "ColorSwitch.h"
         },
         "Color_CW_WW": {
             "fullName": "sTypeColor_CW_WW",
@@ -3439,8 +3081,7 @@
             "comment": "Cold white + Warm white",
             "typeName": "ColorSwitch",
             "typeValue": 241,
-            "fileName": "ColorSwitch.h",
-            "lineNumber": 16
+            "fileName": "ColorSwitch.h"
         },
         "THBFloat": {
             "fullName": "sTypeTHBFloat",
@@ -3449,8 +3090,7 @@
             "comment": "Weather Station",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 5
+            "fileName": "hardwaretypes.h"
         },
         "WINDNoTemp": {
             "fullName": "sTypeWINDNoTemp",
@@ -3459,8 +3099,7 @@
             "comment": "Weather Station",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 6
+            "fileName": "hardwaretypes.h"
         },
         "WINDNoTempNoChill": {
             "fullName": "sTypeWINDNoTempNoChill",
@@ -3469,8 +3108,7 @@
             "comment": "Weather Station",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 7
+            "fileName": "hardwaretypes.h"
         },
         "DomoticzSecurity": {
             "fullName": "sTypeDomoticzSecurity",
@@ -3479,8 +3117,7 @@
             "comment": "",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 9
+            "fileName": "hardwaretypes.h"
         },
         "SmartwaresSwitchRadiator": {
             "fullName": "sTypeSmartwaresSwitchRadiator",
@@ -3489,8 +3126,7 @@
             "comment": "",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 10
+            "fileName": "hardwaretypes.h"
         },
         "RAINWU": {
             "fullName": "sTypeRAINWU",
@@ -3499,8 +3135,7 @@
             "comment": "Weather Underground (Total rain reported, no counter)",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 12
+            "fileName": "hardwaretypes.h"
         },
         "RAINByRate": {
             "fullName": "sTypeRAINByRate",
@@ -3509,8 +3144,7 @@
             "comment": "DarkSky for example (Only rate, no total, no counter) rate in mm/hour x 10000, so all decimals will fit",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 13
+            "fileName": "hardwaretypes.h"
         },
         "TH_LC_TC": {
             "fullName": "sTypeTH_LC_TC",
@@ -3519,8 +3153,7 @@
             "comment": "La Cross Temp_Hum combined",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 15
+            "fileName": "hardwaretypes.h"
         },
         "TEMP_SYSTEM": {
             "fullName": "sTypeTEMP_SYSTEM",
@@ -3529,8 +3162,7 @@
             "comment": "Internal sensor",
             "typeName": "",
             "typeValue": "",
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 16
+            "fileName": "hardwaretypes.h"
         },
         "Setpoint": {
             "fullName": "sTypeSetpoint",
@@ -3539,8 +3171,7 @@
             "comment": "",
             "typeName": "Setpoint",
             "typeValue": 242,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 38
+            "fileName": "hardwaretypes.h"
         },
         "ThermTemperature": {
             "fullName": "sTypeThermTemperature",
@@ -3549,8 +3180,7 @@
             "comment": "",
             "typeName": "Setpoint",
             "typeValue": 242,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 39
+            "fileName": "hardwaretypes.h"
         },
         "Visibility": {
             "fullName": "sTypeVisibility",
@@ -3559,8 +3189,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 42
+            "fileName": "hardwaretypes.h"
         },
         "SolarRadiation": {
             "fullName": "sTypeSolarRadiation",
@@ -3569,8 +3198,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 43
+            "fileName": "hardwaretypes.h"
         },
         "SoilMoisture": {
             "fullName": "sTypeSoilMoisture",
@@ -3579,8 +3207,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 44
+            "fileName": "hardwaretypes.h"
         },
         "LeafWetness": {
             "fullName": "sTypeLeafWetness",
@@ -3589,8 +3216,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 45
+            "fileName": "hardwaretypes.h"
         },
         "SystemTemp": {
             "fullName": "sTypeSystemTemp",
@@ -3599,8 +3225,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 46
+            "fileName": "hardwaretypes.h"
         },
         "Percentage": {
             "fullName": "sTypePercentage",
@@ -3609,8 +3234,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 47
+            "fileName": "hardwaretypes.h"
         },
         "Fan": {
             "fullName": "sTypeFan",
@@ -3619,8 +3243,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 48
+            "fileName": "hardwaretypes.h"
         },
         "Voltage": {
             "fullName": "sTypeVoltage",
@@ -3629,8 +3252,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 49
+            "fileName": "hardwaretypes.h"
         },
         "Pressure": {
             "fullName": "sTypePressure",
@@ -3639,8 +3261,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 50
+            "fileName": "hardwaretypes.h"
         },
         "SetPoint": {
             "fullName": "sTypeSetPoint",
@@ -3649,8 +3270,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 51
+            "fileName": "hardwaretypes.h"
         },
         "Temperature": {
             "fullName": "sTypeTemperature",
@@ -3659,8 +3279,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 52
+            "fileName": "hardwaretypes.h"
         },
         "TextStatus": {
             "fullName": "sTypeTextStatus",
@@ -3669,8 +3288,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 53
+            "fileName": "hardwaretypes.h"
         },
         "ZWaveThermostatMode": {
             "fullName": "sTypeZWaveThermostatMode",
@@ -3679,8 +3297,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 55
+            "fileName": "hardwaretypes.h"
         },
         "ZWaveThermostatFanMode": {
             "fullName": "sTypeZWaveThermostatFanMode",
@@ -3689,8 +3306,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 56
+            "fileName": "hardwaretypes.h"
         },
         "ZWaveAlarm": {
             "fullName": "sTypeZWaveAlarm",
@@ -3699,8 +3315,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 57
+            "fileName": "hardwaretypes.h"
         },
         "ZWaveThermostatOperatingState": {
             "fullName": "sTypeZWaveThermostatOperatingState",
@@ -3709,8 +3324,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 58
+            "fileName": "hardwaretypes.h"
         },
         "Alert": {
             "fullName": "sTypeAlert",
@@ -3719,8 +3333,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 60
+            "fileName": "hardwaretypes.h"
         },
         "Current": {
             "fullName": "sTypeCurrent",
@@ -3729,8 +3342,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 61
+            "fileName": "hardwaretypes.h"
         },
         "SoundLevel": {
             "fullName": "sTypeSoundLevel",
@@ -3739,8 +3351,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 62
+            "fileName": "hardwaretypes.h"
         },
         "UV": {
             "fullName": "sTypeUV",
@@ -3749,8 +3360,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 63
+            "fileName": "hardwaretypes.h"
         },
         "Baro": {
             "fullName": "sTypeBaro",
@@ -3759,8 +3369,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 64
+            "fileName": "hardwaretypes.h"
         },
         "Distance": {
             "fullName": "sTypeDistance",
@@ -3769,8 +3378,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 65
+            "fileName": "hardwaretypes.h"
         },
         "CounterIncremental": {
             "fullName": "sTypeCounterIncremental",
@@ -3779,8 +3387,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 66
+            "fileName": "hardwaretypes.h"
         },
         "Kwh": {
             "fullName": "sTypeKwh",
@@ -3789,8 +3396,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 67
+            "fileName": "hardwaretypes.h"
         },
         "Waterflow": {
             "fullName": "sTypeWaterflow",
@@ -3799,8 +3405,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 68
+            "fileName": "hardwaretypes.h"
         },
         "Custom": {
             "fullName": "sTypeCustom",
@@ -3809,8 +3414,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 69
+            "fileName": "hardwaretypes.h"
         },
         "ManagedCounter": {
             "fullName": "sTypeManagedCounter",
@@ -3819,8 +3423,7 @@
             "comment": "",
             "typeName": "General",
             "typeValue": 243,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 70
+            "fileName": "hardwaretypes.h"
         },
         "TypeX10": {
             "fullName": "sSwitchTypeX10",
@@ -3829,8 +3432,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 74
+            "fileName": "hardwaretypes.h"
         },
         "TypeARC": {
             "fullName": "sSwitchTypeARC",
@@ -3839,8 +3441,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 75
+            "fileName": "hardwaretypes.h"
         },
         "TypeAB400D": {
             "fullName": "sSwitchTypeAB400D",
@@ -3849,8 +3450,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 76
+            "fileName": "hardwaretypes.h"
         },
         "TypeWaveman": {
             "fullName": "sSwitchTypeWaveman",
@@ -3859,8 +3459,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 77
+            "fileName": "hardwaretypes.h"
         },
         "TypeEMW200": {
             "fullName": "sSwitchTypeEMW200",
@@ -3869,8 +3468,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 78
+            "fileName": "hardwaretypes.h"
         },
         "TypeIMPULS": {
             "fullName": "sSwitchTypeIMPULS",
@@ -3879,8 +3477,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 79
+            "fileName": "hardwaretypes.h"
         },
         "TypeRisingSun": {
             "fullName": "sSwitchTypeRisingSun",
@@ -3889,8 +3486,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 80
+            "fileName": "hardwaretypes.h"
         },
         "TypePhilips": {
             "fullName": "sSwitchTypePhilips",
@@ -3899,8 +3495,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 81
+            "fileName": "hardwaretypes.h"
         },
         "TypeEnergenie": {
             "fullName": "sSwitchTypeEnergenie",
@@ -3909,8 +3504,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 82
+            "fileName": "hardwaretypes.h"
         },
         "TypeEnergenie5": {
             "fullName": "sSwitchTypeEnergenie5",
@@ -3919,8 +3513,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 83
+            "fileName": "hardwaretypes.h"
         },
         "TypeGDR2": {
             "fullName": "sSwitchTypeGDR2",
@@ -3929,8 +3522,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 84
+            "fileName": "hardwaretypes.h"
         },
         "TypeAC": {
             "fullName": "sSwitchTypeAC",
@@ -3939,8 +3531,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 85
+            "fileName": "hardwaretypes.h"
         },
         "TypeHEU": {
             "fullName": "sSwitchTypeHEU",
@@ -3949,8 +3540,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 86
+            "fileName": "hardwaretypes.h"
         },
         "TypeANSLUT": {
             "fullName": "sSwitchTypeANSLUT",
@@ -3959,8 +3549,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 87
+            "fileName": "hardwaretypes.h"
         },
         "TypeKambrook": {
             "fullName": "sSwitchTypeKambrook",
@@ -3969,8 +3558,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 88
+            "fileName": "hardwaretypes.h"
         },
         "TypeKoppla": {
             "fullName": "sSwitchTypeKoppla",
@@ -3979,8 +3567,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 89
+            "fileName": "hardwaretypes.h"
         },
         "TypePT2262": {
             "fullName": "sSwitchTypePT2262",
@@ -3989,8 +3576,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 90
+            "fileName": "hardwaretypes.h"
         },
         "TypeLightwaveRF": {
             "fullName": "sSwitchTypeLightwaveRF",
@@ -3999,8 +3585,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 91
+            "fileName": "hardwaretypes.h"
         },
         "TypeEMW100": {
             "fullName": "sSwitchTypeEMW100",
@@ -4009,8 +3594,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 92
+            "fileName": "hardwaretypes.h"
         },
         "TypeBBSB": {
             "fullName": "sSwitchTypeBBSB",
@@ -4019,8 +3603,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 93
+            "fileName": "hardwaretypes.h"
         },
         "TypeMDREMOTE": {
             "fullName": "sSwitchTypeMDREMOTE",
@@ -4029,8 +3612,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 94
+            "fileName": "hardwaretypes.h"
         },
         "TypeRSL": {
             "fullName": "sSwitchTypeRSL",
@@ -4039,8 +3621,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 95
+            "fileName": "hardwaretypes.h"
         },
         "TypeLivolo": {
             "fullName": "sSwitchTypeLivolo",
@@ -4049,8 +3630,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 96
+            "fileName": "hardwaretypes.h"
         },
         "TypeTRC02": {
             "fullName": "sSwitchTypeTRC02",
@@ -4059,8 +3639,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 97
+            "fileName": "hardwaretypes.h"
         },
         "TypeAoke": {
             "fullName": "sSwitchTypeAoke",
@@ -4069,8 +3648,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 98
+            "fileName": "hardwaretypes.h"
         },
         "TypeTRC02_2": {
             "fullName": "sSwitchTypeTRC02_2",
@@ -4079,8 +3657,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 99
+            "fileName": "hardwaretypes.h"
         },
         "TypeEurodomest": {
             "fullName": "sSwitchTypeEurodomest",
@@ -4089,8 +3666,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 100
+            "fileName": "hardwaretypes.h"
         },
         "TypeLivoloAppliance": {
             "fullName": "sSwitchTypeLivoloAppliance",
@@ -4099,8 +3675,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 101
+            "fileName": "hardwaretypes.h"
         },
         "TypeBlyss": {
             "fullName": "sSwitchTypeBlyss",
@@ -4109,8 +3684,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 102
+            "fileName": "hardwaretypes.h"
         },
         "TypeByronSX": {
             "fullName": "sSwitchTypeByronSX",
@@ -4119,8 +3693,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 103
+            "fileName": "hardwaretypes.h"
         },
         "TypeByronMP001": {
             "fullName": "sSwitchTypeByronMP001",
@@ -4129,8 +3702,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 104
+            "fileName": "hardwaretypes.h"
         },
         "TypeSelectPlus": {
             "fullName": "sSwitchTypeSelectPlus",
@@ -4139,8 +3711,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 105
+            "fileName": "hardwaretypes.h"
         },
         "TypeSelectPlus3": {
             "fullName": "sSwitchTypeSelectPlus3",
@@ -4149,8 +3720,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 106
+            "fileName": "hardwaretypes.h"
         },
         "TypeFA20": {
             "fullName": "sSwitchTypeFA20",
@@ -4159,8 +3729,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 107
+            "fileName": "hardwaretypes.h"
         },
         "TypeChuango": {
             "fullName": "sSwitchTypeChuango",
@@ -4169,8 +3738,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 108
+            "fileName": "hardwaretypes.h"
         },
         "TypePlieger": {
             "fullName": "sSwitchTypePlieger",
@@ -4179,8 +3747,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 109
+            "fileName": "hardwaretypes.h"
         },
         "TypeSilvercrest": {
             "fullName": "sSwitchTypeSilvercrest",
@@ -4189,8 +3756,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 110
+            "fileName": "hardwaretypes.h"
         },
         "TypeMertik": {
             "fullName": "sSwitchTypeMertik",
@@ -4199,8 +3765,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 111
+            "fileName": "hardwaretypes.h"
         },
         "TypeHomeConfort": {
             "fullName": "sSwitchTypeHomeConfort",
@@ -4209,8 +3774,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 112
+            "fileName": "hardwaretypes.h"
         },
         "TypePowerfix": {
             "fullName": "sSwitchTypePowerfix",
@@ -4219,8 +3783,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 113
+            "fileName": "hardwaretypes.h"
         },
         "TypeTriState": {
             "fullName": "sSwitchTypeTriState",
@@ -4229,8 +3792,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 114
+            "fileName": "hardwaretypes.h"
         },
         "TypeDeltronic": {
             "fullName": "sSwitchTypeDeltronic",
@@ -4239,8 +3801,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 115
+            "fileName": "hardwaretypes.h"
         },
         "TypeFA500": {
             "fullName": "sSwitchTypeFA500",
@@ -4249,8 +3810,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 116
+            "fileName": "hardwaretypes.h"
         },
         "TypeHT12E": {
             "fullName": "sSwitchTypeHT12E",
@@ -4259,8 +3819,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 117
+            "fileName": "hardwaretypes.h"
         },
         "TypeEV1527": {
             "fullName": "sSwitchTypeEV1527",
@@ -4269,8 +3828,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 118
+            "fileName": "hardwaretypes.h"
         },
         "TypeElmes": {
             "fullName": "sSwitchTypeElmes",
@@ -4279,8 +3837,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 119
+            "fileName": "hardwaretypes.h"
         },
         "TypeAster": {
             "fullName": "sSwitchTypeAster",
@@ -4289,8 +3846,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 120
+            "fileName": "hardwaretypes.h"
         },
         "TypeSartano": {
             "fullName": "sSwitchTypeSartano",
@@ -4299,8 +3855,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 121
+            "fileName": "hardwaretypes.h"
         },
         "TypeEurope": {
             "fullName": "sSwitchTypeEurope",
@@ -4309,8 +3864,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 122
+            "fileName": "hardwaretypes.h"
         },
         "TypeAvidsen": {
             "fullName": "sSwitchTypeAvidsen",
@@ -4319,8 +3873,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 123
+            "fileName": "hardwaretypes.h"
         },
         "TypeBofu": {
             "fullName": "sSwitchTypeBofu",
@@ -4329,8 +3882,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 124
+            "fileName": "hardwaretypes.h"
         },
         "TypeBrel": {
             "fullName": "sSwitchTypeBrel",
@@ -4339,8 +3891,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 125
+            "fileName": "hardwaretypes.h"
         },
         "TypeRTS": {
             "fullName": "sSwitchTypeRTS",
@@ -4349,8 +3900,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 126
+            "fileName": "hardwaretypes.h"
         },
         "TypeElroDB": {
             "fullName": "sSwitchTypeElroDB",
@@ -4359,8 +3909,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 127
+            "fileName": "hardwaretypes.h"
         },
         "TypeDooya": {
             "fullName": "sSwitchTypeDooya",
@@ -4369,8 +3918,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 128
+            "fileName": "hardwaretypes.h"
         },
         "TypeUnitec": {
             "fullName": "sSwitchTypeUnitec",
@@ -4379,8 +3927,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 129
+            "fileName": "hardwaretypes.h"
         },
         "TypeSelector": {
             "fullName": "sSwitchTypeSelector",
@@ -4389,8 +3936,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 130
+            "fileName": "hardwaretypes.h"
         },
         "TypeMaclean": {
             "fullName": "sSwitchTypeMaclean",
@@ -4399,8 +3945,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 131
+            "fileName": "hardwaretypes.h"
         },
         "TypeR546": {
             "fullName": "sSwitchTypeR546",
@@ -4409,8 +3954,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 132
+            "fileName": "hardwaretypes.h"
         },
         "TypeDiya": {
             "fullName": "sSwitchTypeDiya",
@@ -4419,8 +3963,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 133
+            "fileName": "hardwaretypes.h"
         },
         "TypeX10secu": {
             "fullName": "sSwitchTypeX10secu",
@@ -4429,8 +3972,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 134
+            "fileName": "hardwaretypes.h"
         },
         "TypeAtlantic": {
             "fullName": "sSwitchTypeAtlantic",
@@ -4439,8 +3981,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 135
+            "fileName": "hardwaretypes.h"
         },
         "TypeSilvercrestDB": {
             "fullName": "sSwitchTypeSilvercrestDB",
@@ -4449,8 +3990,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 136
+            "fileName": "hardwaretypes.h"
         },
         "TypeMedionDB": {
             "fullName": "sSwitchTypeMedionDB",
@@ -4459,8 +3999,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 137
+            "fileName": "hardwaretypes.h"
         },
         "TypeVMC": {
             "fullName": "sSwitchTypeVMC",
@@ -4469,8 +4008,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 138
+            "fileName": "hardwaretypes.h"
         },
         "TypeKeeloq": {
             "fullName": "sSwitchTypeKeeloq",
@@ -4479,8 +4017,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 139
+            "fileName": "hardwaretypes.h"
         },
         "CustomSwitch": {
             "fullName": "sSwitchCustomSwitch",
@@ -4489,8 +4026,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 140
+            "fileName": "hardwaretypes.h"
         },
         "GeneralSwitch": {
             "fullName": "sSwitchGeneralSwitch",
@@ -4499,8 +4035,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 141
+            "fileName": "hardwaretypes.h"
         },
         "TypeKoch": {
             "fullName": "sSwitchTypeKoch",
@@ -4509,8 +4044,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 142
+            "fileName": "hardwaretypes.h"
         },
         "TypeKingpin": {
             "fullName": "sSwitchTypeKingpin",
@@ -4519,8 +4053,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 143
+            "fileName": "hardwaretypes.h"
         },
         "TypeFunkbus": {
             "fullName": "sSwitchTypeFunkbus",
@@ -4529,8 +4062,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 144
+            "fileName": "hardwaretypes.h"
         },
         "TypeNice": {
             "fullName": "sSwitchTypeNice",
@@ -4539,8 +4071,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 145
+            "fileName": "hardwaretypes.h"
         },
         "TypeForest": {
             "fullName": "sSwitchTypeForest",
@@ -4549,8 +4080,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 146
+            "fileName": "hardwaretypes.h"
         },
         "MC145026": {
             "fullName": "sSwitchMC145026",
@@ -4559,8 +4089,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 148
+            "fileName": "hardwaretypes.h"
         },
         "Lobeco": {
             "fullName": "sSwitchLobeco",
@@ -4569,8 +4098,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 149
+            "fileName": "hardwaretypes.h"
         },
         "Friedland": {
             "fullName": "sSwitchFriedland",
@@ -4579,8 +4107,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 150
+            "fileName": "hardwaretypes.h"
         },
         "BFT": {
             "fullName": "sSwitchBFT",
@@ -4589,8 +4116,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 151
+            "fileName": "hardwaretypes.h"
         },
         "Novatys": {
             "fullName": "sSwitchNovatys",
@@ -4599,8 +4125,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 152
+            "fileName": "hardwaretypes.h"
         },
         "Halemeier": {
             "fullName": "sSwitchHalemeier",
@@ -4609,8 +4134,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 153
+            "fileName": "hardwaretypes.h"
         },
         "Gaposa": {
             "fullName": "sSwitchGaposa",
@@ -4619,8 +4143,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 154
+            "fileName": "hardwaretypes.h"
         },
         "MiLightv1": {
             "fullName": "sSwitchMiLightv1",
@@ -4629,8 +4152,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 155
+            "fileName": "hardwaretypes.h"
         },
         "MiLightv2": {
             "fullName": "sSwitchMiLightv2",
@@ -4639,8 +4161,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 156
+            "fileName": "hardwaretypes.h"
         },
         "HT6P20": {
             "fullName": "sSwitchHT6P20",
@@ -4649,8 +4170,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 157
+            "fileName": "hardwaretypes.h"
         },
         "TypeDoitrand": {
             "fullName": "sSwitchTypeDoitrand",
@@ -4659,8 +4179,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 158
+            "fileName": "hardwaretypes.h"
         },
         "TypeWarema": {
             "fullName": "sSwitchTypeWarema",
@@ -4669,8 +4188,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 159
+            "fileName": "hardwaretypes.h"
         },
         "TypeAnsluta": {
             "fullName": "sSwitchTypeAnsluta",
@@ -4679,8 +4197,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 160
+            "fileName": "hardwaretypes.h"
         },
         "TypeLivcol": {
             "fullName": "sSwitchTypeLivcol",
@@ -4689,8 +4206,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 161
+            "fileName": "hardwaretypes.h"
         },
         "TypeBosch": {
             "fullName": "sSwitchTypeBosch",
@@ -4699,8 +4215,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 162
+            "fileName": "hardwaretypes.h"
         },
         "TypeNingbo": {
             "fullName": "sSwitchTypeNingbo",
@@ -4709,8 +4224,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 163
+            "fileName": "hardwaretypes.h"
         },
         "TypeDitec": {
             "fullName": "sSwitchTypeDitec",
@@ -4719,8 +4233,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 164
+            "fileName": "hardwaretypes.h"
         },
         "TypeSteffen": {
             "fullName": "sSwitchTypeSteffen",
@@ -4729,8 +4242,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 165
+            "fileName": "hardwaretypes.h"
         },
         "TypeAlectoSA": {
             "fullName": "sSwitchTypeAlectoSA",
@@ -4739,8 +4251,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 166
+            "fileName": "hardwaretypes.h"
         },
         "TypeGPIOset": {
             "fullName": "sSwitchTypeGPIOset",
@@ -4749,8 +4260,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 167
+            "fileName": "hardwaretypes.h"
         },
         "LightT1": {
             "fullName": "sSwitchLightT1",
@@ -4759,8 +4269,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 168
+            "fileName": "hardwaretypes.h"
         },
         "TypeKonigSec": {
             "fullName": "sSwitchTypeKonigSec",
@@ -4769,8 +4278,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 169
+            "fileName": "hardwaretypes.h"
         },
         "TypeRM174RF": {
             "fullName": "sSwitchTypeRM174RF",
@@ -4779,8 +4287,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 170
+            "fileName": "hardwaretypes.h"
         },
         "TypeLiwin": {
             "fullName": "sSwitchTypeLiwin",
@@ -4789,8 +4296,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 171
+            "fileName": "hardwaretypes.h"
         },
         "AuxiliaryT1": {
             "fullName": "sSwitchAuxiliaryT1",
@@ -4799,8 +4305,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 172
+            "fileName": "hardwaretypes.h"
         },
         "LightT2": {
             "fullName": "sSwitchLightT2",
@@ -4809,8 +4314,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 174
+            "fileName": "hardwaretypes.h"
         },
         "ContactT1": {
             "fullName": "sSwitchContactT1",
@@ -4819,8 +4323,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 175
+            "fileName": "hardwaretypes.h"
         },
         "TypeYW_Secu": {
             "fullName": "sSwitchTypeYW_Secu",
@@ -4829,8 +4332,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 176
+            "fileName": "hardwaretypes.h"
         },
         "TypeMertik_GV60": {
             "fullName": "sSwitchTypeMertik_GV60",
@@ -4839,8 +4341,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 177
+            "fileName": "hardwaretypes.h"
         },
         "TypeNingbo64": {
             "fullName": "sSwitchTypeNingbo64",
@@ -4849,8 +4350,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 178
+            "fileName": "hardwaretypes.h"
         },
         "TypeX2D": {
             "fullName": "sSwitchTypeX2D",
@@ -4859,8 +4359,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 179
+            "fileName": "hardwaretypes.h"
         },
         "TypeHRCMotor": {
             "fullName": "sSwitchTypeHRCMotor",
@@ -4869,8 +4368,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 180
+            "fileName": "hardwaretypes.h"
         },
         "TypeVelleman": {
             "fullName": "sSwitchTypeVelleman",
@@ -4879,8 +4377,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 181
+            "fileName": "hardwaretypes.h"
         },
         "TypeRFCustom": {
             "fullName": "sSwitchTypeRFCustom",
@@ -4889,8 +4386,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 182
+            "fileName": "hardwaretypes.h"
         },
         "TypeYW_Sensor": {
             "fullName": "sSwitchTypeYW_Sensor",
@@ -4899,8 +4395,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 183
+            "fileName": "hardwaretypes.h"
         },
         "TypeLegrandcad": {
             "fullName": "sSwitchTypeLegrandcad",
@@ -4909,8 +4404,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 184
+            "fileName": "hardwaretypes.h"
         },
         "TypeSysfsGpio": {
             "fullName": "sSwitchTypeSysfsGpio",
@@ -4919,8 +4413,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 185
+            "fileName": "hardwaretypes.h"
         },
         "TypeHager": {
             "fullName": "sSwitchTypeHager",
@@ -4929,8 +4422,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 186
+            "fileName": "hardwaretypes.h"
         },
         "TypeFaber": {
             "fullName": "sSwitchTypeFaber",
@@ -4939,8 +4431,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 187
+            "fileName": "hardwaretypes.h"
         },
         "TypeDrayton": {
             "fullName": "sSwitchTypeDrayton",
@@ -4949,8 +4440,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 188
+            "fileName": "hardwaretypes.h"
         },
         "TypeV2Phoenix": {
             "fullName": "sSwitchTypeV2Phoenix",
@@ -4959,8 +4449,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 189
+            "fileName": "hardwaretypes.h"
         },
         "TypeVisonic433": {
             "fullName": "sSwitchTypeVisonic433",
@@ -4969,8 +4458,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 190
+            "fileName": "hardwaretypes.h"
         },
         "TypeVisonic868": {
             "fullName": "sSwitchTypeVisonic868",
@@ -4979,8 +4467,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 191
+            "fileName": "hardwaretypes.h"
         },
         "TypeX2D433": {
             "fullName": "sSwitchTypeX2D433",
@@ -4989,8 +4476,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 192
+            "fileName": "hardwaretypes.h"
         },
         "TypeX2D868": {
             "fullName": "sSwitchTypeX2D868",
@@ -4999,8 +4485,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 193
+            "fileName": "hardwaretypes.h"
         },
         "TypeX2DShutter": {
             "fullName": "sSwitchTypeX2DShutter",
@@ -5009,8 +4494,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 194
+            "fileName": "hardwaretypes.h"
         },
         "TypeX2DElec": {
             "fullName": "sSwitchTypeX2DElec",
@@ -5019,8 +4503,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 195
+            "fileName": "hardwaretypes.h"
         },
         "TypeX2DGas": {
             "fullName": "sSwitchTypeX2DGas",
@@ -5029,8 +4512,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 196
+            "fileName": "hardwaretypes.h"
         },
         "TypeParrot": {
             "fullName": "sSwitchTypeParrot",
@@ -5039,8 +4521,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 197
+            "fileName": "hardwaretypes.h"
         },
         "TypeKD101": {
             "fullName": "sSwitchTypeKD101",
@@ -5049,8 +4530,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 198
+            "fileName": "hardwaretypes.h"
         },
         "TypeFS20": {
             "fullName": "sSwitchTypeFS20",
@@ -5059,8 +4539,7 @@
             "comment": "",
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 199
+            "fileName": "hardwaretypes.h"
         },
         "Lux": {
             "fullName": "sTypeLux",
@@ -5069,8 +4548,7 @@
             "comment": "",
             "typeName": "Lux",
             "typeValue": 246,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 239
+            "fileName": "hardwaretypes.h"
         },
         "BMP085": {
             "fullName": "sTypeBMP085",
@@ -5079,8 +4557,7 @@
             "comment": "",
             "typeName": "TEMP_BARO",
             "typeValue": 247,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 242
+            "fileName": "hardwaretypes.h"
         },
         "Electric": {
             "fullName": "sTypeElectric",
@@ -5089,8 +4566,7 @@
             "comment": "",
             "typeName": "Usage",
             "typeValue": 248,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 245
+            "fileName": "hardwaretypes.h"
         },
         "Voc": {
             "fullName": "sTypeVoc",
@@ -5099,8 +4575,7 @@
             "comment": "",
             "typeName": "AirQuality",
             "typeValue": 249,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 248
+            "fileName": "hardwaretypes.h"
         },
         "P1Power": {
             "fullName": "sTypeP1Power",
@@ -5109,8 +4584,7 @@
             "comment": "",
             "typeName": "P1Power",
             "typeValue": 250,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 251
+            "fileName": "hardwaretypes.h"
         },
         "P1Gas": {
             "fullName": "sTypeP1Gas",
@@ -5119,8 +4593,7 @@
             "comment": "",
             "typeName": "P1Gas",
             "typeValue": 251,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 256
+            "fileName": "hardwaretypes.h"
         },
         "YouLess": {
             "fullName": "sTypeYouLess",
@@ -5129,8 +4602,7 @@
             "comment": "",
             "typeName": "YouLess",
             "typeValue": 252,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 259
+            "fileName": "hardwaretypes.h"
         },
         "Rego6XXTemp": {
             "fullName": "sTypeRego6XXTemp",
@@ -5139,8 +4611,7 @@
             "comment": "",
             "typeName": "Rego6XXTemp",
             "typeValue": 253,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 262
+            "fileName": "hardwaretypes.h"
         },
         "Rego6XXStatus": {
             "fullName": "sTypeRego6XXStatus",
@@ -5149,8 +4620,7 @@
             "comment": "",
             "typeName": "Rego6XXValue",
             "typeValue": 254,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 265
+            "fileName": "hardwaretypes.h"
         },
         "Rego6XXCounter": {
             "fullName": "sTypeRego6XXCounter",
@@ -5159,8 +4629,7 @@
             "comment": "",
             "typeName": "Rego6XXValue",
             "typeValue": 254,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 266
+            "fileName": "hardwaretypes.h"
         },
         "RFY2": {
             "fullName": "sTypeRFY2",
@@ -5169,8 +4638,7 @@
             "comment": "",
             "typeName": "Rego6XXValue",
             "typeValue": 254,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 269
+            "fileName": "hardwaretypes.h"
         },
         "Evohome": {
             "fullName": "sTypeEvohome",
@@ -5179,8 +4647,7 @@
             "comment": "Controller",
             "typeName": "Evohome",
             "typeValue": 69,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 273
+            "fileName": "hardwaretypes.h"
         },
         "EvohomeZone": {
             "fullName": "sTypeEvohomeZone",
@@ -5189,8 +4656,7 @@
             "comment": "Actual temp zone",
             "typeName": "EvohomeZone",
             "typeValue": 70,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 276
+            "fileName": "hardwaretypes.h"
         },
         "EvohomeWater": {
             "fullName": "sTypeEvohomeWater",
@@ -5199,8 +4665,7 @@
             "comment": "Hot water (Ideally this would just be a zone but for whatever reason evohome treats this differently)",
             "typeName": "EvohomeWater",
             "typeValue": 71,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 279
+            "fileName": "hardwaretypes.h"
         },
         "EvohomeRelay": {
             "fullName": "sTypeEvohomeRelay",
@@ -5209,8 +4674,7 @@
             "comment": "",
             "typeName": "EvohomeRelay",
             "typeValue": 68,
-            "fileName": "hardwaretypes.h",
-            "lineNumber": 282
+            "fileName": "hardwaretypes.h"
         }
     },
     "switchTypes": {
@@ -5219,160 +4683,140 @@
             "name": "OnOff",
             "value": 0,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 7
+            "fileName": "RFXNames.h"
         },
         "Doorbell": {
             "fullName": "STYPE_Doorbell",
             "name": "Doorbell",
             "value": 1,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 8
+            "fileName": "RFXNames.h"
         },
         "Contact": {
             "fullName": "STYPE_Contact",
             "name": "Contact",
             "value": 2,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 9
+            "fileName": "RFXNames.h"
         },
         "Blinds": {
             "fullName": "STYPE_Blinds",
             "name": "Blinds",
             "value": 3,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 10
+            "fileName": "RFXNames.h"
         },
         "X10Siren": {
             "fullName": "STYPE_X10Siren",
             "name": "X10Siren",
             "value": 4,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 11
+            "fileName": "RFXNames.h"
         },
         "SMOKEDETECTOR": {
             "fullName": "STYPE_SMOKEDETECTOR",
             "name": "SMOKEDETECTOR",
             "value": 5,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 12
+            "fileName": "RFXNames.h"
         },
         "Dimmer": {
             "fullName": "STYPE_Dimmer",
             "name": "Dimmer",
             "value": 7,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 13
+            "fileName": "RFXNames.h"
         },
         "Motion": {
             "fullName": "STYPE_Motion",
             "name": "Motion",
             "value": 8,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 14
+            "fileName": "RFXNames.h"
         },
         "PushOn": {
             "fullName": "STYPE_PushOn",
             "name": "PushOn",
             "value": 9,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 15
+            "fileName": "RFXNames.h"
         },
         "PushOff": {
             "fullName": "STYPE_PushOff",
             "name": "PushOff",
             "value": 10,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 16
+            "fileName": "RFXNames.h"
         },
         "DoorContact": {
             "fullName": "STYPE_DoorContact",
             "name": "DoorContact",
             "value": 11,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 17
+            "fileName": "RFXNames.h"
         },
         "Dusk": {
             "fullName": "STYPE_Dusk",
             "name": "Dusk",
             "value": 12,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 18
+            "fileName": "RFXNames.h"
         },
         "BlindsPercentage": {
             "fullName": "STYPE_BlindsPercentage",
             "name": "BlindsPercentage",
             "value": 13,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 19
+            "fileName": "RFXNames.h"
         },
         "VenetianBlindsUS": {
             "fullName": "STYPE_VenetianBlindsUS",
             "name": "VenetianBlindsUS",
             "value": 14,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 20
+            "fileName": "RFXNames.h"
         },
         "VenetianBlindsEU": {
             "fullName": "STYPE_VenetianBlindsEU",
             "name": "VenetianBlindsEU",
             "value": 15,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 21
+            "fileName": "RFXNames.h"
         },
         "Media": {
             "fullName": "STYPE_Media",
             "name": "Media",
             "value": 17,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 22
+            "fileName": "RFXNames.h"
         },
         "Selector": {
             "fullName": "STYPE_Selector",
             "name": "Selector",
             "value": 18,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 23
+            "fileName": "RFXNames.h"
         },
         "DoorLock": {
             "fullName": "STYPE_DoorLock",
             "name": "DoorLock",
             "value": 19,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 24
+            "fileName": "RFXNames.h"
         },
         "DoorLockInverted": {
             "fullName": "STYPE_DoorLockInverted",
             "name": "DoorLockInverted",
             "value": 20,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 25
+            "fileName": "RFXNames.h"
         },
         "BlindsPercentageWithStop": {
             "fullName": "STYPE_BlindsPercentageWithStop",
             "name": "BlindsPercentageWithStop",
             "value": 21,
             "comment": "",
-            "fileName": "RFXNames.h",
-            "lineNumber": 26
+            "fileName": "RFXNames.h"
         }
     },
     "meterTypes": {
@@ -5381,48 +4825,42 @@
             "name": "ENERGY",
             "value": 0,
             "comment": "0",
-            "fileName": "RFXNames.h",
-            "lineNumber": 33
+            "fileName": "RFXNames.h"
         },
         "GAS": {
             "fullName": "MTYPE_GAS",
             "name": "GAS",
             "value": 1,
             "comment": "1",
-            "fileName": "RFXNames.h",
-            "lineNumber": 34
+            "fileName": "RFXNames.h"
         },
         "WATER": {
             "fullName": "MTYPE_WATER",
             "name": "WATER",
             "value": 2,
             "comment": "2",
-            "fileName": "RFXNames.h",
-            "lineNumber": 35
+            "fileName": "RFXNames.h"
         },
         "COUNTER": {
             "fullName": "MTYPE_COUNTER",
             "name": "COUNTER",
             "value": 3,
             "comment": "3",
-            "fileName": "RFXNames.h",
-            "lineNumber": 36
+            "fileName": "RFXNames.h"
         },
         "ENERGY_GENERATED": {
             "fullName": "MTYPE_ENERGY_GENERATED",
             "name": "ENERGY_GENERATED",
             "value": 4,
             "comment": "4",
-            "fileName": "RFXNames.h",
-            "lineNumber": 37
+            "fileName": "RFXNames.h"
         },
         "TIME": {
             "fullName": "MTYPE_TIME",
             "name": "TIME",
             "value": 5,
             "comment": "5",
-            "fileName": "RFXNames.h",
-            "lineNumber": 38
+            "fileName": "RFXNames.h"
         }
     },
     "definitions": {
@@ -5883,7 +5321,8 @@
             }
         },
         "86/1": {
-            "noSubType": true,
+            "noSubType": false,
+            "subTypeName": "WIND1",
             "subTypeValue": 1,
             "typeName": "WIND",
             "typeValue": 86,
@@ -5925,6 +5364,353 @@
                 "dataType": "floating point number",
                 "digits": 1,
                 "format": "%.1f"
+            }
+        },
+        "86/2": {
+            "noSubType": false,
+            "subTypeName": "WIND2",
+            "subTypeValue": 2,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue6": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/3": {
+            "noSubType": false,
+            "subTypeName": "WIND3",
+            "subTypeValue": 3,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue6": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/4": {
+            "noSubType": false,
+            "subTypeName": "WIND4",
+            "subTypeValue": 4,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue6": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/5": {
+            "noSubType": false,
+            "subTypeName": "WIND5",
+            "subTypeValue": 5,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue6": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/6": {
+            "noSubType": false,
+            "subTypeName": "WIND6",
+            "subTypeValue": 6,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue6": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/7": {
+            "noSubType": false,
+            "subTypeName": "WIND7",
+            "subTypeValue": 7,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "temp",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            },
+            "sValue6": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/48": {
+            "noSubType": false,
+            "subTypeName": "WINDNoTemp",
+            "subTypeValue": 48,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue5": {
+                "name": "chill",
+                "unit": "°C",
+                "dataType": "floating point number",
+                "digits": 1,
+                "format": "%.1f"
+            }
+        },
+        "86/49": {
+            "noSubType": false,
+            "subTypeName": "WINDNoTempNoChill",
+            "subTypeValue": 49,
+            "typeName": "WIND",
+            "typeValue": 86,
+            "sValue": {
+                "name": "direction",
+                "unit": "°",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            },
+            "sValue2": {
+                "name": "direction",
+                "unit": "xx",
+                "dataType": "text",
+                "format": "%s"
+            },
+            "sValue3": {
+                "name": "speed",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue4": {
+                "name": "gust",
+                "unit": "m/s",
+                "dataType": "number",
+                "format": "%d"
             }
         },
         "87/1": {
@@ -6121,13 +5907,27 @@
                 "format": "%u"
             }
         },
-        "242/1": {
-            "noSubType": true,
-            "subTypeValue": 1,
+        "242/16": {
+            "noSubType": false,
+            "subTypeName": "SetPoint",
+            "subTypeValue": 16,
             "typeName": "Setpoint",
             "typeValue": 242,
             "sValue": {
-                "name": "value",
+                "name": "setpoint",
+                "dataType": "floating point number",
+                "digits": 2,
+                "format": "%.2f"
+            }
+        },
+        "242/2": {
+            "noSubType": false,
+            "subTypeName": "ThermTemperature",
+            "subTypeValue": 2,
+            "typeName": "Setpoint",
+            "typeValue": 242,
+            "sValue": {
+                "name": "temperature",
                 "dataType": "floating point number",
                 "digits": 2,
                 "format": "%.2f"
@@ -6275,12 +6075,10 @@
             "subTypeValue": 22,
             "typeName": "General",
             "typeValue": 243,
-            "sValue": {
-                "name": "status",
-                "dataType": "number",
-                "format": "%d"
+            "nValue": {
+                "name": "alert"
             },
-            "sValue2": {
+            "sValue": {
                 "name": "text",
                 "dataType": "text",
                 "format": "%s"
