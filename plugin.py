@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.54" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.55" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -162,6 +162,18 @@ class BasePlugin:
     jsonData = None
     initDone = False
 
+    # Converts a value to boolean (return True for some string values, integer or float different of zero, false else)
+    def convert2bool(self, val):
+        valType = type(val).__name__
+        if valType == "str":
+            if val.lower() in ['y', 'yes', 't', 'true', 'on']:
+                return True
+        elif valType == "int":
+            return valType != 0
+        elif valType == "float":
+            return valType != 0.0
+        return False
+    
     # Returns a dictionary value giving a key or default value if not existing
     def getValue(self, dict, key, default: Any =''):
         if dict == None:
@@ -219,9 +231,9 @@ class BasePlugin:
             return False
         if type(valueToTest).__name__ == "bool":
             return False
-        if type(valueToTest).__name__ in {"int", "float"}:
+        if type(valueToTest).__name__ in ["int", "float"]:
             return True
-        if valueToTest.lower() in {"false", "true"}:
+        if valueToTest.lower() in ["false", "true", "y", "n", "yes", "no", "on", "off"]:
             return False
         try:
             float(valueToTest)
@@ -612,7 +624,7 @@ class BasePlugin:
                         Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
                         self.mqttClient.Publish(setTopic, payload, 1)
                     if localCommand != None: # Command given, execute it
-                        localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace # in command by value
+                        localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace "#" in command by value
                         Domoticz.Log(F"Executing {localCommand}")
                         localProcess = subprocess.Popen(localCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
                         if localProcess.stdout != None:
