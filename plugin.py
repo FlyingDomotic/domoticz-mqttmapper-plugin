@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.55" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.56" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -515,8 +515,12 @@ class BasePlugin:
                             valueToSet = mappingDefault or 0 # Set default mapping (or 0)
                             for testValue in mappingValues: # Scan all mapping values
                                 Domoticz.Log(f'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
-                                if testValue == readValue:  # Is this the same value?
-                                    valueToSet = mappingValues[testValue]   # Insert mapped value
+                                if type(testValue).__name__ == "bool":
+                                    if testValue == self.convert2bool(readValue):
+                                        valueToSet = mappingValues[testValue]   # Insert mapped value
+                                else:
+                                    if str(testValue) == str(readValue):  # Is this the same value?
+                                        valueToSet = mappingValues[testValue]   # Insert mapped value
                         else:
                             valueToSet = readValue  # Set value = read value
                     else:   # Not a switch
