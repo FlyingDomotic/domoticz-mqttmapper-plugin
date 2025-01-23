@@ -142,7 +142,21 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
         "options": {"SelectorStyle":"1", "LevelOffHidden": "true", "LevelNames":"Off|Auto|Forced"},
         "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}},
         "mapping": {"item": "mode", "default": "0", "values": {"Off": "0", "Auto": "10", "Forced": "20"}}
-    }
+    },
+    "Kontor takbelysning": {
+		"topic": "shellies/shellypro4pm-xxxx/status/switch:0",
+		"type": "244", "subtype": "73", "switchtype": "0",
+		"mapping": {
+			"item": "output",
+			"default": "0",
+			"values": {"False": "0", "True" : "100"}
+		},
+		"set": {
+			"topic": "shellies/shellypro4pm-xxxx/rpc",
+			"payload": "{ \"id\":0, \"src\": \"domoticz\", \"method\": \"Switch.Set\", \"params\":{\"id\":0,\"on\":#}}",
+			"mapping": {"values": {"false": "0", "true" : "100"}}
+		}
+     }
 }
 ```
 
@@ -275,6 +289,31 @@ Les exemples précédents détaillaient des mises à jour depuis MQTT vers des d
 `topic` contient le topic vers lequel la valeur sera envoyée (par défaut, on utilisera celui du dispositif). Mettez le vide pour ignorer les demandes de modification sans afficher d'erreur. 
 
 `payload` contient la valeur à envoyer (par défaut `#`). Le caractère `#` sera remplacé par la valeur associée (Dans cet exemple, `Forced` si le dispositif Domoticz contient un niveau 20).
+
+In some cases (in particular if device has to set boolean value, but not only), it may be necessary to have a different mapping between data read and data written. In this case, you can insert set mapping values that are different than those used to read. For example:
+
+Dans certains cas (en particulier si le dispositif utilise des valeurs booléennes, mais pas que), il peut être nécessaire d'utiliser une association différente de celle de la lecture lors de l'écriture . Par exemple :
+
+```
+{
+    "Kontor takbelysning": {
+		"topic": "shellies/shellypro4pm-xxxx/status/switch:0",
+		"type": "244", "subtype": "73", "switchtype": "0",
+		"mapping": {
+			"item": "output",
+			"default": "0",
+			"values": {"False": "0", "True" : "100"}
+		},
+		"set": {
+			"topic": "shellies/shellypro4pm-xxxx/rpc",
+			"payload": "{ \"id\":0, \"src\": \"domoticz\", \"method\": \"Switch.Set\", \"params\":{\"id\":0,\"on\":#}}",
+			"mapping": {"values": {"false": "0", "true" : "100"}}
+		}
+     }
+}
+```
+
+
 
 It's also possible to execute a bash command through `command` tag. In this case, unless you explicitely specify `topic`, no MQTT set will be send. Value to set will replace the `#`in command.
 

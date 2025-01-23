@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.56" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.57" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -569,7 +569,6 @@ class BasePlugin:
         # (Re)subscribed, refresh device info
         Domoticz.Debug("onMQTTSubscribed")
 
-# ==========================================================DASHBOARD COMMAND=============================================================
     def onCommand(self, Unit, Command, Level, sColor):
         # Exit if init not properly done
         if not self.initDone:
@@ -607,10 +606,18 @@ class BasePlugin:
                         localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
                         setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
                         setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
+                        setMapping = self.getValue(nodeSet, 'mapping', None)        # Get set mapping, default to None
+                        setMappingValues = self.getValue(setMapping, 'values', None)# Get set mapping values, default to None
                         mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
                         nodeType = str(self.getValue(nodeItems, 'type', None))      # Get device type
-                        if int(nodeType) >= 242 and int(nodeType) <= 244:               # Select valid types
-                            if mappingValues != None:
+                        if int(nodeType) >= 242 and int(nodeType) <= 244:           # Select valid types
+                            if setMappingValues != None:
+                                for testValue in setMappingValues: # Scan all mapping values
+                                    if setMappingValues[testValue] == targetValue:  # Is this the same value?
+                                        valueToSet = testValue  # Insert mapped value
+                                if valueToSet == None:  # No mapping value found
+                                    Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
+                            elif mappingValues != None:
                                 for testValue in mappingValues: # Scan all mapping values
                                     if mappingValues[testValue] == targetValue:  # Is this the same value?
                                         valueToSet = testValue  # Insert mapped value
