@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.58" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.59" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -525,7 +525,8 @@ class BasePlugin:
                             else:
                                 itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                                 if itemValue == None:
-                                    Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
+                                    Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<, message ignored')
+                                    return
                                 else:   # Add extracted value
                                     readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                         readValue = readValue[1:]   # Remove first ';'
