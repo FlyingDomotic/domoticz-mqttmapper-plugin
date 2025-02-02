@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.57" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.58" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -473,94 +473,113 @@ class BasePlugin:
                     Domoticz.Error(F"Can't find device key {nodeKey if nodeKey else nodeTopic}")
                     return
                 Domoticz.Debug("onMQTTPublish found "+str(topic)+", Device '" + device.Name + "', message '" + str(message) + "'")
-                nodeType = self.getValue(nodeItems, 'type', "0")   # Read some values for this device
-                nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
-                nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
-                nodeMapping = self.getValue(nodeItems, 'mapping', None)
-                mappingItem = self.getValue(nodeMapping, 'item', None)
-                mappingDefault = self.getValue(nodeMapping, 'default', None)
-                mappingValues = self.getValue(nodeMapping, 'values', None)
-                mappingBattery = self.getValue(nodeMapping, 'battery', None)
-                valueToSet = None
-                if mappingItem !=None:
-                    if mappingItem == '':   # Empty mapping means (not json) full message
-                        mappingItem = "~*"
-                    readValue = ''
-                    itemIndex = -1
-                    items = mappingItem.split(';')  # Work with multiple items values
-                    for item in items:  # Read all values to map
-                        readValue += ";"# Add ';' as separator
-                        itemIndex += 1  # Increment index
-                        if item[0:1] == '~': # Does item start with '~'?
-                            if item == '~': # If item is just '~', insert previous sValue item
-                                sValue = device.sValue.split(';')   # Extract current sValue
-                                if itemIndex < len(sValue): # Is index within device sValue range?
-                                    valueToSet = sValue[itemIndex]  # Yes, load it
-                                else:
-                                    valueToSet = '' # No, use empty string
-                                readValue += str(valueToSet)    # Insert the value
-                            elif item == "~*":  # Item is ~*, insert topic content
-                                readValue += str(self.computeValue(message, nodeMapping, itemIndex))
-                            else:
-                                readValue += item[1:]   # Add item, removing initial '~'
-                        else:
-                            itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
-                            if itemValue == None:
-                                Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
-                            else:   # Add extracted value
-                                readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
-                    readValue = readValue[1:]   # Remove first ';'
-                    if int(nodeType) == 244:   # This is a switch
-                        if  mappingValues != None:
-                            valueToSet = mappingDefault or 0 # Set default mapping (or 0)
-                            for testValue in mappingValues: # Scan all mapping values
-                                Domoticz.Log(f'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
-                                if type(testValue).__name__ == "bool":
-                                    if testValue == self.convert2bool(readValue):
-                                        valueToSet = mappingValues[testValue]   # Insert mapped value
-                                else:
-                                    if str(testValue) == str(readValue):  # Is this the same value?
-                                        valueToSet = mappingValues[testValue]   # Insert mapped value
-                        else:
-                            valueToSet = readValue  # Set value = read value
-                    else:   # Not a switch
-                        valueToSet = readValue
-                else:   # No mapping given
-                    Domoticz.Error('No mapping for '+device.Name)
-                if valueToSet != None: # Value given, set it
-                    batteryValue = 255
-                    if mappingBattery != None:
-                        batteryValue = self.getPathValue(message, mappingBattery, '/', 255) # Extract battery value from message
-                    if batteryValue < 0:
-                        batteryValue = 0
-                    elif batteryValue > 100 and batteryValue != 255:
-                        batteryValue = 100
-                    if batteryValue != 255:
-                        batteryText = F", batteryLevel: {batteryValue}"
+                nodeSelect = self.getValue(nodeItems, 'select', None) # Is there a "select" option?
+                if nodeSelect:
+                    topicSelected = False # By default, refuse topic
+                    selectItem = self.getValue(nodeSelect, 'item', None) # Get select item
+                    selectValue = self.getValue(nodeSelect, 'value', None) # Get select value
+                    if selectItem == None or selectValue == None: # Any error?
+                        Domoticz.Error(F"Key 'select' should have both 'item' and 'value' defined")
                     else:
-                        batteryText =""
-                    if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
-                        readValue = str(valueToSet) # Force read value as string
-                        if int(nodeType) == 244:   # This is a switch
-                            if nodeSwitchtype == '0': # This is an On/Off switch
-                                nValueToSet = 0 if str(valueToSet) == '0' else 1
-                            elif nodeSwitchtype == '7': # This is a Dimmer switch
-                                nValueToSet = 0 if str(valueToSet) == '0' else 1 if str(valueToSet) == '100' else 2
-                            else:   # Not a switch, use given value
-                                nValueToSet = int(valueToSet)
-                            sValueToSet = str(valueToSet)
+                        selectItemValue = self.getPathValue(message, selectItem, '/', None) # Extract select value from message
+                        if selectItemValue == None:
+                            Domoticz.Error(F"Can't find '{selectItem}' in message")
                         else:
-                            nValueToSet = int(round(float(valueToSet),0))
-                            if int(nodeType) == 84:
-                                nValueToSet = 0
-                            if int(nodeType) == 243 and int(nodeSubtype) in [26, 28, 29, 31, 33]:
-                                nValueToSet = 0
-                            sValueToSet = readValue
-                        Domoticz.Log(F'Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}')  # Value is numeric or float
-                        device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
-                    else:   # Value is not numeric
-                        Domoticz.Log(F'Setting {device.Name} to >{valueToSet}<{batteryText}') 
-                        device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
+                            if selectItemValue != selectValue:
+                                Domoticz.Log(F"'{selectItem}' is '{selectItemValue}' instead of '{selectValue}'")
+                            else:
+                                topicSelected = True # Select item has the right value
+                else:
+                    topicSelected = True    # No 'selected', validate topic
+                if topicSelected:
+                    nodeType = self.getValue(nodeItems, 'type', "0")   # Read some values for this device
+                    nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
+                    nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
+                    nodeMapping = self.getValue(nodeItems, 'mapping', None)
+                    mappingItem = self.getValue(nodeMapping, 'item', None)
+                    mappingDefault = self.getValue(nodeMapping, 'default', None)
+                    mappingValues = self.getValue(nodeMapping, 'values', None)
+                    mappingBattery = self.getValue(nodeMapping, 'battery', None)
+                    valueToSet = None
+                    if mappingItem !=None:
+                        if mappingItem == '':   # Empty mapping means (not json) full message
+                            mappingItem = "~*"
+                        readValue = ''
+                        itemIndex = -1
+                        items = mappingItem.split(';')  # Work with multiple items values
+                        for item in items:  # Read all values to map
+                            readValue += ";"# Add ';' as separator
+                            itemIndex += 1  # Increment index
+                            if item[0:1] == '~': # Does item start with '~'?
+                                if item == '~': # If item is just '~', insert previous sValue item
+                                    sValue = device.sValue.split(';')   # Extract current sValue
+                                    if itemIndex < len(sValue): # Is index within device sValue range?
+                                        valueToSet = sValue[itemIndex]  # Yes, load it
+                                    else:
+                                        valueToSet = '' # No, use empty string
+                                    readValue += str(valueToSet)    # Insert the value
+                                elif item == "~*":  # Item is ~*, insert topic content
+                                    readValue += str(self.computeValue(message, nodeMapping, itemIndex))
+                                else:
+                                    readValue += item[1:]   # Add item, removing initial '~'
+                            else:
+                                itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
+                                if itemValue == None:
+                                    Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<')
+                                else:   # Add extracted value
+                                    readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
+                        readValue = readValue[1:]   # Remove first ';'
+                        if int(nodeType) == 244:   # This is a switch
+                            if  mappingValues != None:
+                                valueToSet = mappingDefault or 0 # Set default mapping (or 0)
+                                for testValue in mappingValues: # Scan all mapping values
+                                    Domoticz.Log(f'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
+                                    if type(testValue).__name__ == "bool":
+                                        if testValue == self.convert2bool(readValue):
+                                            valueToSet = mappingValues[testValue]   # Insert mapped value
+                                    else:
+                                        if str(testValue) == str(readValue):  # Is this the same value?
+                                            valueToSet = mappingValues[testValue]   # Insert mapped value
+                            else:
+                                valueToSet = readValue  # Set value = read value
+                        else:   # Not a switch
+                            valueToSet = readValue
+                    else:   # No mapping given
+                        Domoticz.Error('No mapping for '+device.Name)
+                    if valueToSet != None: # Value given, set it
+                        batteryValue = 255
+                        if mappingBattery != None:
+                            batteryValue = self.getPathValue(message, mappingBattery, '/', 255) # Extract battery value from message
+                        if batteryValue < 0:
+                            batteryValue = 0
+                        elif batteryValue > 100 and batteryValue != 255:
+                            batteryValue = 100
+                        if batteryValue != 255:
+                            batteryText = F", batteryLevel: {batteryValue}"
+                        else:
+                            batteryText =""
+                        if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
+                            readValue = str(valueToSet) # Force read value as string
+                            if int(nodeType) == 244:   # This is a switch
+                                if nodeSwitchtype == '0': # This is an On/Off switch
+                                    nValueToSet = 0 if str(valueToSet) == '0' else 1
+                                elif nodeSwitchtype == '7': # This is a Dimmer switch
+                                    nValueToSet = 0 if str(valueToSet) == '0' else 1 if str(valueToSet) == '100' else 2
+                                else:   # Not a switch, use given value
+                                    nValueToSet = int(valueToSet)
+                                sValueToSet = str(valueToSet)
+                            else:
+                                nValueToSet = int(round(float(valueToSet),0))
+                                if int(nodeType) == 84:
+                                    nValueToSet = 0
+                                if int(nodeType) == 243 and int(nodeSubtype) in [26, 28, 29, 31, 33]:
+                                    nValueToSet = 0
+                                sValueToSet = readValue
+                            Domoticz.Log(F'Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}')  # Value is numeric or float
+                            device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
+                        else:   # Value is not numeric
+                            Domoticz.Log(F'Setting {device.Name} to >{valueToSet}<{batteryText}') 
+                            device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
 
     def onMQTTSubscribed(self):
         # Exit if init not properly done

@@ -13,12 +13,6 @@ If you want to be able to read/write some MQTT topics and maps them to Domoticz 
 
 Si vous voulez lire/écrire des topics MQTT et les lier à des dispositifs Domoticz, sans avoir besoin d'installer NodeRed, et/ou intégrer des capteurs qui n'ont pas de découvertes HomeAssistant, ce plug-in est fait pour vous.
 
-## Warning / Attention
-
-This plug-in is at an early stage, and has only partly be tested, with few Domoticz devices types. In addition, bad JSON configuration files will lead to unexpected behavior. You've been warned!
-
-Ce plug-in est en phase de développement initial, et n'a été que partiellement testé, avec seulement certains types de dispositifs Domoticz. De plus, un fichier de configuration JSON incorrect va provoquer des effets inattendus, voire rigolos. Vous avez été prévenus !
-
 ## Prerequisites / Prérequis
 
 - Domoticz 2020.0 or higher (but lower version could also work)
@@ -125,6 +119,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
     "Beed room temperature": {
         "topic": "beedRoom",
         "type": "80", "subtype": "5", "switchtype": "0",
+		"select": {"item": "isOk", "value": "yes"},
         "mapping": {"item": "temperature", "multiplier": 0.1, "digits": 1}
     },
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
@@ -203,6 +198,7 @@ Dans cet exemple, `options` contient les options utilisées pour créer le dispo
     "Beed room temperature": {
         "topic": "beedRoom",
         "type": "80", "subtype": "5", "switchtype": "0",
+		"select": {"item": "isOk", "value": "yes"},
         "mapping": {"item": "temperature", "multiplier": 0.1, "digits": 1}
     }
 ```
@@ -212,10 +208,14 @@ This time, payload is in JSON format (`item` is not empty). This mean that the v
 `multiplier` is optional, and gives the factor to apply to numeric value (here `0.1`, equivalent to divided by 10). When having multiple items in sValue, you can use multiplier like "0.1;10;1".
 'digits' is also optional, and gives the number of decimal digits to round value to. When having digits items in sValue, you can use digits like "1;2;0".
 
+`select` allow to consider only message having a specific item with a given value (else message will be just ignored). Here, only message with `"isOk": "yes"` will be selected.
+
 Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur extraite sera prise dans l'item `temperature` du contenu, au niveau supérieur. `ENERGY/Power` dans l'exemple suivant indique que la valeur sera extraite de l'item `Power` de l'item `Energy`.
 
 `multiplier` est optionnel et indique le facteur à appliquer à la valeur numérique (ici `0.1`, équivalent à diviser par 10). Lorsque vous avez plusieurs multiplicateurs à indiquer,, vous pouvez les spécifier comme "0.1;10;1"
 'digits' est également optionnel et indique le nombre de décimales à utiliser pour arrondir la valeur. Là encore, vous pouvez utiliser "1;2;0" si vous avez plusieurs valeurs à donner.
+
+`select` permet de ne considérer que les messages ayant un item particulier contenant une valeur spécifique (sinon, le message sera simplement ingoré). Ici, seuls les messages ayec `"isOk": "yes"` seront sélectionnés.
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
@@ -544,4 +544,22 @@ Topic content / Contenu du topic:
 
 Domoticz device value / Valeur du dispositif Domoticz:
  -69 
+```
+
+## Message with specific item value / Messages avec une valeur particulière
+```
+Setup / Configuration:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": "ok"}}
+
+Topic content / Contenu du topic:
+{"temperature": 19, "humidity":70, "status": "ok"}
+
+Domoticz device value / Valeur du dispositif Domoticz:
+ 19 
+
+Topic content / Contenu du topic:
+{"temperature": 19, "humidity":70, "status": "bad"}
+
+-> Message ignored/ignoré
+ 
 ```
