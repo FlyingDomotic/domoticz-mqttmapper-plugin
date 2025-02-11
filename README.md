@@ -135,7 +135,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
     "Mode selector": {"topic": "fan/mode",
         "type": "244", "subtype": "62", "switchtype": "18",
         "options": {"SelectorStyle":"1", "LevelOffHidden": "true", "LevelNames":"Off|Auto|Forced"},
-        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}},
+        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}, "retain": false},
         "mapping": {"item": "mode", "default": "0", "values": {"Off": "0", "Auto": "10", "Forced": "20"}}
     },
     "Kontor takbelysning": {
@@ -278,17 +278,22 @@ Les exemples précédents détaillaient des mises à jour depuis MQTT vers des d
     "Mode selector": {"topic": "fan/mode",
         "type": "244", "subtype": "62", "switchtype": "18",
         "options": {"SelectorStyle":"1", "LevelOffHidden": "true", "LevelNames":"Off|Auto|Forced"},
-        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}},
+        "set": {"topic": "fan/mode/set", "payload": {"mode":"#"}, "retain": false},
         "mapping": {"item": "mode", "default": "0", "values": {"Off": "0", "Auto": "10", "Forced": "20"}}
     }
 ```
 
 `topic` contains the topic to send the value to (defaults to primary topic if not specified). Set it to empty to ignore SET requests without error message.
+
 `payload` contains the payload to send (defaults to `#`). The `#` character will be replaced by translated value (`Forced` in this example if Domoticz devices holds 20 in its level).
+
+'retain' indicates if message should be sent with MQTT retain flag (default to true)
 
 `topic` contient le topic vers lequel la valeur sera envoyée (par défaut, on utilisera celui du dispositif). Mettez le vide pour ignorer les demandes de modification sans afficher d'erreur. 
 
 `payload` contient la valeur à envoyer (par défaut `#`). Le caractère `#` sera remplacé par la valeur associée (Dans cet exemple, `Forced` si le dispositif Domoticz contient un niveau 20).
+
+'retain' indique si le message doit être envoyé avec le flag MQTT retain (par défaut: true)
 
 In some cases (in particular if device has to set boolean value, but not only), it may be necessary to have a different mapping between data read and data written. In this case, you can insert set mapping values that are different than those used to read. For example:
 

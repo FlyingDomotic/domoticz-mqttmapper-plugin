@@ -1,4 +1,5 @@
 # MqttMapper is a Domoticz Python plug in allowing to map MQTT topics directly to Domoticz devices.
+# MqttMapper is a Domoticz Python plug in allowing to map MQTT topics directly to Domoticz devices.
 #
 #   If you want to be able to read/write some MQTT topics and maps them to Domoticz devices, without having to install NodeRed,
 #       and/pr integrate sensors that don't have HomeAssistant discovery item, this plug-in is made for you.
@@ -10,7 +11,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.59" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.60" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -94,7 +95,7 @@ class MqttClient:
             self.mqttConn.Send({'Verb': 'PING'})
 
     def Publish(self, topic, payload, retain = 0):
-        Domoticz.Debug("MqttClient::Publish " + topic + " (" + payload + ")")
+        Domoticz.Debug("MqttClient::Publish " + topic + " (" + payload + "), retain="+str(retain))
         if (self.mqttConn == None or not self.isConnected):
             self.Open()
         else:
@@ -626,6 +627,7 @@ class BasePlugin:
                         localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
                         setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
                         setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
+                        setRetain = self.getValue(nodeSet, 'retain', True)          # Get retain, default to true
                         setMapping = self.getValue(nodeSet, 'mapping', None)        # Get set mapping, default to None
                         setMappingValues = self.getValue(setMapping, 'values', None)# Get set mapping values, default to None
                         mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
@@ -654,8 +656,8 @@ class BasePlugin:
                             payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
                         else:
                             payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
-                        Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<')
-                        self.mqttClient.Publish(setTopic, payload, 1)
+                        Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<, retain='+str(setRetain))
+                        self.mqttClient.Publish(setTopic, payload, 1 if setRetain else 0)
                     if localCommand != None: # Command given, execute it
                         localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace "#" in command by value
                         Domoticz.Log(F"Executing {localCommand}")
