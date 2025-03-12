@@ -11,7 +11,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.60" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.61" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -388,7 +388,9 @@ class BasePlugin:
                                     Domoticz.Error(F"Can't find device {nodeKey if nodeKey else nodeTopic}")
                 else:
                     # Update device only if something changed
-                    if device.Type != int(nodeType) or device.SubType != int(nodeSubtype) or device.SwitchType != int(nodeSwitchtype):
+                    if nodeOptions == None:
+                        nodeOptions = {}
+                    if device.Type != int(nodeType) or device.SubType != int(nodeSubtype) or device.SwitchType != int(nodeSwitchtype or device.Options != nodeOptions):
                         Domoticz.Log("Updating device " + nodeName)
                         device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
 
