@@ -160,7 +160,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
 			"Open": {"topic": "blind/setOtherTopic", "payload": {"value": "Open"}},
 			"Close": {"topic": "blind/setOtherTopic", "payload": {"value": "Close"}},
 			"Stop": {"topic": "blind/setOtherTopic", "payload": {"value": "<command>"}},
-			"Set Level":{"topic": "blind/setLevelTopic", "payload": {"value" : "<level>"}, "retain": true},
+			"Set Level":{"topic": "xxxx/setLevelTopic", "payload": "{\"value\": <level>}", "retain": true},
 		}
 	}
 }
@@ -381,7 +381,7 @@ Les exemples précédents d'utilisation de `set` peuvent supporter des commandes
 		"Open": {"topic": "blind/setOtherTopic", "payload": {"value": "Open"}},
 		"Close": {"topic": "blind/setOtherTopic", "payload": {"value": "Close"}},
 		"Stop": {"topic": "blind/setOtherTopic", "payload": {"value": "<command>"}},
-		"Set Level":{"topic": "blind/setLevelTopic", "payload": {"value" : "<level>"}, "retain": true},
+		"Set Level":{"topic": "xxxx/setLevelTopic", "payload": "{\"value\": <level>}", "retain": true},
 	}
 }
 ```
@@ -389,9 +389,13 @@ Instead of `set` part, we have a `commands` part where we specify Domoticz comma
 
 In given example, `Open` and `Close` have fixed payload, `Stop` includes <command> value (here `Stop`), and `Set Level` has <level> value.
 
+Level payload has a specific format, as numeric values are not allowed as string. Instead of putting directly JSON format in payload data, payload is put on a string, and quotes are escaped using "\".
+
 Au lieu d'une partie `set`, on a ici une partie `commands` où on peut indiquer les commandes Domoticz gérées (voir la liste complète ci-dessous), et donner soit les sujets et contenus, soit les commandes systèmes ) passer.
 
 Dans l'exemple donné, `Open` et `Close` ont un contenu fixe, `Stop` inclue la valeur <command> (ici `Stop`), et `Set Level` a la valeur <level>.
+
+Le contenu de payload a un format specifique, les valeurs numériques n'étant pas autorisées dans des chaînes de caractères. Au lieu d'indiquer directement du JSON dans le contenu, la charge est mise dans une chaîne de caractères et les marques "quote" sont échappées par un "\".
 
 Command list is not closed. You may want to add some as soon as you find them in Domoticz. However, here's list of doscovered commands at time of writting this document: `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contains the given command, `<level>` contains user requested level and `<color>` user requested color.
 

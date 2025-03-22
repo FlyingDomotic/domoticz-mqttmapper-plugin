@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.1.0" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.1.1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -102,7 +102,7 @@ class MqttClient:
 
     # Publish a payload into a topic
     def Publish(self, topic, payload, retain = 0):
-        Domoticz.Debug("MqttClient::Publish " + topic + " (" + payload + "), retain="+str(retain))
+        Domoticz.Debug("MqttClient::Publish " + topic + "=" + payload + ", retain="+str(retain))
         if (self.mqttConn == None or not self.isConnected):
             self.Open()
         else:
@@ -676,7 +676,14 @@ class BasePlugin:
                     # Topic found, load payload and retain
                     commandPayload = self.getValue(thisCommand, 'payload', "")
                     commandRetain = self.getValue(thisCommand, 'retain', False)
-                    payload = json.dumps(commandPayload).replace("<command>", str(Command)).replace("<level>", str(Level)).replace("<color>", str(sColor))
+                    if type(commandPayload).__name__ == "str":
+                        if commandPayload.startswith('"') and commandPayload.endswith('"'):
+                            payload = commandPayload[1:-1]
+                        else:
+                           payload = commandPayload
+                    else:
+                        payload = json.dumps(commandPayload)
+                    payload = payload.replace("<command>", str(Command)).replace("<level>", str(Level)).replace("<color>", str(sColor))
                     Domoticz.Log(F"Setting {commandTopic} to >{payload}<, retain={commandRetain}")
                     self.mqttClient.Publish(commandTopic, payload, 1 if commandRetain else 0)
                 else:
