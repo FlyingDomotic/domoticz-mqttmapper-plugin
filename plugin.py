@@ -1,5 +1,4 @@
 # MqttMapper is a Domoticz Python plug in allowing to map MQTT topics directly to Domoticz devices.
-# MqttMapper is a Domoticz Python plug in allowing to map MQTT topics directly to Domoticz devices.
 #
 #   If you want to be able to read/write some MQTT topics and maps them to Domoticz devices, without having to install NodeRed,
 #       and/pr integrate sensors that don't have HomeAssistant discovery item, this plug-in is made for you.
@@ -11,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.0.61" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.1.0" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -39,12 +38,14 @@ try:
     from Domoticz import *
 except:
     pass
+
 import json
 import time
 import subprocess
 import os
 from typing import Any
 
+#   MQTT client class
 class MqttClient:
     Address = ""
     Port = ""
@@ -53,6 +54,7 @@ class MqttClient:
     mqttDisconnectedCb = None
     mqttPublishCb = None
 
+    #Initialization
     def __init__(self, destination, port, mqttConnectedCb, mqttDisconnectedCb, mqttPublishCb, mqttSubackCb):
         Domoticz.Debug("MqttClient::__init__")
         self.Address = destination
@@ -63,6 +65,7 @@ class MqttClient:
         self.mqttSubackCb = mqttSubackCb
         self.Open()
 
+    # Default value
     def __str__(self):
         Domoticz.Debug("MqttClient::__str__")
         if (self.mqttConn != None):
@@ -70,6 +73,7 @@ class MqttClient:
         else:
             return "None"
 
+    # Open MQTT connection
     def Open(self):
         Domoticz.Debug("MqttClient::Open")
         if (self.mqttConn != None):
@@ -78,6 +82,7 @@ class MqttClient:
         self.mqttConn = Domoticz.Connection(Name=self.Address, Transport="TCP/IP", Protocol="MQTT", Address=self.Address, Port=self.Port)
         self.mqttConn.Connect()
 
+    # Connect to MQTT
     def Connect(self):
         Domoticz.Debug("MqttClient::Connect")
         if (self.mqttConn == None):
@@ -87,6 +92,7 @@ class MqttClient:
             Domoticz.Log("MQTT CONNECT ID: '" + ID + "'")
             self.mqttConn.Send({'Verb': 'CONNECT', 'ID': ID})
 
+    # Send a Ping to keep connection opened
     def Ping(self):
         #Domoticz.Debug("MqttClient::Ping")
         if (self.mqttConn == None or not self.isConnected):
@@ -94,6 +100,7 @@ class MqttClient:
         else:
             self.mqttConn.Send({'Verb': 'PING'})
 
+    # Publish a payload into a topic
     def Publish(self, topic, payload, retain = 0):
         Domoticz.Debug("MqttClient::Publish " + topic + " (" + payload + "), retain="+str(retain))
         if (self.mqttConn == None or not self.isConnected):
@@ -101,6 +108,7 @@ class MqttClient:
         else:
             self.mqttConn.Send({'Verb': 'PUBLISH', 'Topic': topic, 'Payload': bytearray(payload, 'utf-8'), 'Retain': retain})
 
+    # Subscribe to a topic (or list of topics)
     def Subscribe(self, topics):
         Domoticz.Debug("MqttClient::Subscribe")
         subscriptionlist = []
@@ -111,12 +119,14 @@ class MqttClient:
         else:
             self.mqttConn.Send({'Verb': 'SUBSCRIBE', 'Topics': subscriptionlist})
 
+    # Close MQTT connection
     def Close(self):
         Domoticz.Log("MqttClient::Close")
         #TODO: Disconnect from server
         self.mqttConn = None
         self.isConnected = False
 
+    # MQTT connected callback
     def onConnect(self, Connection, Status, Description):
         Domoticz.Debug("MqttClient::onConnect")
         if (Status == 0):
@@ -125,6 +135,7 @@ class MqttClient:
         else:
             Domoticz.Error("Failed to connect to: "+Connection.Address+":"+Connection.Port+", Description: "+Description)
 
+    # MQTT disconnected callback
     def onDisconnect(self, Connection):
         Domoticz.Log("MqttClient::onDisonnect Disconnected from: "+Connection.Address+":"+Connection.Port)
         self.Close()
@@ -132,6 +143,7 @@ class MqttClient:
         if self.mqttDisconnectedCb != None:
             self.mqttDisconnectedCb()
 
+    # MQTT cmessage received callback
     def onMessage(self, Connection, Data):
         topic = ''
         if 'Topic' in Data:
@@ -154,6 +166,7 @@ class MqttClient:
             if self.mqttPublishCb != None:
                 self.mqttPublishCb(topic, Data['Payload'])
 
+#   Plug-in base class
 class BasePlugin:
     # MQTT settings
     mqttClient = None
@@ -306,12 +319,39 @@ class BasePlugin:
             nextDeviceId = nextDeviceId + 1
         return nextDeviceId
 
+    # Return data definition for a given device
+    def getDeviceDefinition(self, device):
+        # Iterating through the JSON list
+        for node in self.jsonData.items():
+            nodeItems = node[1]
+            nodeTopic = self.getValue(nodeItems, 'topic', None)                 # Get MQTT topic
+            nodeKey = self.getValue(nodeItems, 'key', None)                     # Get device key
+            valueToSet = None
+            localCommand = None
+            if device.DeviceID == (nodeKey if nodeKey else nodeTopic):          # Is this the right topic?
+                return nodeItems                                                # Yes, return definition
+        return None
+
+    # Execute a local command
+    def executeCommand(self, command):
+        Domoticz.Log(F"Executing {command}")
+        localProcess = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if localProcess.stdout != None:
+            for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
+                Domoticz.Log(F'>{line.decode("utf-8")}')
+        finalStatus = localProcess.wait()   # Get final status
+        if (finalStatus):   # Did we got an error?
+            Domoticz.Error(F"Error {finalStatus} executing {command}")
+
+
+    # Format device name
     def deviceStr(self, unit):
         name = "<UNKNOWN>"
         if unit in Devices:
             name = Devices[unit].Name
         return format(unit, '03d') + "/" + name
 
+    # Return device unit givine a device name
     def getUnit(self, device):
         unit = -1
         for k, dev in Devices.items():
@@ -319,6 +359,7 @@ class BasePlugin:
                 unit = k
         return unit
 
+    # Executed on plug-in start
     def onStart(self):
         # Parse options
         self.debugging = Parameters["Mode6"]
@@ -413,26 +454,30 @@ class BasePlugin:
             Domoticz.Error(F"Error {str(exception)} opening {parametersFile}")
         self.initDone = True
         # Enable heartbeat
-        Domoticz.Heartbeat(60)
+        Domoticz.Heartbeat(30)
 
+    # Executed on plug-in connection
     def onConnect(self, Connection, Status, Description):
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
             return
         self.mqttClient.onConnect(Connection, Status, Description)
 
+    # Executed on plug-in disconnection
     def onDisconnect(self, Connection):
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
             return
         self.mqttClient.onDisconnect(Connection)
 
+    # Executed on plug-in message reception
     def onMessage(self, Connection, Data):
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
             return
         self.mqttClient.onMessage(Connection, Data)
 
+    # Executed on MQTT connection
     def onMQTTConnected(self):
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
@@ -440,12 +485,14 @@ class BasePlugin:
         Domoticz.Debug("onMQTTConnected")
         self.mqttClient.Subscribe(self.getTopics())
 
+    # Executed on MQTT disconnection
     def onMQTTDisconnected(self):
         # Exit if init not properly done
         if not self.initDone:
             return
         Domoticz.Debug("onMQTTDisconnected")
 
+    # Executed on MQTT publishing
     def onMQTTPublish(self, topic, rawmessage):
         # Exit if init not properly done
         if not self.initDone or self.jsonData == None:
@@ -585,6 +632,7 @@ class BasePlugin:
                             Domoticz.Log(F'Setting {device.Name} to >{valueToSet}<{batteryText}') 
                             device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
 
+    # Executed on MQTT subscribtion
     def onMQTTSubscribed(self):
         # Exit if init not properly done
         if not self.initDone:
@@ -592,91 +640,128 @@ class BasePlugin:
         # (Re)subscribed, refresh device info
         Domoticz.Debug("onMQTTSubscribed")
 
+    # Executed when Domoticz (on user request) send a command
     def onCommand(self, Unit, Command, Level, sColor):
         # Exit if init not properly done
         if not self.initDone:
             return
+        # Get device
         device = Devices[Unit]
         Domoticz.Log(F"{self.deviceStr(Unit)}, {device.DeviceID}: Command: '{Command}', Level: {Level}, Color: {sColor}")
-        targetValue = None
-        if Command == 'Off':
-            targetValue = '0'
-        elif Command == 'On':
-            targetValue = '100'
-        elif Command == 'Set Level':
-            targetValue = str(Level)
-        elif self.isFloat(Command):                                                 # If command is numeric or float
-            targetValue = Command
+        # Get define JSON definition
+        nodeItems = self.getDeviceDefinition(device)
+        # Load supported commands
+        nodeCommands = self.getValue(nodeItems, 'commands', None)
+        # Any defined command?
+        if nodeCommands != None:
+            # Locate command into list (save default some found)
+            defaultCommand = None
+            thisCommand = None
+            # Scan all commands for this device
+            for nodeCommand in nodeCommands.keys():
+                if nodeCommand.lower() == Command.lower():
+                    # This is the same command
+                    thisCommand = nodeCommands[nodeCommand]
+                elif nodeCommand.lower() == "<default>":
+                    # Save default value if found
+                    defaultCommand = nodeCommands[nodeCommand]
+            # Load default if command not found
+            if thisCommand == None:
+                thisCommand = defaultCommand
+            # Did we got a command definition?
+            if thisCommand != None:
+                # Try loading topic
+                commandTopic = self.getValue(thisCommand, 'topic', None)
+                if commandTopic != None:
+                    # Topic found, load payload and retain
+                    commandPayload = self.getValue(thisCommand, 'payload', "")
+                    commandRetain = self.getValue(thisCommand, 'retain', False)
+                    payload = json.dumps(commandPayload).replace("<command>", str(Command)).replace("<level>", str(Level)).replace("<color>", str(sColor))
+                    Domoticz.Log(F"Setting {commandTopic} to >{payload}<, retain={commandRetain}")
+                    self.mqttClient.Publish(commandTopic, payload, 1 if commandRetain else 0)
+                else:
+                    commandCommand = self.getValue(thisCommand, 'command', None)
+                    if commandCommand != None:
+                        # Command found, execute it
+                        commandCommand = str(commandCommand).replace("<command>", str(Command)).replace("<level>", str(Level)).replace("<color>", str(sColor))
+                        self.executeCommand(commandCommand)
+                    else:
+                        Domoticz.Error(F"Can't find 'topic' nor 'command' in {thisCommand}. Please fix it!")
+            else:
+                Domoticz.Error(F"Can't find command {Command} nor <default> in {nodeCommands}")
         else:
-            Domoticz.Error('Command: "' + str(Command) + '" not supported yet for ' + device.Name+'. Please ask for support.')
-        self.setTargetValue (targetValue, device)
+            # No defined commands, use default settings for on/off/set level
+            targetValue = None
+            if Command == 'Off':
+                targetValue = '0'
+            elif Command == 'On':
+                targetValue = '100'
+            elif Command == 'Set Level':
+                targetValue = str(Level)
+            elif self.isFloat(Command):                                                 # If command is numeric or float
+                targetValue = Command
+            else:
+                Domoticz.Error('Command: "' + str(Command) + '" not supported by default. Please add "commands" for ' + device.Name)
+            # Try to set value
+            self.setTargetValue (targetValue, device)
 
+    # Sends a SET message
     def setTargetValue(self, targetValue, device):
         if targetValue != None and self.jsonData != None and self.mqttClient != None: # Only if a target value has been given, and jsonData loaded
-            # Iterating through the JSON list
-            for node in self.jsonData.items():
-                nodeItems = node[1]
-                nodeTopic = self.getValue(nodeItems, 'topic', None)                 # Get MQTT topic
-                nodeKey = self.getValue(nodeItems, 'key', None)                     # Get device key
-                valueToSet = None
-                localCommand = None
-                if device.DeviceID == (nodeKey if nodeKey else nodeTopic):          # Is this the right topic?
-                    nodeMapping = self.getValue(nodeItems, 'mapping', None)
-                    nodeSet = self.getValue(nodeItems, 'set', None)
-                    setTopic = None
-                    setPayload = None
-                    if nodeSet != None:  # Do we have some SET parameters?
-                        localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
-                        setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
-                        setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
-                        setRetain = self.getValue(nodeSet, 'retain', True)          # Get retain, default to true
-                        setMapping = self.getValue(nodeSet, 'mapping', None)        # Get set mapping, default to None
-                        setMappingValues = self.getValue(setMapping, 'values', None)# Get set mapping values, default to None
-                        mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
-                        nodeType = str(self.getValue(nodeItems, 'type', None))      # Get device type
-                        if int(nodeType) >= 242 and int(nodeType) <= 244:           # Select valid types
-                            if setMappingValues != None:
-                                for testValue in setMappingValues: # Scan all mapping values
-                                    if setMappingValues[testValue] == targetValue:  # Is this the same value?
-                                        valueToSet = testValue  # Insert mapped value
-                                if valueToSet == None:  # No mapping value found
-                                    Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
-                            elif mappingValues != None:
-                                for testValue in mappingValues: # Scan all mapping values
-                                    if mappingValues[testValue] == targetValue:  # Is this the same value?
-                                        valueToSet = testValue  # Insert mapped value
-                                if valueToSet == None:  # No mapping value found
-                                    Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
-                            else: # No mapping given, use command value
-                                valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
-                        else:   # Not a switch
-                            Domoticz.Error(F"Can't set device type {nodeType} yet. Please ask for support.")
-                    else:   # No set given
-                        Domoticz.Error('No SET parameters for '+device.Name+"/"+device.DeviceID+" in "+str(node))
-                    if valueToSet != None and setTopic != None: # Value and topic given, set it
-                        if isinstance(setPayload, str):
-                            payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
-                        else:
-                            payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
-                        Domoticz.Log('Setting '+device.DeviceID+' to >'+payload+'<, retain='+str(setRetain))
-                        self.mqttClient.Publish(setTopic, payload, 1 if setRetain else 0)
-                    if localCommand != None: # Command given, execute it
-                        localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace "#" in command by value
-                        Domoticz.Log(F"Executing {localCommand}")
-                        localProcess = subprocess.Popen(localCommand, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                        if localProcess.stdout != None:
-                            for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
-                                Domoticz.Log(F">{line}")
-                        finalStatus = localProcess.wait()   # Get final status
-                        if (finalStatus):   # Did we got an error?
-                            Domoticz.Error(F"Error {finalStatus} executing {localCommand}")
+            nodeItems = self.getDeviceDefinition(device)
+            nodeMapping = self.getValue(nodeItems, 'mapping', None)
+            nodeSet = self.getValue(nodeItems, 'set', None)
+            setTopic = None
+            setPayload = None
+            valueToSet = None
+            if nodeSet != None:  # Do we have some SET parameters?
+                localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
+                nodeTopic = self.getValue(nodeItems, 'topic', None)         # Get MQTT topic
+                setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
+                setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
+                setRetain = self.getValue(nodeSet, 'retain', True)          # Get retain, default to true
+                setMapping = self.getValue(nodeSet, 'mapping', None)        # Get set mapping, default to None
+                setMappingValues = self.getValue(setMapping, 'values', None)# Get set mapping values, default to None
+                mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
+                nodeType = str(self.getValue(nodeItems, 'type', None))      # Get device type
+                if int(nodeType) >= 242 and int(nodeType) <= 244:           # Select valid types
+                    if setMappingValues != None:
+                        for testValue in setMappingValues: # Scan all mapping values
+                            if setMappingValues[testValue] == targetValue:  # Is this the same value?
+                                valueToSet = testValue  # Insert mapped value
+                        if valueToSet == None:  # No mapping value found
+                            Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
+                    elif mappingValues != None:
+                        for testValue in mappingValues: # Scan all mapping values
+                            if mappingValues[testValue] == targetValue:  # Is this the same value?
+                                valueToSet = testValue  # Insert mapped value
+                        if valueToSet == None:  # No mapping value found
+                            Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
+                    else: # No mapping given, use command value
+                        valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
+                else:   # Not a switch
+                    Domoticz.Error(F"Can't set device type {nodeType} yet. Please ask for support.")
+                if valueToSet != None and setTopic != None: # Value and topic given, set it
+                    if isinstance(setPayload, str):
+                        payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
+                    else:
+                        payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
+                    Domoticz.Log(F"Setting {setTopic} to >{payload}<, retain={setRetain}")
+                    self.mqttClient.Publish(setTopic, payload, 1 if setRetain else 0)
+                if localCommand != None: # Command given, execute it
+                    localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace "#" in command by value
+                    self.executeCommand(localCommand)
+            else:   # No set given
+                Domoticz.Error('No SET parameters for '+device.Name+"/"+device.DeviceID+" in "+str(nodeItems))
 
+    # Executed when a device is added
     def onDeviceAdded(self, Unit):
         # Exit if init not properly done
         if not self.initDone:
             return
         Domoticz.Log("onDeviceAdded " + self.deviceStr(Unit))
 
+    # Executed when a device is modified
     def onDeviceModified(self, Unit):
         # Exit if init not properly done
         if not self.initDone:
@@ -686,12 +771,14 @@ class BasePlugin:
         targetValue = device.sValue
         self.setTargetValue(targetValue, device)
 
+    # Executed when a device is removed
     def onDeviceRemoved(self, Unit):
         # Exit if init not properly done
         if not self.initDone:
             return
         Domoticz.Log("onDeviceRemoved " + self.deviceStr(Unit))
 
+    # Executed at regular interval
     def onHeartbeat(self):
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:

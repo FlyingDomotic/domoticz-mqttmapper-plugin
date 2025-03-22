@@ -151,7 +151,18 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
 			"payload": "{ \"id\":0, \"src\": \"domoticz\", \"method\": \"Switch.Set\", \"params\":{\"id\":0,\"on\":#}}",
 			"mapping": {"values": {"false": "0", "true" : "100"}}
 		}
-     }
+     }?
+	"Test blind": {
+		"topic": "blind/state",
+		"type": "244", "subtype": "73", "switchtype": "21",
+		"mapping": {"item": "value"},
+		"commands": {
+			"Open": {"topic": "blind/setOtherTopic", "payload": {"value": "Open"}},
+			"Close": {"topic": "blind/setOtherTopic", "payload": {"value": "Close"}},
+			"Stop": {"topic": "blind/setOtherTopic", "payload": {"value": "<command>"}},
+			"Set Level":{"topic": "blind/setLevelTopic", "payload": {"value" : "<level>"}, "retain": true},
+		}
+	}
 }
 ```
 
@@ -335,7 +346,7 @@ Il est également possible d'exécuter une commande bash avec le tag `command`. 
 }
 ```
 
-Note that bash command will be executed with a default folder equal to Domoticz root folder. Add `plugin/MqttMapper/` in command if you wish to execute commands into MqttMQpper context. You may also specify a full path like `/home/user/...`.
+Note that bash command will be executed with a default folder equal to Domoticz root folder. Add `plugin/MqttMapper/` in command if you wish to execute commands into MqttMapper context. You may also specify a full path like `/home/user/...`.
 
 Noter que la commande bash sera executée par défaut dans le répertoire de Domoticz. Ajoutez `plugin/MqttMapper/`  dans la commande si vous souhaitez l'exécuter dans le contexte de MqttMapper. Vous pouvez aussi spcifier un chemin complet comme `/home/user/...`.
 
@@ -349,12 +360,63 @@ value=$(echo "scale=1; $1 / 1" | bc)
 echo "Received $value"
 ```
 
-You may also use "'digit': n" in set command parameters to round value:
+You may also use `'digit': n` in set command parameters to round value:
 
-Vous pouvez aussi utiliser "'digit': n" dans les parramtres de la commande set pour arrondir la valeur:
+Vous pouvez aussi utiliser `'digit': n` dans les parramtres de la commande set pour arrondir la valeur:
 
 ```ts
         "set": {"topic": "topic/xxx", "payload": {"value":"#"}, "digits": 2}
+```
+
+The previous `set` configuration is able to support simple commands as on/off or set level. For more complex ones, you may want to use specific topics and payloads. Here's an example of blinds, with open/close/stop and even percentage of opening:
+
+Les exemples précédents d'utilisation de `set` peuvent supporter des commandes simples, telles que marche/arrêt ou intensité. Pour les cas plus complexes, vous pouvez souhaiter utiliser des sujet ou des contenus spécifiques. Voici un exemple de volet, avec ouverture/fermeture/arrêt et même pourcentage d'ouverture:
+
+```ts
+"Test blind": {
+	"topic": "blind/state",
+	"type": "244", "subtype": "73", "switchtype": "21",
+	"mapping": {"item": "value"},
+	"commands": {
+		"Open": {"topic": "blind/setOtherTopic", "payload": {"value": "Open"}},
+		"Close": {"topic": "blind/setOtherTopic", "payload": {"value": "Close"}},
+		"Stop": {"topic": "blind/setOtherTopic", "payload": {"value": "<command>"}},
+		"Set Level":{"topic": "blind/setLevelTopic", "payload": {"value" : "<level>"}, "retain": true},
+	}
+}
+```
+Instead of `set` part, we have a `commands` part where we specify Domoticz commands (full list here under) we want to support, and give either topic and payload or shell command to execute.
+
+In given example, `Open` and `Close` have fixed payload, `Stop` includes <command> value (here `Stop`), and `Set Level` has <level> value.
+
+Au lieu d'une partie `set`, on a ici une partie `commands` où on peut indiquer les commandes Domoticz gérées (voir la liste complète ci-dessous), et donner soit les sujets et contenus, soit les commandes systèmes ) passer.
+
+Dans l'exemple donné, `Open` et `Close` ont un contenu fixe, `Stop` inclue la valeur <command> (ici `Stop`), et `Set Level` a la valeur <level>.
+
+Command list is not closed. You may want to add some as soon as you find them in Domoticz. However, here's list of doscovered commands at time of writting this document: `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contains the given command, `<level>` contains user requested level and `<color>` user requested color.
+
+La liste des commandes n'est pas fixe. On peut en ajouter dès que Domoticz en ajoute. Pour aider, voici la liste des commandes découvertes dans Domoticz au moment de l'écriture de ce document : `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contient la commande passée par Domoticz, `<level>` contient l'intensité ou le niveau donné ar l'utiisateur et `<color>` la couleur donnée par l'utilisateur.
+
+It's also possible to add a `<default>` command, that will be used if none of given commands matches those received. This could be the only command, if needed.
+
+Il est également possible d'indiquer une commande `<default>` qui sera utilisée si aucune des commandes données ne correspondant à celle reçue. Ce peut être la seule, si besoin.
+
+```ts
+"commands": {
+	"On": {"topic": "xxxx/setLevelTopic", "payload": {"value" : 100}},
+	"Off": {"topic": "xxxx/setLevelTopic", "payload": {"value" : 0}},
+	"<default>": {"topic": "xxxx/otherCommand", "payload": {"command": "<command>", "level": "<level>", "color": "<color>"}, "retain": true}
+}
+```
+
+As already explained, it's also possible to specify a shell ommand instead of sending a MQTT message. Here's an example pushing all commands with their associated values to a script in MqttMapper plugin folder:
+
+Comme expliqué plus haut, il est également possible d'exécuter une commande système au lieu d'envoyer un message MQTT. Voici un exemple qui envoie toutes les commandes à un script dans le répertoire du plugin MqttMapper:
+
+```ts
+"commands": {
+	"<default>": {"command": "plugins/MqttMapper/logCommand.sh \"<command>\" \"<level>\" \"<color>\""}
+}
 ```
 
 ## Device options (partial) list / Liste (partielle) des options
