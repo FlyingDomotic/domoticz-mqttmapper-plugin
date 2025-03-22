@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "1.4.3"
+version = "1.5.0"
 
 import glob
 import os
@@ -100,12 +100,14 @@ def getValue(dict: Any, key: str, default: Any = '') -> Any:
         else:
             return default
 
+# Compare 
+
 # Format json data, removing {} and ""
 def formatJson(jsonData: dict) -> str:
     return json.dumps(jsonData, ensure_ascii=False).replace("{", "").replace("}","").replace('"', "")
 
 # Check a json item against a definition dictionary
-def checkToken(tokenName: str, nodeItem: Any) -> str:
+def checkToken(tokenName: str, nodeItem: Any, fullPath: str = "") -> str:
     # Init errors
     errorText = ""
 
@@ -121,6 +123,7 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
         "node/initial": {"mandatory": False, "type": "dict"},
         "node/visible": {"mandatory": False, "type": "bool"},
         "node/set": {"mandatory": False, "type": "dict"},
+        "node/commands": {"mandatory": False, "type": "dict"},
         "node/select": {"mandatory": False, "type": "dict"},
         "select/item": {"mandatory": True, "type": "str"},
         "select/value": {"mandatory": True, "type": "str"},
@@ -137,9 +140,13 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
         "set/digits": {"mandatory": False, "type": ["int", "str"]},
         "set/multiplier": {"mandatory": False, "type": ["int", "float", "str"]},
         "set/mapping": {"mandatory": False, "type": "Any"},
-        "set/mapping/values": {"mandatory": False, "type": "Any"},
         "initial/nvalue": {"mandatory": False, "type": "int"},
-        "initial/svalue": {"mandatory": False, "type": "str"}
+        "initial/svalue": {"mandatory": False, "type": "str"},
+        "commands/xxx": {"mandatory": False, "type": "dict"},
+        "xxx/topic": {"mandatory": False, "type": "str"},
+        "xxx/retain": {"mandatory": False, "type": "bool"},
+        "xxx/payload": {"mandatory": False, "type": "Any"},
+        "xxx/command": {"mandatory": False, "type": "str"}
         })
 
     #  Check for mandatory tokens
@@ -151,15 +158,19 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
             if tokenList[token]['mandatory']:
                 # Is token not present in items?
                 if not elements[1] in nodeItem:
-                    errorText += F"\n{elements[1]} is mandatory"
-                    if elements[0] != "node":
-                        errorText += F" in {elements[0]}"
+                    errorText += F"\n{elements[1]} is mandatory in >{fullPath}<"
 
     # Check for each item
     for item in nodeItem:
         # Compose key
         key = tokenName + "/" + item
-        # if item in allowed token list?
+        # For commands, overwrite command name by "xxx"
+        elements = fullPath.split(":")
+        if len(elements) == 2 and elements[1] == "commands":
+            key = tokenName + "/" + "xxx"
+        elif len(elements) == 3 and elements[1] == "commands":
+            key = "xxx" + "/" + item
+        # Is item in allowed token list?
         if key in tokenList:
             # Check for item type against token type
             tokenType = tokenList[key]['type']
@@ -169,16 +180,14 @@ def checkToken(tokenName: str, nodeItem: Any) -> str:
                 # Check for type 
                 if isinstance(tokenType, list):
                     if itemType not in tokenType:
-                        errorText += F"\n{item} is {itemType} instead of {tokenType}"
+                        errorText += F"\n{item} is {itemType} instead of {tokenType} in >{fullPath}<"
                 else:
                     if itemType != tokenType:
-                        errorText += F"\n{item} is {itemType} instead of {tokenType}"
+                        errorText += F"\n{item} is {itemType} instead of {tokenType} in >{fullPath}<"
                 if itemType in ['list', 'dict']:
-                    errorText += checkToken(item, nodeItem[item])
+                    errorText += checkToken(item, nodeItem[item], fullPath + ":" + item)
         else:
-            errorText += F"\n{item} is unknown"
-            if tokenName != "node":
-                errorText += F" for {tokenName}"
+            errorText += F"\n{item} is unknown in >{fullPath}<"
     return errorText
 
 # Check MqttMapper JSON mapping file jsonFile
@@ -210,7 +219,7 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
             errorText += '\nno items given'
             errors += 1
         else:
-            newErrors = checkToken("node", nodeItems)
+            newErrors = checkToken("node", nodeItems, node[0])
             if newErrors != "":
                 errorText += newErrors
                 errors += len(errorText.split("\n")) - 1
