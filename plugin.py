@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.1.1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.1.2" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -614,7 +614,7 @@ class BasePlugin:
                             if int(nodeType) == 244:   # This is a switch
                                 if nodeSwitchtype == '0': # This is an On/Off switch
                                     nValueToSet = 0 if str(valueToSet) == '0' else 1
-                                elif nodeSwitchtype == '7': # This is a Dimmer switch
+                                elif nodeSwitchtype in ['7', '13', '14', '15', '21']: # This is a Dimmer switch
                                     nValueToSet = 0 if str(valueToSet) == '0' else 1 if str(valueToSet) == '100' else 2
                                 else:   # Not a switch, use given value
                                     nValueToSet = int(valueToSet)
