@@ -454,7 +454,7 @@ class BasePlugin:
             Domoticz.Error(F"Error {str(exception)} opening {parametersFile}")
         self.initDone = True
         # Enable heartbeat
-        Domoticz.Heartbeat(30)
+        Domoticz.Heartbeat(15)
 
     # Executed on plug-in connection
     def onConnect(self, Connection, Status, Description):
