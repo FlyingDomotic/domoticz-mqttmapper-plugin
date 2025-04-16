@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "1.5.0"
+version = "25.4.16-1"
 
 import glob
 import os
@@ -118,6 +118,7 @@ def checkToken(tokenName: str, nodeItem: Any, fullPath: str = "") -> str:
         "node/subtype": {"mandatory": True, "type": ["int", "str"]},
         "node/mapping": {"mandatory": True, "type": "dict"},
         "node/key": {"mandatory": False, "type": "str"},
+        "node/throttle": {"mandatory": False, "type": "int"},
         "node/switchtype": {"mandatory": False, "type": ["int", "str"]},
         "node/options": {"mandatory": False, "type": "Any"},
         "node/initial": {"mandatory": False, "type": "dict"},
@@ -257,8 +258,17 @@ def checkJson(jsonData: dict, jsonFile: str) -> None:
                 if value != None:
                     subTypeLib = value
 
-            if subTypeLib == "???":
-                errorText += F"\nsubType {subType} not known with type {type}"
+       # Check for throttle parameter
+        if "throttle" in nodeItems:
+            # Only one value given on digits
+            try:
+                delay = int(nodeItems["throttle"])
+            except:
+                errorText += F'\ninvalid numeric value in "throttle": {nodeItems["throttle"]}'
+                errors += 1
+            else:
+                if delay < 1:
+                    errorText += F'\n"throttle" must be at least 1 second (is {nodeItems["throttle"]})'
                 errors += 1
 
        # Put a warning if no default specified when values are given in mapping

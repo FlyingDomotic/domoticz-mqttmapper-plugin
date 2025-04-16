@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="1.1.2" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.16-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -44,6 +44,7 @@ import time
 import subprocess
 import os
 from typing import Any
+from datetime import datetime, timezone
 
 #   MQTT client class
 class MqttClient:
@@ -75,75 +76,72 @@ class MqttClient:
 
     # Open MQTT connection
     def Open(self):
-        Domoticz.Debug("MqttClient::Open")
         if (self.mqttConn != None):
             self.Close()
         self.isConnected = False
         self.mqttConn = Domoticz.Connection(Name=self.Address, Transport="TCP/IP", Protocol="MQTT", Address=self.Address, Port=self.Port)
         self.mqttConn.Connect()
 
-    # Connect to MQTT
-    def Connect(self):
-        Domoticz.Debug("MqttClient::Connect")
-        if (self.mqttConn == None):
-            self.Open()
-        else:
-            ID = 'Domoticz_'+Parameters['Key']+'_'+str(Parameters['HardwareID'])+'_'+str(int(time.time()))
-            Domoticz.Log("MQTT CONNECT ID: '" + ID + "'")
-            self.mqttConn.Send({'Verb': 'CONNECT', 'ID': ID})
-
     # Send a Ping to keep connection opened
     def Ping(self):
         #Domoticz.Debug("MqttClient::Ping")
         if (self.mqttConn == None or not self.isConnected):
-            self.Open()
+            Domoticz.Error("MqttClient::MQTT not connected, can't Ping")
         else:
             self.mqttConn.Send({'Verb': 'PING'})
 
     # Publish a payload into a topic
     def Publish(self, topic, payload, retain = 0):
-        Domoticz.Debug("MqttClient::Publish " + topic + "=" + payload + ", retain="+str(retain))
         if (self.mqttConn == None or not self.isConnected):
-            self.Open()
+            Domoticz.Error(F"MqttCLient::MQTT not connected, can't Publish {topic}={payload}, retain={retain}")
         else:
+            Domoticz.Debug("MqttClient::Publish {topic}={payload}, retain={retain}")
             self.mqttConn.Send({'Verb': 'PUBLISH', 'Topic': topic, 'Payload': bytearray(payload, 'utf-8'), 'Retain': retain})
 
     # Subscribe to a topic (or list of topics)
     def Subscribe(self, topics):
-        Domoticz.Debug("MqttClient::Subscribe")
         subscriptionlist = []
         for topic in topics:
             subscriptionlist.append({'Topic':topic, 'QoS':0})
         if (self.mqttConn == None or not self.isConnected):
-            self.Open()
+            Domoticz.Error("MqttClient::MQTT not connected, can't Subscribe {subscriptionlist}")
         else:
+            Domoticz.Debug("MqttClient::Subscribe to {subscriptionlist}")
             self.mqttConn.Send({'Verb': 'SUBSCRIBE', 'Topics': subscriptionlist})
 
     # Close MQTT connection
     def Close(self):
         Domoticz.Log("MqttClient::Close")
-        #TODO: Disconnect from server
-        self.mqttConn = None
         self.isConnected = False
+        if self.mqttConn != None:
+            try:
+                self.mqttConn.Disconnect() 
+            except:
+                pass
+        self.mqttConn = None
 
     # MQTT connected callback
     def onConnect(self, Connection, Status, Description):
         Domoticz.Debug("MqttClient::onConnect")
         if (Status == 0):
-            Domoticz.Log("Successful connect to: "+Connection.Address+":"+Connection.Port)
-            self.Connect()
+            ID = F"Domoticz_{Parameters['Key']}_{Parameters['HardwareID']}_{int(time.time())}"
+            Domoticz.Log(F"MqttClient::onConnect connect to {Connection.Address}:{Connection.Port}, ID={ID}")
+            if self.mqttConn != None:
+                self.mqttConn.Send({'Verb': 'CONNECT', 'ID': ID})
+            else:
+                Domoticz.Error(F"MqttClient::onConnect, not connected...")
         else:
-            Domoticz.Error("Failed to connect to: "+Connection.Address+":"+Connection.Port+", Description: "+Description)
+            Domoticz.Error(F"Mqtt::onConnect Failed to connect to  {Connection.Address}:{Connection.Port}, Description: {Description}")
 
     # MQTT disconnected callback
     def onDisconnect(self, Connection):
-        Domoticz.Log("MqttClient::onDisonnect Disconnected from: "+Connection.Address+":"+Connection.Port)
+        Domoticz.Log("MqttClient::onDisconnect Disconnected from  {Connection.Address}:{Connection.Port}")
+        self.isConnected = False
         self.Close()
-        # TODO: Reconnect?
         if self.mqttDisconnectedCb != None:
             self.mqttDisconnectedCb()
 
-    # MQTT cmessage received callback
+    # MQTT message received callback
     def onMessage(self, Connection, Data):
         topic = ''
         if 'Topic' in Data:
@@ -173,6 +171,10 @@ class BasePlugin:
     mqttserveraddress = ""
     mqttserverport = ""
     debugging = "Normal"
+    throttleLastDate = {}
+    throttleData = {}
+    lastHeartbeatUtc = 0
+    lastMqttCheckUtc = 0
     jsonData = None
     initDone = False
 
@@ -322,13 +324,14 @@ class BasePlugin:
     # Return data definition for a given device
     def getDeviceDefinition(self, device):
         # Iterating through the JSON list
+        if self.jsonData != None:
         for node in self.jsonData.items():
             nodeItems = node[1]
             nodeTopic = self.getValue(nodeItems, 'topic', None)                 # Get MQTT topic
-            nodeKey = self.getValue(nodeItems, 'key', None)                     # Get device key
+                nodeKey = self.getValue(nodeItems, 'key', nodeTopic)                # Get device key
             valueToSet = None
             localCommand = None
-            if device.DeviceID == (nodeKey if nodeKey else nodeTopic):          # Is this the right topic?
+                if device.DeviceID == nodeKey:                                      # Is this the right topic?
                 return nodeItems                                                # Yes, return definition
         return None
 
@@ -399,7 +402,7 @@ class BasePlugin:
             nodeName = node[0]
             nodeItems = node[1]
             nodeTopic = self.getValue(nodeItems, 'topic', None)
-            nodeKey = self.getValue(nodeItems, 'key', None)
+            nodeKey = self.getValue(nodeItems, 'key', nodeTopic)
             nodeType = self.getValue(nodeItems, 'type', "0")
             nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
             nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
@@ -408,12 +411,11 @@ class BasePlugin:
 
             if nodeName != None and nodeTopic != None and nodeType != None and nodeSubtype != None:
                 # Create device if needed, update it if it already exists
-                deviceKeyName = nodeKey if nodeKey else nodeTopic
-                device = self.getDevice(deviceKeyName)
-                if (deviceKeyName in deviceList):
-                    Domoticz.Error("Duplicate "+str(deviceKeyName)+" node/key - Please make them unique")
+                device = self.getDevice(nodeKey)
+                if (nodeKey in deviceList):
+                    Domoticz.Error("Duplicate "+str(nodeKey)+" node/key - Please make them unique")
                 else:
-                    deviceList.append(deviceKeyName)
+                    deviceList.append(nodeKey)
                 if (device == None):
                     Domoticz.Log("Creating device " + nodeName)
                     Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=nodeVisible).Create()
@@ -422,11 +424,11 @@ class BasePlugin:
                         nValue = int(self.getValue(initialData, 'nvalue', 0))
                         sValue = self.getValue(initialData, 'svalue', '')
                         Domoticz.Log(f"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
-                        device = self.getDevice(nodeKey if nodeKey else nodeTopic)
+                        device = self.getDevice(nodeKey)
                         if device != None:
                             device.Update(nValue = nValue, sValue = sValue)
                         else:
-                                    Domoticz.Error(F"Can't find device {nodeKey if nodeKey else nodeTopic}")
+                                    Domoticz.Error(F"Can't find device {nodeKey}")
                 else:
                     # Update device only if something changed
                     if nodeOptions == None:
@@ -454,7 +456,9 @@ class BasePlugin:
             Domoticz.Error(F"Error {str(exception)} opening {parametersFile}")
         self.initDone = True
         # Enable heartbeat
-        Domoticz.Heartbeat(15)
+        self.lastHeartbeatUtc = self.utcTime()
+        self.lastMqttCheckUtc = self.utcTime()
+        Domoticz.Heartbeat(1)
 
     # Executed on plug-in connection
     def onConnect(self, Connection, Status, Description):
@@ -516,13 +520,48 @@ class BasePlugin:
         for node in self.jsonData.items():
             nodeItems = node[1]
             nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
-            nodeKey = self.getValue(nodeItems, 'key', None) # Get device key
             if nodeTopic == topic:  # Is this the right topic?
-                device = self.getDevice(nodeKey if nodeKey else nodeTopic)
+                # Check for throttle value in node description
+                nodeThrottle = self.getValue(nodeItems, 'throttle', None)
+                if nodeThrottle != None:
+                    # We have a throttle value, extract last message date
+                    if node[0] in self.throttleLastDate:
+                        # Is throttle active?
+                        if self.isThrottleActive(self.throttleLastDate[node[0]], nodeThrottle):
+                            self.throttleData[node[0]] = message
+                            return
+                    else:
+                        # Save last message date (this first time we have amessage for this device)
+                        self.throttleLastDate[node[0]] = self.utcTime()
+                # No throttle or throttle not active, use message right now
+                self.setDeviceFromMessage(node[0], nodeItems, message, "onMQTTPublish")
+
+    # Check if a throttle is active for a device index
+    def isThrottleActive(self, nodeLastUpdate, nodeThrottle):
+        return ((self.utcTime()) - nodeLastUpdate) < int(nodeThrottle)
+
+    # Return UTC time
+    def utcTime(self):
+        return datetime.now(timezone.utc).timestamp()
+
+    # Send a pending throttled message
+    def sendThrottled(self, nodeIndex):
+        if self.jsonData != None:
+            self.setDeviceFromMessage(nodeIndex, self.jsonData[nodeIndex], self.throttleData[nodeIndex], "sendThrottled")
+
+    # Set device value giving a message
+    def setDeviceFromMessage(self, nodeIndex, nodeItems, message, source):
+        # Delete throttled message and set last message date
+        if nodeIndex in self.throttleLastDate:
+            self.throttleLastDate[nodeIndex] = self.utcTime()
+            self.throttleData[nodeIndex] = ""
+        nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+        nodeKey = self.getValue(nodeItems, 'key', nodeTopic) # Get device key
+        device = self.getDevice(nodeKey)
                 if device == None:
-                    Domoticz.Error(F"Can't find device key {nodeKey if nodeKey else nodeTopic}")
+            Domoticz.Error(F"Can't find device key {nodeKey}")
                     return
-                Domoticz.Debug("onMQTTPublish found "+str(topic)+", Device '" + device.Name + "', message '" + str(message) + "'")
+        Domoticz.Debug(source+" found "+str(nodeTopic)+", Device '" + device.Name + "', message '" + str(message) + "'")
                 nodeSelect = self.getValue(nodeItems, 'select', None) # Is there a "select" option?
                 if nodeSelect:
                     topicSelected = False # By default, refuse topic
@@ -632,6 +671,7 @@ class BasePlugin:
                             Domoticz.Log(F'Setting {device.Name} to >{valueToSet}<{batteryText}') 
                             device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
 
+
     # Executed on MQTT subscribtion
     def onMQTTSubscribed(self):
         # Exit if init not properly done
@@ -685,6 +725,7 @@ class BasePlugin:
                         payload = json.dumps(commandPayload)
                     payload = payload.replace("<command>", str(Command)).replace("<level>", str(Level)).replace("<color>", str(sColor))
                     Domoticz.Log(F"Setting {commandTopic} to >{payload}<, retain={commandRetain}")
+                    if self.mqttClient != None:
                     self.mqttClient.Publish(commandTopic, payload, 1 if commandRetain else 0)
                 else:
                     commandCommand = self.getValue(thisCommand, 'command', None)
@@ -790,15 +831,44 @@ class BasePlugin:
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
             return
-        if self.debugging == "Extra verbose":
-            Domoticz.Debug("Heartbeating...")
 
-        # Reconnect if connection has dropped
-        if self.mqttClient.mqttConn is None or (not self.mqttClient.mqttConn.Connecting and not self.mqttClient.mqttConn.Connected or not self.mqttClient.isConnected):
+        # Get UTC time
+        nowUtc = self.utcTime()
+
+        # Reconnect if connection has dropped every 5 seconds
+        if (nowUtc - self.lastMqttCheckUtc) > 5:
+            self.lastMqttCheckUtc = nowUtc
+            Domoticz.Log(F"{self.mqttClient.mqttConn == None} {self.mqttClient.isConnected}")
+            if self.mqttClient.mqttConn == None or not self.mqttClient.isConnected:
             Domoticz.Debug("Reconnecting")
             self.mqttClient.Open()
         else:
             self.mqttClient.Ping()
+
+        # Check if UTC time was set backward
+        if nowUtc < self.lastHeartbeatUtc:
+            Domoticz.Log("UTC time set backward, releasing all changes")
+            # Scan all throttle date
+            for nodeIndex in self.throttleLastDate:
+                # Do we have a pending message?
+                if self.throttleData[nodeIndex] != "":
+                    # Send pending message (last date will be updated in setDeviceFromMessage)
+                    self.sendThrottled(nodeIndex)
+                else:
+                    # Overwrite last date taking in account time already spent between last UTC and last message date
+                    self.throttleLastDate[nodeIndex] = nowUtc - (self.lastHeartbeatUtc - self.throttleLastDate[nodeIndex])
+        else:
+            # Release all pending expired throttled messages
+            for nodeIndex in self.throttleLastDate:
+                # Do we have a pending message?
+                if self.throttleData[nodeIndex] != "" and self.jsonData != None:
+                    # Is throttle expired?
+                    if not self.isThrottleActive(self.throttleLastDate[nodeIndex], self.getValue(self.jsonData[nodeIndex], 'throttle', 0)):
+                        # Send pending message (last date will be updated in setDeviceFromMessage)
+                        self.sendThrottled(nodeIndex)
+
+        # Set last heartbeat time
+        self.lastHeartbeatUtc = nowUtc
 
     # Returns list of topics to subscribe to
     def getTopics(self):

@@ -130,6 +130,7 @@ Ce plug-in utilise un fichier de configuration externe au format JSON pour assoc
     "Boiler power": {
         "topic": "boiler/SENSOR",
         "type": "248", "subtype": "1", "switchtype": "0",
+		"throttle": 5,
         "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
     },
     "Mode selector": {"topic": "fan/mode",
@@ -422,6 +423,30 @@ Comme expliqué plus haut, il est également possible d'exécuter une commande s
 	"<default>": {"command": "plugins/MqttMapper/logCommand.sh \"<command>\" \"<level>\" \"<color>\""}
 }
 ```
+
+In some cases, MQTT update rate is higher than what we could/want expect. It's possible to rate limit messages to a certain level. This is done using the `throttle` keyword at device level, like :
+```ts
+    "Boiler power": {
+        "topic": "boiler/SENSOR",
+        "type": "248", "subtype": "1", "switchtype": "0",
+		"throttle": 5,
+        "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
+    }
+```ts
+
+If a message is received while the previous change is less than `throttle` seconds, message will be saved (and overwritten by newer versions) until `throttle` is expired. At this time, Domoticz device will be updated. Messages are not lost, but only last version is kept, and updated every `throttle` seconds.
+
+Dans certains cas, l'intervalle de mise à jour des messages MQTT est plus élevé que ce qu'on souhaite. Il est possible de limiter le débit de mise à jour d'un dispositif en ajoutant le mot clef `throttle` au niveau du dispositif, comme ça :
+```ts
+    "Boiler power": {
+        "topic": "boiler/SENSOR",
+        "type": "248", "subtype": "1", "switchtype": "0",
+		"throttle": 5,
+        "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
+    }
+```ts
+
+Si un message est reçu alors que le délai avec la dernière modification du dispositif est inférieur à `throttle` secondes, le message sera sauvegardé (et écrase par de nouvelles versions si besoin) jusqu'à ce que le delai `throttle` expire. A ce moment, le dispositif Domotiicz  sera mis à jour avec la dernière version. Les messages ne sont pas perdus, mais seule la dernière version est conservée et mise à jour toutes les `throttle` secondes.
 
 ## Device options (partial) list / Liste (partielle) des options
 
