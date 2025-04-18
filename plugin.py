@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.18-2" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.18-3" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -112,10 +112,8 @@ class MqttClient:
         Domoticz.Log("MqttClient::Close")
         self.isConnected = False
         if self.mqttConn != None:
-            try:
+            if self.mqttConn.Connected():
                 self.mqttConn.Disconnect() 
-            except:
-                pass
         self.mqttConn = None
 
     # MQTT connected callback
@@ -830,8 +828,8 @@ class BasePlugin:
         # Get UTC time
         nowUtc = self.utcTime()
 
-        # Reconnect if connection has dropped every 5 seconds
-        if (nowUtc - self.lastMqttCheckUtc) > 5:
+        # Reconnect if connection has dropped every 15 seconds
+        if (nowUtc - self.lastMqttCheckUtc) > 15:
             self.lastMqttCheckUtc = nowUtc
             if self.mqttClient.mqttConn == None or not self.mqttClient.isConnected:
                 Domoticz.Debug("Reconnecting")
