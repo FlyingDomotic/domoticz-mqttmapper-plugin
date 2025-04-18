@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.18-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.18-2" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -454,7 +454,7 @@ class BasePlugin:
         # Enable heartbeat
         self.lastHeartbeatUtc = self.utcTime()
         self.lastMqttCheckUtc = self.utcTime()
-        Domoticz.Heartbeat(1)
+        Domoticz.Heartbeat(3)
 
     # Executed on plug-in connection
     def onConnect(self, Connection, Status, Description):
