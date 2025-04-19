@@ -83,6 +83,78 @@ ou
 git checkout <fichier modifié>
 ```
 
+## What's MQTT? MQTT, qu’est-ce que c’est ?
+
+MQTT is a message exchange system based on queues allowing some applications/servers to send (publish)  messages to some other applications/clients who asked to receive (subscribe to) these messages.
+
+MQTT est un système d’échange de messages basé sur des files d’attente permettant à des applications/serveurs d’envoyer (publier) des messages à d’autres applications/clients qui ont demandé à recevoir (souscrit à) ces messages.
+
+As clients may not be connected when a message is sent, server may add the "retain" flag to  store the last copy of the message, to be sent when clients connects.
+
+Comme les clients peuvent ne pas être connectés lorsqu’on message est émis, le serveur peut ajouter un indicateur « retain » (retiens) pour stocker la dernière version du message, qui sera envoyé lorsque les clients se connecteront.
+
+Lot of clients tools are able to read and write MQTT messages.  A popular one is MQTT Explorer (https://mqtt-explorer.com/). You may want to install one to have a look at what happens in MQTT broker.
+
+Un grand nombre d’outils MQTT sont capables d’écrire et lire ces messages. Le client MQTT Explorer (https://mqtt-explorer.com/) est particulièrement connu. On peut être tenté d’en installer un pour voir ce qui se passe dans MQTT.
+
+Messages are sent with a name (topic), for example "zigbee2mqtt/bridge/config". In MqttMapper, this corresponds to "topic".
+
+Les messages sont émis avec un nom (topic, traduit en français par sujet), par exemple "zigbee2mqtt/bridge/config". Dans MqttMapper, ceci correspond à "topic".
+
+Topic points to  sent data. Here’s an example of "zigbee2mqtt/bridge/config" topic:
+
+Les sujets pointent sur les données envoyées. Voici un exemple du sujet "zigbee2mqtt/bridge/config" :
+
+```
+{"commit":"56589dc","coordinator":{"meta":{"maintrel":1,"majorrel":2,"minorrel":7,"product":1,"revision":20220221,"transportrev":2},"type":"zStack3x0"},"log_level":"debug","network":{"channel":15,"extendedPanID":"0xeb344dd381129444","panID":22046},"permit_join":false,"version":"1.34.0"}
+```
+As we can see, data is (very often) stored as JSON (but you may also have raw content like `20.5` or `on`).
+
+Comme on peut le voir, les données sont (très souvent) stockées au format JSON (mais on peut aussi trouver des données au format brut comme `20.5` ou `on`).
+
+Using JSON tools (like NotePad++ JSON extension or embedded JSON viewer in MQTT Explorer), this can be seen more friendly like:
+
+En utilisant des outils JSON (tels que l’extension JSON de NotePad++ ou l’extension JSON intégrée à MQTT Explorer), on peut obtenir une vision plus lisible comme :
+```
+{
+	"commit": "56589dc",
+	"coordinator": {
+		"meta": {
+			"maintrel": 1,
+			"majorrel": 2,
+			"minorrel": 7,
+			"product": 1,
+			"revision": 20220221,
+			"transportrev": 2
+		},
+		"type": "zStack3x0"
+	},
+	"log_level": "debug",
+	"network": {
+		"channel": 15,
+		"extendedPanID": "0xeb344dd381129444",
+		"panID": 22046
+	},
+	"permit_join": false,
+	"version": "1.34.0"
+}
+```
+To get access to `channel` data (15), you must specify `item` in MqttMapper as `network/channel` and `revision` data (20220221) as `coordinator/meta/revision`.
+
+Pour accéder à la donnée `channel`  (15), on doit indiquer dans MqttMapper un `item` égal à  `network/channel` et à la donnée `revision` (20220221) égal à `coordinator/meta/revision`.
+
+When data is unstructured (or if you want to get full content of a message), specify `"item": ""` in MqttMapper.
+
+Quand la donnée n’est pas structurée (ou qu’on souhaite récupérer le message complet), on spécifie `"item": ""` dans MqttMapper.
+
+To make it short, use MQTT client to have a view of MQTT tree, find full topic name and put it in `topic` in MqttMapper, find JSON data key into topic’s data and put it in ìtem` in MqttMapper (or set it empty if not JSON structured).
+
+En bref, utiliser un client MQTT pour avoir une vue de l’arborescence MQTT, trouver le sujet complet et le mettre dans `topic` dans MqttMapper, trouver la clef JSON des données et la mettre dans `item` (ou le laisser vide s’il n’est pas au format JSON).
+
+You should now have understood these two tricky things ;-)
+
+Avec ça, on devrait avoir compris ces 2 concepts ;-)
+
 ## Configuration
 
 plug-in uses an external JSON configuration file to map MQTT topics to Domoticz devices. Here's an example of syntax:
