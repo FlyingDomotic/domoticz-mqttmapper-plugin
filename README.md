@@ -436,6 +436,8 @@ In some cases, MQTT update rate is higher than what we could/want expect. It's p
 
 If a message is received while the previous change is less than `throttle` seconds, message will be saved (and overwritten by newer versions) until `throttle` is expired. At this time, Domoticz device will be updated. Messages are not lost, but only last version is kept, and updated every `throttle` seconds.
 
+Note: to avoid tons of "Error: MQTT mapper hardware thread seems to have ended unexpectedly" in Domoticz logs, `throttle` can't be less than 3 seconds.
+
 Dans certains cas, l'intervalle de mise à jour des messages MQTT est plus élevé que ce qu'on souhaite. Il est possible de limiter le débit de mise à jour d'un dispositif en ajoutant le mot clef `throttle` au niveau du dispositif, comme ça :
 ```ts
     "Boiler power": {
@@ -447,6 +449,8 @@ Dans certains cas, l'intervalle de mise à jour des messages MQTT est plus élev
 ```ts
 
 Si un message est reçu alors que le délai avec la dernière modification du dispositif est inférieur à `throttle` secondes, le message sera sauvegardé (et écrase par de nouvelles versions si besoin) jusqu'à ce que le delai `throttle` expire. A ce moment, le dispositif Domotiicz  sera mis à jour avec la dernière version. Les messages ne sont pas perdus, mais seule la dernière version est conservée et mise à jour toutes les `throttle` secondes.
+
+Note: pour éviter de récupérer des tonnes de "Error: MQTT mapper hardware thread seems to have ended unexpectedly" dans les logs de Domoticz, `throttle` doit être au moins égal à 3 secondes.
 
 ## Device options (partial) list / Liste (partielle) des options
 
