@@ -504,7 +504,7 @@ In some cases, MQTT update rate is higher than what we could/want expect. It's p
 		"throttle": 5,
         "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
     }
-```ts
+```
 
 If a message is received while the previous change is less than `throttle` seconds, message will be saved (and overwritten by newer versions) until `throttle` is expired. At this time, Domoticz device will be updated. Messages are not lost, but only last version is kept, and updated every `throttle` seconds.
 
@@ -518,7 +518,7 @@ Dans certains cas, l'intervalle de mise à jour des messages MQTT est plus élev
 		"throttle": 5,
         "mapping": {"item": "ENERGY/Power;ENERGY/Total"}}
     }
-```ts
+```
 
 Si un message est reçu alors que le délai avec la dernière modification du dispositif est inférieur à `throttle` secondes, le message sera sauvegardé (et écrase par de nouvelles versions si besoin) jusqu'à ce que le delai `throttle` expire. A ce moment, le dispositif Domotiicz  sera mis à jour avec la dernière version. Les messages ne sont pas perdus, mais seule la dernière version est conservée et mise à jour toutes les `throttle` secondes.
 
