@@ -4880,8 +4880,11 @@
             "typeName": "Lighting2",
             "typeValue": 17,
             "comment": "Replace by GeneralSwitch (244)",
-            "nValue": {
-                "name": "state"
+            "sValue": {
+                "name": "level",
+                "unit": "%",
+                "dataType": "number",
+                "format": "%d"
             }
         },
         "17/73": {
@@ -6249,9 +6252,6 @@
             "subTypeValue": 62,
             "typeName": "GeneralSwitch",
             "typeValue": 244,
-            "nValue": {
-                "name": "state"
-            },
             "sValue": {
                 "name": "level",
                 "unit": "%",
