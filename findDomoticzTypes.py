@@ -7,8 +7,9 @@ import re
 import pathlib
 import os
 from typing import Any, Tuple, Union, Optional
+from DomoticzTypes import DomoticzTypes
 
-version = "1.1.1"
+version = "25.4.24-1"
 
 # Returns a dictionary value giving a key or default value if not existing
 def getValue(dict: Any, key: str, default : Optional[Any] = '') -> Any:
@@ -75,6 +76,8 @@ currentFileName = pathlib.Path(__file__).stem
 # Load Domoticz types dictionary
 typesFile = "DomoticzTypes.json"
 jsonData = {}
+switchTypes = DomoticzTypes()
+
 try:
     with open(typesFile, "rt", encoding="UTF-8") as inpStream:
         jsonData = json.load(inpStream)
@@ -134,11 +137,27 @@ while 1:
                             if (switchType != None and item2["value"] == switchType) or (switchType == None and switchTypeFind.match(item2["name"]) != None):
                                     switchTypeFound = True
                                     print(F'      Switchtype {item2["value"]}: {item2["name"]}')
-                    # Print nValue and sValue(s)
-                    for item2 in item.keys():
-                        if item2 == "nValue" or item2.startswith("sValue"):
-                            items = item[item2]
-                            # Remove format item
-                            if "format" in items:
-                                del items["format"]
-                            print(f"        {item2}: {formatJson(items)}")
+                                    # Print nValue and sValue(s)
+                                    for itemType in item.keys():
+                                        if itemType == "nValue" and (item["switchType"] != "switch" or switchTypes.isStateSwitch(item["typeValue"], item["subTypeValue"], item2["value"])):
+                                            items = item[itemType]
+                                            # Remove format item
+                                            if "format" in items:
+                                                del items["format"]
+                                            print(f"        {itemType}: {formatJson(items)}")
+                                        if itemType == "sValue" and (item["switchType"] != "switch" or switchTypes.isLevelSwitch(item["typeValue"], item["subTypeValue"], item2["value"])):
+                                            items = item[itemType]
+                                            # Remove format item
+                                            if "format" in items:
+                                                del items["format"]
+                                            print(f"        {itemType}: {formatJson(items)}")
+
+                    else:
+                        # Print nValue and sValue(s)
+                        for itemType in item.keys():
+                            if itemType == "nValue" or itemType.startswith("sValue"):
+                                items = item[itemType]
+                                # Remove format item
+                                if "format" in items:
+                                    del items["format"]
+                                print(f"        {itemType}: {formatJson(items)}")
