@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.18-3" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.24-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -45,6 +45,7 @@ import subprocess
 import os
 from typing import Any
 from datetime import datetime, timezone
+from DomoticzTypes import DomoticzTypes
 
 #   MQTT client class
 class MqttClient:
@@ -173,6 +174,7 @@ class BasePlugin:
     lastMqttCheckUtc = 0
     jsonData = None
     initDone = False
+    switchTypes = DomoticzTypes()
 
     # Converts a value to boolean (return True for some string values, integer or float different of zero, false else)
     def convert2bool(self, val):
@@ -644,14 +646,13 @@ class BasePlugin:
                     batteryText =""
                 if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
                     readValue = str(valueToSet) # Force read value as string
-                    if int(nodeType) == 244:   # This is a switch
-                        if nodeSwitchtype == '0': # This is an On/Off switch
-                            nValueToSet = 0 if str(valueToSet) == '0' else 1
-                        elif nodeSwitchtype in ['7', '13', '14', '15', '21']: # This is a Dimmer switch
+                    if self.switchTypes.isSwitch(nodeType):   # This is a switch
+                        if self.switchTypes.isLevelSwitch(nodeType, nodeSubtype, nodeSwitchtype): # This is a switch with dimmer or level
                             nValueToSet = 0 if str(valueToSet) == '0' else 1 if str(valueToSet) == '100' else 2
-                        else:   # Not a switch, use given value
-                            nValueToSet = int(valueToSet)
-                        sValueToSet = str(valueToSet)
+                            sValueToSet = str(valueToSet)
+                        else:   # Not a dimmer/level switch
+                            nValueToSet = 0 if str(valueToSet) == '0' else 1
+                            sValueToSet = ""
                     else:
                         nValueToSet = int(round(float(valueToSet),0))
                         if int(nodeType) == 84:
