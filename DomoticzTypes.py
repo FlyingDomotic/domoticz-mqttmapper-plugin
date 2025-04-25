@@ -1,5 +1,5 @@
 class DomoticzTypes:
-    version = "25.4.24-1"
+    version = "25.4.25-1"
 
     switchTypeList = [ # List of types being switches
         16, # Lighting1
@@ -83,30 +83,30 @@ class DomoticzTypes:
 
     # Returns True if deviceType is a switch
     def isSwitch(self, deviceType):
-        return deviceType in self.switchTypeList
+        return int(deviceType) in self.switchTypeList
 
     # Returns True if device Type/subType/switchType correspond to a device having nValue as switch state
     def isStateSwitch(self, deviceType, deviceSubType, deviceSwitchType):
         for deviceChar in self.switchStateList:
-            if deviceType == deviceChar[0]: # Device type is found
+            if int(deviceType) == deviceChar[0]: # Device type is found
                 if deviceChar[1] == -1: # Any subType, return True
                     return True
-                if deviceChar[1] == deviceSubType: # Device subType is found
+                if int(deviceSubType) == deviceChar[1]: # Device subType is found
                     if deviceChar[2] == -1: # Device switchType is found
                         return True
-                    if deviceChar[2] == deviceSwitchType: # Device switchType is found
+                    if int(deviceSwitchType) == deviceChar[2]: # Device switchType is found
                         return True
         return False
 
     # Returns True if device Type/subType/switchType correspond to a device having sValue as level
     def isLevelSwitch(self, deviceType, deviceSubType, deviceSwitchType):
         for deviceChar in self.switchLevelList:
-            if deviceType == deviceChar[0]: # Device type is found
+            if int(deviceType) == deviceChar[0]: # Device type is found
                 if deviceChar[1] == -1: # Any subType, return True
                     return True
-                if deviceChar[1] == deviceSubType: # Device subType is found
+                if int(deviceSubType) == deviceChar[1]: # Device subType is found
                     if deviceChar[2] == -1: # Device switchType is found
                         return True
-                    if deviceChar[2] == deviceSwitchType: # Device switchType is found
+                    if int(deviceSwitchType) == deviceChar[2]: # Device switchType is found
                         return True
         return False
