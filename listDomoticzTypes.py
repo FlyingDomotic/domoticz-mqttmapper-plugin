@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #   List all Domoticz supported types, sub types and switch types
 
-version = "25.4.23-1"
+version = "25.4.26-1"
 
 import json
 import pathlib
@@ -79,7 +79,7 @@ for key in jsonData["definitions"].keys():
             switchTypeValue = getValue(item2, "value")
             switchTypeName = getValue(item2, "name")
             for itemType in item.keys():
-                if itemType == "nValue" and (switchCategory != "switch" or switchTypes.isStateSwitch(typeValue, subTypeValue, switchTypeValue)):
+                if itemType == "nValue":
                     items = item[itemType]
                     itemName = getValue(items, "name")
                     itemUnit = getValue(items, "unit")

@@ -9,7 +9,7 @@ import os
 from typing import Any, Tuple, Union, Optional
 from DomoticzTypes import DomoticzTypes
 
-version = "25.4.24-1"
+version = "25.4.26-1"
 
 # Returns a dictionary value giving a key or default value if not existing
 def getValue(dict: Any, key: str, default : Optional[Any] = '') -> Any:
@@ -139,7 +139,7 @@ while 1:
                                     print(F'      Switchtype {item2["value"]}: {item2["name"]}')
                                     # Print nValue and sValue(s)
                                     for itemType in item.keys():
-                                        if itemType == "nValue" and (item["switchType"] != "switch" or switchTypes.isStateSwitch(item["typeValue"], item["subTypeValue"], item2["value"])):
+                                        if itemType == "nValue":
                                             items = item[itemType]
                                             # Remove format item
                                             if "format" in items:
