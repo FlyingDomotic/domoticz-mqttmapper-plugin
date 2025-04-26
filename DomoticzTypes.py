@@ -38,19 +38,6 @@ class DomoticzTypes:
     def isSwitch(self, deviceType):
         return int(deviceType) in self.switchTypeList
 
-    # Returns True if device Type/subType/switchType correspond to a device having nValue as switch state
-    def isStateSwitch(self, deviceType, deviceSubType, deviceSwitchType):
-        for deviceChar in self.switchStateList:
-            if int(deviceType) == deviceChar[0]: # Device type is found
-                if deviceChar[1] == -1: # Any subType, return True
-                    return True
-                if int(deviceSubType) == deviceChar[1]: # Device subType is found
-                    if deviceChar[2] == -1: # Device switchType is found
-                        return True
-                    if int(deviceSwitchType) == deviceChar[2]: # Device switchType is found
-                        return True
-        return False
-
     # Returns True if device Type/subType/switchType correspond to a device having sValue as level
     def isLevelSwitch(self, deviceType, deviceSubType, deviceSwitchType):
         for deviceChar in self.switchLevelList:
