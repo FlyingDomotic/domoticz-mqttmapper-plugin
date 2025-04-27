@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.26-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.27-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -619,7 +619,7 @@ class BasePlugin:
                     if  mappingValues != None:
                         valueToSet = mappingDefault or 0 # Set default mapping (or 0)
                         for testValue in mappingValues: # Scan all mapping values
-                        Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
+                            Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
                             if type(testValue).__name__ == "bool":
                                 if testValue == self.convert2bool(readValue):
                                     valueToSet = mappingValues[testValue]   # Insert mapped value
@@ -730,7 +730,7 @@ class BasePlugin:
                     else:
                         Domoticz.Error(F"Can't find 'topic' nor 'command' in {thisCommand}. Please fix it!")
             else:
-                    Domoticz.Error(F"Can't find command {commandToScan} nor <default> in {nodeCommands}")
+                    Domoticz.Error(F"Can't find command {Command} nor <default> in {nodeCommands}")
 
         else:
             # No defined commands, use default settings for on/off/set level
