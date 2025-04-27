@@ -1,7 +1,7 @@
 # MqttMapper is a Domoticz Python plug in allowing to map MQTT topics directly to Domoticz devices.
 #
 #   If you want to be able to read/write some MQTT topics and maps them to Domoticz devices, without having to install NodeRed,
-#       and/pr integrate sensors that don't have HomeAssistant discovery item, this plug-in is made for you.
+#       and/or integrate sensors that don't have HomeAssistant discovery item, this plug-in is made for you.
 #
 # MqttMapper est un plugin Domoticz qui permet de relier des dispositifs Domoticz à MQTT directement.
 #
@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.24-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.26-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -58,7 +58,7 @@ class MqttClient:
 
     #Initialization
     def __init__(self, destination, port, mqttConnectedCb, mqttDisconnectedCb, mqttPublishCb, mqttSubackCb):
-        Domoticz.Debug("MqttClient::__init__")
+        Domoticz.Debug(F"MqttClient::__init__")
         self.Address = destination
         self.Port = port
         self.mqttConnectedCb = mqttConnectedCb
@@ -69,7 +69,7 @@ class MqttClient:
 
     # Default value
     def __str__(self):
-        Domoticz.Debug("MqttClient::__str__")
+        Domoticz.Debug(F"MqttClient::__str__")
         if (self.mqttConn != None):
             return str(self.mqttConn)
         else:
@@ -85,7 +85,7 @@ class MqttClient:
 
     # Send a Ping to keep connection opened
     def Ping(self):
-        #Domoticz.Debug("MqttClient::Ping")
+        #Domoticz.Debug(F"MqttClient::Ping")
         if (self.mqttConn != None and self.isConnected):
             self.mqttConn.Send({'Verb': 'PING'})
 
@@ -94,7 +94,7 @@ class MqttClient:
         if (self.mqttConn == None or not self.isConnected):
             Domoticz.Error(F"MqttCLient::MQTT not connected, can't Publish {topic}={payload}, retain={retain}")
         else:
-            Domoticz.Debug("MqttClient::Publish {topic}={payload}, retain={retain}")
+            Domoticz.Debug(F"MqttClient::Publish {topic}={payload}, retain={retain}")
             self.mqttConn.Send({'Verb': 'PUBLISH', 'Topic': topic, 'Payload': bytearray(payload, 'utf-8'), 'Retain': retain})
 
     # Subscribe to a topic (or list of topics)
@@ -103,14 +103,14 @@ class MqttClient:
         for topic in topics:
             subscriptionlist.append({'Topic':topic, 'QoS':0})
         if (self.mqttConn == None or not self.isConnected):
-            Domoticz.Error("MqttClient::MQTT not connected, can't Subscribe {subscriptionlist}")
+            Domoticz.Error(F"MqttClient::MQTT not connected, can't Subscribe {subscriptionlist}")
         else:
-            Domoticz.Debug("MqttClient::Subscribe to {subscriptionlist}")
+            Domoticz.Debug(F"MqttClient::Subscribe to {subscriptionlist}")
             self.mqttConn.Send({'Verb': 'SUBSCRIBE', 'Topics': subscriptionlist})
 
     # Close MQTT connection
     def Close(self):
-        Domoticz.Log("MqttClient::Close")
+        Domoticz.Log(F"MqttClient::Close")
         self.isConnected = False
         if self.mqttConn != None:
             if self.mqttConn.Connected():
@@ -119,7 +119,7 @@ class MqttClient:
 
     # MQTT connected callback
     def onConnect(self, Connection, Status, Description):
-        Domoticz.Debug("MqttClient::onConnect")
+        Domoticz.Debug(F"MqttClient::onConnect")
         if (Status == 0):
             ID = F"Domoticz_{Parameters['Key']}_{Parameters['HardwareID']}_{int(time.time())}"
             Domoticz.Log(F"MqttClient::onConnect connect to {Connection.Address}:{Connection.Port}, ID={ID}")
@@ -132,7 +132,7 @@ class MqttClient:
 
     # MQTT disconnected callback
     def onDisconnect(self, Connection):
-        Domoticz.Log("MqttClient::onDisconnect Disconnected from  {Connection.Address}:{Connection.Port}")
+        Domoticz.Log(F"MqttClient::onDisconnect Disconnected from  {Connection.Address}:{Connection.Port}")
         self.isConnected = False
         self.Close()
         if self.mqttDisconnectedCb != None:
@@ -380,7 +380,7 @@ class BasePlugin:
         self.jsonData = None
         # Check for configuration file
         if not os.path.isfile(jsonFile):
-            Domoticz.Error(f"Can't find {jsonFile} file!")
+            Domoticz.Error(F"Can't find {jsonFile} file!")
             return
         with open(jsonFile, encoding = 'UTF-8') as configStream:
             try:
@@ -389,8 +389,8 @@ class BasePlugin:
                 errorLine = 0
                 if e.__traceback__ != None:
                     errorLine = e.__traceback__.tb_lineno
-                Domoticz.Error(f"Error loading {jsonFile} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
-                Domoticz.Error(f"You should probably use any online 'json format checker' to locate JSON syntax error in {jsonFile}")
+                Domoticz.Error(F"Error loading {jsonFile} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
+                Domoticz.Error(F"You should probably use any online 'json format checker' to locate JSON syntax error in {jsonFile}")
                 return
         # Go through Json file to create devices
         deviceList = []
@@ -409,17 +409,17 @@ class BasePlugin:
                 # Create device if needed, update it if it already exists
                 device = self.getDevice(nodeKey)
                 if (nodeKey in deviceList):
-                    Domoticz.Error("Duplicate "+str(nodeKey)+" node/key - Please make them unique")
+                    Domoticz.Error(F"Duplicate {nodeKey} node/key - Please make them unique")
                 else:
                     deviceList.append(nodeKey)
                 if (device == None):
-                    Domoticz.Log("Creating device " + nodeName)
+                    Domoticz.Log(F"Creating device {nodeName}")
                     Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=nodeVisible).Create()
                     initialData = self.getValue(nodeItems, 'initial', None)
                     if initialData: # Set initial data if required
                         nValue = int(self.getValue(initialData, 'nvalue', 0))
                         sValue = self.getValue(initialData, 'svalue', '')
-                        Domoticz.Log(f"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
+                        Domoticz.Log(F"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
                         device = self.getDevice(nodeKey)
                         if device != None:
                             device.Update(nValue = nValue, sValue = sValue)
@@ -430,7 +430,7 @@ class BasePlugin:
                     if nodeOptions == None:
                         nodeOptions = {}
                     if device.Type != int(nodeType) or device.SubType != int(nodeSubtype) or device.SwitchType != int(nodeSwitchtype or device.Options != nodeOptions):
-                        Domoticz.Log("Updating device " + nodeName)
+                        Domoticz.Log(F"Updating device {nodeName}")
                         device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
 
         # Connect to MQTT server
@@ -482,7 +482,7 @@ class BasePlugin:
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
             return
-        Domoticz.Debug("onMQTTConnected")
+        Domoticz.Debug(F"onMQTTConnected")
         self.mqttClient.Subscribe(self.getTopics())
 
     # Executed on MQTT disconnection
@@ -490,7 +490,7 @@ class BasePlugin:
         # Exit if init not properly done
         if not self.initDone:
             return
-        Domoticz.Debug("onMQTTDisconnected")
+        Domoticz.Debug(F"onMQTTDisconnected")
 
     # Executed on MQTT publishing
     def onMQTTPublish(self, topic, rawmessage):
@@ -506,7 +506,7 @@ class BasePlugin:
             errorLine = 0
             if e.__traceback__ != None:
                 errorLine = e.__traceback__.tb_lineno
-            Domoticz.Error(f"Error decoding {rawmessage} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
+            Domoticz.Error(F"Error decoding {rawmessage} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
 
         topiclist = topic.split('/')
         if self.debugging == "Extra verbose":
@@ -545,7 +545,7 @@ class BasePlugin:
         if self.jsonData != None:
             self.setDeviceFromMessage(nodeIndex, self.jsonData[nodeIndex], self.throttleData[nodeIndex], "sendThrottled")
 
-    # Set device value giving a message
+    # Set device value giving a message, either directly or throttled
     def setDeviceFromMessage(self, nodeIndex, nodeItems, message, source):
         # Delete throttled message and set last message date
         if nodeIndex in self.throttleLastDate:
@@ -610,7 +610,7 @@ class BasePlugin:
                     else:
                         itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                         if itemValue == None:
-                            Domoticz.Error('Can\'t find >'+str(item)+'< in >'+str(message)+'<, message ignored')
+                            Domoticz.Error(F"Can't find >{item}'< in >'{message}<, message ignored")
                             return
                         else:   # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
@@ -619,7 +619,7 @@ class BasePlugin:
                     if  mappingValues != None:
                         valueToSet = mappingDefault or 0 # Set default mapping (or 0)
                         for testValue in mappingValues: # Scan all mapping values
-                            Domoticz.Log(f'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
+                        Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
                             if type(testValue).__name__ == "bool":
                                 if testValue == self.convert2bool(readValue):
                                     valueToSet = mappingValues[testValue]   # Insert mapped value
@@ -631,7 +631,7 @@ class BasePlugin:
                 else:   # Not a switch
                     valueToSet = readValue
             else:   # No mapping given
-                Domoticz.Error('No mapping for '+device.Name)
+                Domoticz.Error(F"No mapping for {device.Name}")
             if valueToSet != None: # Value given, set it
                 batteryValue = 255
                 if mappingBattery != None:
@@ -660,10 +660,10 @@ class BasePlugin:
                         if int(nodeType) == 243 and int(nodeSubtype) in [26, 28, 29, 31, 33]:
                             nValueToSet = 0
                         sValueToSet = readValue
-                    Domoticz.Log(F'Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}')  # Value is numeric or float
+                    Domoticz.Log(F"Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}")  # Value is numeric or float
                     device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
                 else:   # Value is not numeric
-                    Domoticz.Log(F'Setting {device.Name} to >{valueToSet}<{batteryText}') 
+                    Domoticz.Log(F"Setting {device.Name} to >{valueToSet}<{batteryText}") 
                     device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
 
     # Executed on MQTT subscribtion
@@ -672,7 +672,7 @@ class BasePlugin:
         if not self.initDone:
             return
         # (Re)subscribed, refresh device info
-        Domoticz.Debug("onMQTTSubscribed")
+        Domoticz.Debug(F"onMQTTSubscribed")
 
     # Executed when Domoticz (on user request) send a command
     def onCommand(self, Unit, Command, Level, sColor):
@@ -681,7 +681,7 @@ class BasePlugin:
             return
         # Get device
         device = Devices[Unit]
-        Domoticz.Log(F"{self.deviceStr(Unit)}, {device.DeviceID}: Command: '{Command}', Level: {Level}, Color: {sColor}")
+        Domoticz.Log(F"{device.DeviceID}: Command: '{Command}', Level: {Level}, Color: {sColor}")
         # Get define JSON definition
         nodeItems = self.getDeviceDefinition(device)
         # Load supported commands
@@ -730,7 +730,8 @@ class BasePlugin:
                     else:
                         Domoticz.Error(F"Can't find 'topic' nor 'command' in {thisCommand}. Please fix it!")
             else:
-                Domoticz.Error(F"Can't find command {Command} nor <default> in {nodeCommands}")
+                    Domoticz.Error(F"Can't find command {commandToScan} nor <default> in {nodeCommands}")
+
         else:
             # No defined commands, use default settings for on/off/set level
             targetValue = None
@@ -743,7 +744,7 @@ class BasePlugin:
             elif self.isFloat(Command):                                                 # If command is numeric or float
                 targetValue = Command
             else:
-                Domoticz.Error('Command: "' + str(Command) + '" not supported by default. Please add "commands" for ' + device.Name)
+                Domoticz.Error(F'Command: "{Command}" not supported by default. Please add "commands" for {device.Name}')
             # Try to set value
             self.setTargetValue (targetValue, device)
 
@@ -772,13 +773,13 @@ class BasePlugin:
                             if setMappingValues[testValue] == targetValue:  # Is this the same value?
                                 valueToSet = testValue  # Insert mapped value
                         if valueToSet == None:  # No mapping value found
-                            Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
+                            Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
                     elif mappingValues != None:
                         for testValue in mappingValues: # Scan all mapping values
                             if mappingValues[testValue] == targetValue:  # Is this the same value?
                                 valueToSet = testValue  # Insert mapped value
                         if valueToSet == None:  # No mapping value found
-                            Domoticz.Error('Can\'t map >'+targetValue+'< for '+device.Name)
+                            Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
                     else: # No mapping given, use command value
                         valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
                 else:   # Not a switch
@@ -794,14 +795,14 @@ class BasePlugin:
                     localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace "#" in command by value
                     self.executeCommand(localCommand)
             else:   # No set given
-                Domoticz.Error('No SET parameters for '+device.Name+"/"+device.DeviceID+" in "+str(nodeItems))
+                Domoticz.Error(F"No SET parameters for {device.Name}/{device.DeviceID} in {nodeItems}")
 
     # Executed when a device is added
     def onDeviceAdded(self, Unit):
         # Exit if init not properly done
         if not self.initDone:
             return
-        Domoticz.Log("onDeviceAdded " + self.deviceStr(Unit))
+        Domoticz.Log(F"onDeviceAdded {self.deviceStr(Unit)}")
 
     # Executed when a device is modified
     def onDeviceModified(self, Unit):
@@ -809,16 +810,14 @@ class BasePlugin:
         if not self.initDone:
             return
         device = Devices[Unit]
-        Domoticz.Log("onDeviceModified " + self.deviceStr(Unit) + ", " + str(device.DeviceID) + ", nValue=" + str(device.nValue) + ", sValue=" + device.sValue)
-        targetValue = device.sValue
-        self.setTargetValue(targetValue, device)
+        Domoticz.Log(F"onDeviceModified {self.deviceStr(Unit)}, {device.DeviceID}, nValue={device.nValue}, sValue{device.sValue}")
 
     # Executed when a device is removed
     def onDeviceRemoved(self, Unit):
         # Exit if init not properly done
         if not self.initDone:
             return
-        Domoticz.Log("onDeviceRemoved " + self.deviceStr(Unit))
+        Domoticz.Log(F"onDeviceRemoved {self.deviceStr(Unit)}")
 
     # Executed at regular interval
     def onHeartbeat(self):
@@ -833,14 +832,14 @@ class BasePlugin:
         if (nowUtc - self.lastMqttCheckUtc) > 15:
             self.lastMqttCheckUtc = nowUtc
             if self.mqttClient.mqttConn == None or not self.mqttClient.isConnected:
-                Domoticz.Debug("Reconnecting")
+                Domoticz.Debug(F"Reconnecting")
                 self.mqttClient.Open()
         else:
             self.mqttClient.Ping()
 
         # Check if UTC time was set backward
         if nowUtc < self.lastHeartbeatUtc:
-            Domoticz.Log("UTC time set backward, releasing all changes")
+            Domoticz.Log(F"UTC time set backward, releasing all changes")
             # Scan all throttle date
             for nodeIndex in self.throttleLastDate:
                 # Do we have a pending message?
@@ -874,7 +873,7 @@ class BasePlugin:
                 # Add topic if not already in list (as multiple devices on the same topic are allowed)
                 if nodeTopic not in topics:
                     topics.add(nodeTopic)
-        Domoticz.Debug("getTopics: '" + str(topics) +"'")
+        Domoticz.Debug(F"getTopics: '{topics}'")
         return list(topics)
 
 global _plugin
@@ -919,12 +918,12 @@ def onHeartbeat():
 def DumpConfigToLog():
     for x in Parameters:
         if Parameters[x] != "":
-            Domoticz.Log( "'" + x + "':'" + str(Parameters[x]) + "'")
-    Domoticz.Log("Device count: " + str(len(Devices)))
+            Domoticz.Log(F"'{x}': '{Parameters[x]}'")
+    Domoticz.Log(F"Device count: {str(len(Devices))}")
     for x in Devices:
-        Domoticz.Log("Device: " + str(x) + " - " + str(Devices[x]))
+        Domoticz.Log(F"Device: {x} - {str(Devices[x])}")
 
 def DumpMQTTMessageToLog(topic, rawmessage, prefix=''):
     message = rawmessage.decode('utf8','replace')
     message = str(message.encode('unicode_escape'))
-    Domoticz.Log(prefix+topic+":"+message)
+    Domoticz.Log(F"{prefix}{topic}: '{message}'")
