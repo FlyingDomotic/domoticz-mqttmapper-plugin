@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.4.27-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.9-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -615,7 +615,7 @@ class BasePlugin:
                         else:   # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                 readValue = readValue[1:]   # Remove first ';'
-                if int(nodeType) == 244:   # This is a switch
+                if self.switchTypes.isSwitch(nodeType):   # This is a switch
                     if  mappingValues != None:
                         valueToSet = mappingDefault or 0 # Set default mapping (or 0)
                         for testValue in mappingValues: # Scan all mapping values
@@ -654,10 +654,10 @@ class BasePlugin:
                             nValueToSet = 0 if str(valueToSet) == '0' else 1
                             sValueToSet = ""
                     else:
-                        nValueToSet = int(round(float(valueToSet),0))
-                        if int(nodeType) == 84:
-                            nValueToSet = 0
-                        if int(nodeType) == 243 and int(nodeSubtype) in [26, 28, 29, 31, 33]:
+                        if self.switchTypes.hasNvalueData: # If device has nValue data, round sValue (text)
+                            nValueToSet = int(round(float(valueToSet),0))
+                        else:
+                            # Set nValue to zero
                             nValueToSet = 0
                         sValueToSet = readValue
                     Domoticz.Log(F"Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}")  # Value is numeric or float
@@ -766,8 +766,10 @@ class BasePlugin:
                 setMapping = self.getValue(nodeSet, 'mapping', None)        # Get set mapping, default to None
                 setMappingValues = self.getValue(setMapping, 'values', None)# Get set mapping values, default to None
                 mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
-                nodeType = str(self.getValue(nodeItems, 'type', None))      # Get device type
-                if int(nodeType) >= 242 and int(nodeType) <= 244:           # Select valid types
+                nodeType = self.getValue(nodeItems, 'type', "0")
+                nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
+                nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
+                if self.switchTypes.canBeSet(nodeType, nodeSubtype, nodeSwitchtype): # Select valid types
                     if setMappingValues != None:
                         for testValue in setMappingValues: # Scan all mapping values
                             if setMappingValues[testValue] == targetValue:  # Is this the same value?
@@ -782,8 +784,9 @@ class BasePlugin:
                             Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
                     else: # No mapping given, use command value
                         valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
-                else:   # Not a switch
-                    Domoticz.Error(F"Can't set device type {nodeType} yet. Please ask for support.")
+                else:   # Device not in canBeSet list
+                    Domoticz.Error(F"Can't set device type {nodeType}, subtype {nodeSubtype}, switchtype {nodeSwitchtype} yet. Please ask for support.")
+                    return
                 if valueToSet != None and setTopic != None: # Value and topic given, set it
                     if isinstance(setPayload, str):
                         payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
@@ -810,7 +813,7 @@ class BasePlugin:
         if not self.initDone:
             return
         device = Devices[Unit]
-        Domoticz.Log(F"onDeviceModified {self.deviceStr(Unit)}, {device.DeviceID}, nValue={device.nValue}, sValue{device.sValue}")
+        Domoticz.Log(F"onDeviceModified {self.deviceStr(Unit)}, {device.DeviceID}, nValue={device.nValue}, sValue={device.sValue}")
 
     # Executed when a device is removed
     def onDeviceRemoved(self, Unit):
