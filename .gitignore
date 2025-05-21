@@ -1,2 +1,4 @@
 *.bak
+*.old
 Domoticz.py
+reformatCode.py

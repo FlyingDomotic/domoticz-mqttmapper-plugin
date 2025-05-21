@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.9-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.21-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -615,21 +615,18 @@ class BasePlugin:
                         else:   # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                 readValue = readValue[1:]   # Remove first ';'
-                if self.switchTypes.isSwitch(nodeType):   # This is a switch
-                    if  mappingValues != None:
-                        valueToSet = mappingDefault or 0 # Set default mapping (or 0)
-                        for testValue in mappingValues: # Scan all mapping values
-                            Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
-                            if type(testValue).__name__ == "bool":
-                                if testValue == self.convert2bool(readValue):
-                                    valueToSet = mappingValues[testValue]   # Insert mapped value
-                            else:
-                                if str(testValue) == str(readValue):  # Is this the same value?
-                                    valueToSet = mappingValues[testValue]   # Insert mapped value
-                    else:
-                        valueToSet = readValue  # Set value = read value
-                else:   # Not a switch
-                    valueToSet = readValue
+                if  mappingValues != None:
+                    valueToSet = mappingDefault or 0 # Set default mapping (or 0)
+                    for testValue in mappingValues: # Scan all mapping values
+                        Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
+                        if type(testValue).__name__ == "bool":
+                            if testValue == self.convert2bool(readValue):
+                                valueToSet = mappingValues[testValue]   # Insert mapped value
+                        else:
+                            if str(testValue) == str(readValue):  # Is this the same value?
+                                valueToSet = mappingValues[testValue]   # Insert mapped value
+                else:
+                    valueToSet = readValue  # Set value = read value
             else:   # No mapping given
                 Domoticz.Error(F"No mapping for {device.Name}")
             if valueToSet != None: # Value given, set it
