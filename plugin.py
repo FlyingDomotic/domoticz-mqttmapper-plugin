@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.21-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.25-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -243,7 +243,7 @@ class BasePlugin:
     def isFloat(self, valueToTest):
         if valueToTest is None:
             return False
-        if type(valueToTest).__name__ == "bool":
+        if type(valueToTest).__name__ in ["bool", "dict", "list"]:
             return False
         if type(valueToTest).__name__ in ["int", "float"]:
             return True
@@ -254,6 +254,29 @@ class BasePlugin:
             return True
         except ValueError:
             return False
+
+    # Return True if a message matches
+    def itemFoundInMessage(self, nodeSelect, message, nodeName):
+        selectItem = self.getValue(nodeSelect, 'item', None)        # Get select item
+        selectValue = self.getValue(nodeSelect, 'value', None)      # Get select value
+        if selectItem == None or selectValue == None:               # Any error?
+            Domoticz.Error(F"Key 'select' should have both 'item' and 'value' defined in {nodeSelect} for {nodeName}")
+            return False
+        else:
+            selectItemValue = self.getPathValue(message, selectItem, '/', None) # Extract select value from message
+            if selectItemValue == None:
+                Domoticz.Error(F"Can't find '{selectItem}' in message for {nodeName}")
+                return False
+            else:
+                if type(selectValue).__name__ == "list":            # Value is a list
+                    if selectItemValue not in selectValue:
+                        Domoticz.Log(F"'{selectItem}' is '{selectItemValue}' instead of '{selectValue}' for {nodeName}")
+                        return False
+                else:                                               # Value is not a list
+                    if selectItemValue != selectValue:
+                        Domoticz.Log(F"'{selectItem}' is '{selectItemValue}' instead of '{selectValue}' for {nodeName}")
+                        return False
+        return True
 
     # Return value to use, depending on 'multiplier' and 'digits' for numerical data
     #   If setMapping is specified, we're about to set the value.
@@ -497,18 +520,7 @@ class BasePlugin:
         # Exit if init not properly done
         if not self.initDone or self.jsonData == None:
             return
-        message = ""
-        try:
-            message = json.loads(rawmessage.decode('utf8'))
-        except ValueError:
-            message = rawmessage.decode('utf8')
-        except Exception as e:
-            errorLine = 0
-            if e.__traceback__ != None:
-                errorLine = e.__traceback__.tb_lineno
-            Domoticz.Error(F"Error decoding {rawmessage} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
 
-        topiclist = topic.split('/')
         if self.debugging == "Extra verbose":
             DumpMQTTMessageToLog(topic, rawmessage, 'onMQTTPublish: ')
 
@@ -524,13 +536,13 @@ class BasePlugin:
                     if node[0] in self.throttleLastDate:
                         # Is throttle active?
                         if self.isThrottleActive(self.throttleLastDate[node[0]], nodeThrottle):
-                            self.throttleData[node[0]] = message
+                            self.throttleData[node[0]] = rawmessage
                             return
                     else:
                         # Save last message date (this first time we have amessage for this device)
                         self.throttleLastDate[node[0]] = self.utcTime()
                 # No throttle or throttle not active, use message right now
-                self.setDeviceFromMessage(node[0], nodeItems, message, "onMQTTPublish")
+                self.setDeviceFromMessage(node[0], nodeItems, rawmessage, "onMQTTPublish")
 
     # Check if a throttle is active for a device index
     def isThrottleActive(self, nodeLastUpdate, nodeThrottle):
@@ -546,11 +558,22 @@ class BasePlugin:
             self.setDeviceFromMessage(nodeIndex, self.jsonData[nodeIndex], self.throttleData[nodeIndex], "sendThrottled")
 
     # Set device value giving a message, either directly or throttled
-    def setDeviceFromMessage(self, nodeIndex, nodeItems, message, source):
+    def setDeviceFromMessage(self, nodeIndex, nodeItems, rawmessage, source):
         # Delete throttled message and set last message date
         if nodeIndex in self.throttleLastDate:
             self.throttleLastDate[nodeIndex] = self.utcTime()
             self.throttleData[nodeIndex] = ""
+        # Try to decode JSON message
+        message = ""
+        try:
+            message = json.loads(rawmessage.decode('utf8'))
+        except ValueError:
+            message = rawmessage.decode('utf8')
+        except Exception as e:
+            errorLine = 0
+            if e.__traceback__ != None:
+                errorLine = e.__traceback__.tb_lineno
+            Domoticz.Error(F"Error decoding {rawmessage} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
         nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
         nodeKey = self.getValue(nodeItems, 'key', nodeTopic) # Get device key
         device = self.getDevice(nodeKey)
@@ -558,24 +581,24 @@ class BasePlugin:
             Domoticz.Error(F"Can't find device key {nodeKey}")
             return
         Domoticz.Debug(source+" found "+str(nodeTopic)+", Device '" + device.Name + "', message '" + str(message) + "'")
-        nodeSelect = self.getValue(nodeItems, 'select', None) # Is there a "select" option?
-        if nodeSelect:
-            topicSelected = False # By default, refuse topic
-            selectItem = self.getValue(nodeSelect, 'item', None) # Get select item
-            selectValue = self.getValue(nodeSelect, 'value', None) # Get select value
-            if selectItem == None or selectValue == None: # Any error?
-                Domoticz.Error(F"Key 'select' should have both 'item' and 'value' defined")
+        nodeSelect = self.getValue(nodeItems, 'select', None)       # Is there a "select" option?
+        # Do we have a "select" option?
+        topicSelected = True                                        # By default, accept message
+        if nodeSelect != None:
+            Domoticz.Log(F"nodeSelect: {type(nodeSelect).__name__}: >{nodeSelect}<")
+            if type(nodeSelect).__name__ == "list":
+                # This is a list, scan it
+                for nodeSelectItem in nodeSelect:
+                    if not self.itemFoundInMessage(nodeSelectItem, message, nodeKey):
+                        topicSelected = False
+            elif type(nodeSelect).__name__ == "dict":
+                # This is a dict, use it
+                if not self.itemFoundInMessage(nodeSelect, message, nodeKey):
+                    topicSelected = False
             else:
-                selectItemValue = self.getPathValue(message, selectItem, '/', None) # Extract select value from message
-                if selectItemValue == None:
-                    Domoticz.Error(F"Can't find '{selectItem}' in message")
-                else:
-                    if selectItemValue != selectValue:
-                        Domoticz.Log(F"'{selectItem}' is '{selectItemValue}' instead of '{selectValue}'")
-                    else:
-                        topicSelected = True # Select item has the right value
-        else:
-            topicSelected = True    # No 'selected', validate topic
+                # What's that?
+                Domoticz.Error(F"Can't understand 'select' with type {type(nodeSelect).__name__} for nodeKey")
+                topicSelected = False
         if topicSelected:
             nodeType = self.getValue(nodeItems, 'type', "0")   # Read some values for this device
             nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
@@ -591,6 +614,7 @@ class BasePlugin:
                     mappingItem = "~*"
                 readValue = ''
                 itemIndex = -1
+                isOnlyMessage = None
                 items = mappingItem.split(';')  # Work with multiple items values
                 for item in items:  # Read all values to map
                     readValue += ";"# Add ';' as separator
@@ -603,21 +627,26 @@ class BasePlugin:
                             else:
                                 valueToSet = '' # No, use empty string
                             readValue += str(valueToSet)    # Insert the value
+                            isOnlyMessage = False
                         elif item == "~*":  # Item is ~*, insert topic content
                             readValue += str(self.computeValue(message, nodeMapping, itemIndex))
+                            if isOnlyMessage == None:
+                                    isOnlyMessage = True
                         else:
+                            isOnlyMessage = False
                             readValue += item[1:]   # Add item, removing initial '~'
                     else:
+                        isOnlyMessage = False
                         itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                         if itemValue == None:
                             Domoticz.Error(F"Can't find >{item}'< in >'{message}<, message ignored")
                             return
                         else:   # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
-                readValue = readValue[1:]   # Remove first ';'
+                readValue = readValue[1:] # Remove first ';'  
                 if  mappingValues != None:
                     valueToSet = mappingDefault or 0 # Set default mapping (or 0)
-                    for testValue in mappingValues: # Scan all mapping values
+                    for testValue in mappingValues:  # Scan all mapping values
                         Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
                         if type(testValue).__name__ == "bool":
                             if testValue == self.convert2bool(readValue):
@@ -626,9 +655,13 @@ class BasePlugin:
                             if str(testValue) == str(readValue):  # Is this the same value?
                                 valueToSet = mappingValues[testValue]   # Insert mapped value
                 else:
-                    valueToSet = readValue  # Set value = read value
+                    if isOnlyMessage == True:                           # If we have only message into readValue
+                        valueToSet = rawmessage.decode('utf8')          # Use original message instead of it's dict representation
+                    else:                                               # Read value is more complex
+                        valueToSet = readValue                          # Set value = read value
             else:   # No mapping given
                 Domoticz.Error(F"No mapping for {device.Name}")
+
             if valueToSet != None: # Value given, set it
                 batteryValue = 255
                 if mappingBattery != None:

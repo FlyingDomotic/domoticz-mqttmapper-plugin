@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "25.4.16-1"
+version = "25.5.25-1"
 
 import glob
 import os
@@ -127,7 +127,7 @@ def checkToken(tokenName: str, nodeItem: Any, fullPath: str = "") -> str:
         "node/commands": {"mandatory": False, "type": "dict"},
         "node/select": {"mandatory": False, "type": "dict"},
         "select/item": {"mandatory": True, "type": "str"},
-        "select/value": {"mandatory": True, "type": "str"},
+        "select/value": {"mandatory": True, "type": ["str", "dict"]},
         "mapping/item": {"mandatory": True, "type": "str"},
         "mapping/default": {"mandatory": False, "type": "str"},
         "mapping/digits": {"mandatory": False, "type": ["int", "str"]},
