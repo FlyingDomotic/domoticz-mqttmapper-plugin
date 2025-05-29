@@ -16,10 +16,10 @@ Si vous voulez lire/écrire des topics MQTT et les lier à des dispositifs Domot
 ## Prerequisites / Prérequis
 
 - Domoticz 2020.0 or higher (but lower version could also work)
-- Make sure that your Domoticz supports Python plug-ins (https://www.domoticz.com/wiki/Using_Python_plugins)
+- Make sure that your Domoticz supports Python plug-ins (https://wiki.domoticz.com/Using_Python_plugins)
 
 - Domoticz 2022.0 ou supérieurs (les versions précédentes peuvent aussi fonctionner)
-- Vérifiez que votre version de Domoticz supporte les plug-ins Python (https://www.domoticz.com/wiki/Using_Python_plugins)
+- Vérifiez que votre version de Domoticz supporte les plug-ins Python (https://wiki.domoticz.com/Using_Python_plugins)
 
 ## Installation
 
@@ -250,7 +250,7 @@ Let's see how this is constructed: / Voyons comment c'est construit :
 
 ```
 
-`Car windows` is the name of Domoticz device to be created. `type`, `subtype` and `switchtype` contains the type/subtype/switchtype values of device being created. Valid values can be found at (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
+`Car windows` is the name of Domoticz device to be created. `type`, `subtype` and `switchtype` contains the type/subtype/switchtype values of device being created. Valid values can be found at (https://wiki.domoticz.com/Developing_a_Python_plugin#Available_Device_Types).
 
 When empty or `~*`, `mapping` -> `item` indicates that payload is not in a JSON format. Extracted value is content of payload. Default value is set in `default` and mapping values in `values`. Here, when payload is `close`, device is set to `1`.
 
@@ -258,7 +258,7 @@ In short, when receiving topic `volvo/xx-999-xx/binary_sensor/any_window_open/st
 
 When `default` is not specified, the extracted value will be directly loaded in associated device.
 
-`Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les types/subtypes/switchtypes du dispositif à créer. La liste des valeurs supportées est disponible à (https://www.domoticz.com/wiki/Developing_a_Python_plugin#Available_Device_Types).
+`Car windows` représente le nom du dispositif Domoticz à créer. `type`, `subtype` et `switchtype` contiennent les types/subtypes/switchtypes du dispositif à créer. La liste des valeurs supportées est disponible à (https://wiki.domoticz.com/Developing_a_Python_plugin#Available_Device_Types).
 
 Vide ou égal à `~*`, `mapping` -> `item` indique que le contenu n'est pas dans un format JSON. La valeur extraite est le contenu de topic MQTT. La valeur par défaut est indiquée dans `default` et les valeurs associées sont dans `values` . Dans cet exemple, lorsque le contenu est `close`, le dispositif est mis à `1`.
 

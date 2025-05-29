@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.25-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.27-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -275,6 +275,29 @@ class BasePlugin:
                 else:                                               # Value is not a list
                     if selectItemValue != selectValue:
                         Domoticz.Log(F"'{selectItem}' is '{selectItemValue}' instead of '{selectValue}' for {nodeName}")
+                        return False
+        return True
+
+    # Return True if a message don't matches
+    def itemNotFoundInMessage(self, nodeReject, message, nodeName):
+        rejectItem = self.getValue(nodeReject, 'item', None)        # Get reject item
+        rejectValue = self.getValue(nodeReject, 'value', None)      # Get reject value
+        if rejectItem == None or rejectValue == None:               # Any error?
+            Domoticz.Error(F"Key 'reject' should have both 'item' and 'value' defined in {nodeReject} for {nodeName}")
+            return False
+        else:
+            rejectItemValue = self.getPathValue(message, rejectItem, '/', None) # Extract reject value from message
+            if rejectItemValue == None:
+                Domoticz.Error(F"Can't find '{rejectItem}' in message for {nodeName}")
+                return False
+            else:
+                if type(rejectValue).__name__ == "list":            # Value is a list
+                    if rejectItemValue in rejectValue:
+                        Domoticz.Log(F"'{rejectItem}' is '{rejectItemValue}' for {nodeName}")
+                        return False
+                else:                                               # Value is not a list
+                    if rejectItemValue == rejectValue:
+                        Domoticz.Log(F"'{rejectItem}' is '{rejectItemValue}' for {nodeName}")
                         return False
         return True
 
@@ -582,10 +605,10 @@ class BasePlugin:
             return
         Domoticz.Debug(source+" found "+str(nodeTopic)+", Device '" + device.Name + "', message '" + str(message) + "'")
         nodeSelect = self.getValue(nodeItems, 'select', None)       # Is there a "select" option?
+        nodeReject = self.getValue(nodeItems, 'reject', None)       # Is there a "reject" option?
         # Do we have a "select" option?
         topicSelected = True                                        # By default, accept message
         if nodeSelect != None:
-            Domoticz.Log(F"nodeSelect: {type(nodeSelect).__name__}: >{nodeSelect}<")
             if type(nodeSelect).__name__ == "list":
                 # This is a list, scan it
                 for nodeSelectItem in nodeSelect:
@@ -598,6 +621,21 @@ class BasePlugin:
             else:
                 # What's that?
                 Domoticz.Error(F"Can't understand 'select' with type {type(nodeSelect).__name__} for nodeKey")
+                topicSelected = False
+        # Do we have a "reject" option?
+        if nodeReject != None:
+            if type(nodeReject).__name__ == "list":
+                # This is a list, scan it
+                for nodeRejectItem in nodeReject:
+                    if not self.itemNotFoundInMessage(nodeRejectItem, message, nodeKey):
+                        topicSelected = False
+            elif type(nodeReject).__name__ == "dict":
+                # This is a dict, use it
+                if not self.itemNotFoundInMessage(nodeReject, message, nodeKey):
+                    topicSelected = False
+            else:
+                # What's that?
+                Domoticz.Error(F"Can't understand 'reject' with type {type(nodeReject).__name__} for nodeKey")
                 topicSelected = False
         if topicSelected:
             nodeType = self.getValue(nodeItems, 'type', "0")   # Read some values for this device
