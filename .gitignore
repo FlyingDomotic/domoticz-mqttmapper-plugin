@@ -1,3 +1,6 @@
+*.xls
+*.xlsm
+*.xlsx
 *.bak
 *.old
 Domoticz.py

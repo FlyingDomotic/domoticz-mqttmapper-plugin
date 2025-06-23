@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-version = "25.5.27-1"
+codeVersion = "25.6.23-1"
 
 import glob
 import os
@@ -25,7 +25,19 @@ import pathlib
 import getopt
 import sys
 import json
+from datetime import datetime
 from typing import Any
+from FF_checkV1File import FF_checkV1File
+
+# Print a message to screen and output stream
+def printMsg(logStream, msg: str, level: str = ""):
+    header = ""
+    if level != "":
+        header = F"   {level[:1].upper()}{level[1:]}: "
+    if level != "debug":
+        print(F"{header}{msg}")
+    if logStream != None:
+        logStream.write(F"{header}{msg}\n")
 
 # Dumps a dictionary to screen
 def dumpToLog(value: Any) -> None:
@@ -42,41 +54,6 @@ def dumpToLog(value: Any) -> None:
             if traceFlag:
                 print(line)
 
-# Returns a field value in a dictionary with a selection field and value (or None if not found)
-def getDictField(searchDict: dict, returnField: str, selectField: str, selectValue: Any, selectField2: str = "", selectValue2 : Any = None) -> Any:
-    # Scan all items
-    for item in searchDict.keys():
-        # Extract data
-        itemData = searchDict[item]
-        # Is select field in item?
-        if selectField in itemData:
-            # Is select field with required value?
-            if itemData[selectField] == selectValue:
-                if selectField2 != "":
-                    # Is select field 2 in item?
-                    if selectField2 in itemData:
-                        # Is select field 2 with required value?
-                        if itemData[selectField2] == selectValue2:
-                            # Return required field value
-                            if returnField != "":
-                                return getValue(itemData, returnField, None)
-                            else:
-                                return itemData
-                else:
-                    # Return required field value
-                    if returnField != "":
-                        return getValue(itemData, returnField, None)
-                    else:
-                        return itemData
-    return None
-
-# Return number of items in a ";" separated string (or zero if not string)
-def getItemCount(item: Any) -> int:
-    if type(item).__name__ == "str":                            # Is item a string?
-        parts = item.split(";")                                 # Split string giving ";"
-        return len(parts)                                       # Return item count (1 if no ";" found)
-    return 0                                                    # Not a string, return 0
-
 # Return a path in a dictionary (else None)
 def getPathValue(dict: Any, path: str, separator: str = '/') -> Any:
     pathElements = path.split(separator)
@@ -88,389 +65,87 @@ def getPathValue(dict: Any, path: str, separator: str = '/') -> Any:
     return element
 
 # Returns a dictionary value giving a key or default value if not existing
-def getValue(dict: Any, key: str, default: Any = '') -> Any:
-    if dict == None:
-        return default
+def getValue(searchDict, searchKey, defaultValue: Any =''):
+    if searchDict == None:
+        return defaultValue
     else:
-        if key in dict:
-            if dict[key] == None:
-                return default
+        if searchKey in searchDict:
+            if searchDict[searchKey] == None:
+                return defaultValue
             else:
-                return dict[key]
+                return searchDict[searchKey]
         else:
-            return default
+            return defaultValue
 
-# Compare 
+# Check if a token is present in root device or in one of its sub device
+def hasTokenPresent(nodeItems, itemName):
+    # Does item exist in nodeItems?
+    if itemName in nodeItems:
+        return True
+    # Scan all sub devices
+    subDevices = getValue(nodeItems, "subdevices", {})
+    for subDeviceKey in subDevices:
+        # Does item exist in this sub device?
+        if itemName in subDevices[subDeviceKey]:
+            return True
+    # Nothing found
+    return False
 
 # Format json data, removing {} and ""
 def formatJson(jsonData: dict) -> str:
     return json.dumps(jsonData, ensure_ascii=False).replace("{", "").replace("}","").replace('"', "")
 
-# Check a json item against a definition dictionary
-def checkToken(tokenName: str, nodeItem: Any, fullPath: str = "") -> str:
-    # Init errors
-    errorText = ""
-
-    # Load authorized token list
-    tokenList = dict({ 
-        "node/topic": {"mandatory": True, "type": "str"},
-        "node/type": {"mandatory": True, "type": ["int", "str"]},
-        "node/subtype": {"mandatory": True, "type": ["int", "str"]},
-        "node/mapping": {"mandatory": True, "type": "dict"},
-        "node/key": {"mandatory": False, "type": "str"},
-        "node/throttle": {"mandatory": False, "type": "int"},
-        "node/switchtype": {"mandatory": False, "type": ["int", "str"]},
-        "node/options": {"mandatory": False, "type": "Any"},
-        "node/initial": {"mandatory": False, "type": "dict"},
-        "node/visible": {"mandatory": False, "type": "bool"},
-        "node/set": {"mandatory": False, "type": "dict"},
-        "node/commands": {"mandatory": False, "type": "dict"},
-        "node/select": {"mandatory": False, "type": "dict"},
-        "select/item": {"mandatory": True, "type": "str"},
-        "select/value": {"mandatory": True, "type": ["str", "dict"]},
-        "node/reject": {"mandatory": False, "type": "dict"},
-        "reject/item": {"mandatory": True, "type": "str"},
-        "reject/value": {"mandatory": True, "type": ["str", "dict"]},
-        "mapping/item": {"mandatory": True, "type": "str"},
-        "mapping/default": {"mandatory": False, "type": "str"},
-        "mapping/digits": {"mandatory": False, "type": ["int", "str"]},
-        "mapping/multiplier": {"mandatory": False, "type": ["int", "float", "str"]},
-        "mapping/values": {"mandatory": False, "type": "Any"},
-        "mapping/battery": {"mandatory": False, "type": "str"},
-        "set/topic": {"mandatory": False, "type": "str"},
-        "set/retain": {"mandatory": False, "type": "bool"},
-        "set/payload": {"mandatory": False, "type": "Any"},
-        "set/command": {"mandatory": False, "type": "str"},
-        "set/digits": {"mandatory": False, "type": ["int", "str"]},
-        "set/multiplier": {"mandatory": False, "type": ["int", "float", "str"]},
-        "set/mapping": {"mandatory": False, "type": "Any"},
-        "initial/nvalue": {"mandatory": False, "type": "int"},
-        "initial/svalue": {"mandatory": False, "type": "str"},
-        "commands/xxx": {"mandatory": False, "type": "dict"},
-        "xxx/topic": {"mandatory": False, "type": "str"},
-        "xxx/retain": {"mandatory": False, "type": "bool"},
-        "xxx/payload": {"mandatory": False, "type": "Any"},
-        "xxx/command": {"mandatory": False, "type": "str"}
-        })
-
-    #  Check for mandatory tokens
-    for token in tokenList:
-        elements = token.split("/")
-        # Is this token the one for our items?
-        if elements[0] == tokenName:
-            # If token mandatory?
-            if tokenList[token]['mandatory']:
-                # Is token not present in items?
-                if not elements[1] in nodeItem:
-                    errorText += F"\n{elements[1]} is mandatory in >{fullPath}<"
-
-    # Check for each item
-    for item in nodeItem:
-        # Compose key
-        key = tokenName + "/" + item
-        # For commands, overwrite command name by "xxx"
-        elements = fullPath.split(":")
-        if len(elements) == 2 and elements[1] == "commands":
-            key = tokenName + "/" + "xxx"
-        elif len(elements) == 3 and elements[1] == "commands":
-            key = "xxx" + "/" + item
-        # Is item in allowed token list?
-        if key in tokenList:
-            # Check for item type against token type
-            tokenType = tokenList[key]['type']
-            if tokenType != "Any":
-                # Get item type
-                itemType = type(nodeItem[item]).__name__
-                # Check for type 
-                if isinstance(tokenType, list):
-                    if itemType not in tokenType:
-                        errorText += F"\n{item} is {itemType} instead of {tokenType} in >{fullPath}<"
-                else:
-                    if itemType != tokenType:
-                        errorText += F"\n{item} is {itemType} instead of {tokenType} in >{fullPath}<"
-                if itemType in ['list', 'dict']:
-                    errorText += checkToken(item, nodeItem[item], fullPath + ":" + item)
+# Extract a version number in format 1.2.3-4
+def extractVersion(version: str) -> list:
+    result = []
+    part = ""
+    for char in version:
+        if char in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']:
+            part += char
         else:
-            errorText += F"\n{item} is unknown in >{fullPath}<"
-    return errorText
+            if part != "":
+                result.append(part)
+                part = ""
+    if part != "":
+        result.append(part)
+    return result
 
-# Check MqttMapper JSON mapping file jsonFile
-def checkJson(jsonData: dict, jsonFile: str) -> None:
-    # Don't check DomoticzTypes.json file
-    if jsonFile == domoticzTypesFile:
-        return
-    # Iterating through the JSON list
-    print("Checking "+jsonFile)
-    errorSeen = 0
-    warningSeen = 0
-    devices = []
-    global typeLib
-    global subTypeLib
-    global switchTypeLib
-    for node in jsonData.items():
-        errors = 0
-        warnings = 0
-        nodeName = node[0]
-        nodeItems = node[1]
-        nodeTopic = getValue(nodeItems, 'topic', None)
-        nodeKey = getValue(nodeItems, 'key', None)
-        errorText = ''
-        warningText = ''
-        if nodeName == None or nodeName == '':
-            errorText += '\nno device name given'
-            errors += 1
-        elif nodeItems == None or nodeItems == '':
-            errorText += '\nno items given'
-            errors += 1
-        else:
-            newErrors = checkToken("node", nodeItems, node[0])
-            if newErrors != "":
-                errorText += newErrors
-                errors += len(errorText.split("\n")) - 1
-        if traceFlag:
-            dumpToLog(node)
-        type = None
-        typeLib = "???"
-        subType = None
-        subTypeLib = "???"
-        definitionItems = None
-        switchType = None
-        switchTypeLib = "???"
-
-        if "type" in nodeItems:
-            try:
-                type = int(nodeItems["type"])
-            except:
-                pass
-            else:
-                value = getDictField(domoticzTypes["types"], "name", "value", type)
-                if value != None:
-                    typeLib = value
-
-            if typeLib == "???":
-                errorText += F"\ntype {type} not known"
-                errors += 1
-
-        if "subtype" in nodeItems:
-            try:
-                subType = int(nodeItems["subtype"])
-            except:
-                pass
-            else:
-                value = getDictField(domoticzTypes["subTypes"], "name", "value", subType, "typeValue", type)
-                if value != None:
-                    subTypeLib = value
-
-       # Check for throttle parameter
-        if "throttle" in nodeItems:
-            # Only one value given on digits
-            try:
-                delay = int(nodeItems["throttle"])
-            except:
-                errorText += F'\ninvalid numeric value in "throttle": {nodeItems["throttle"]}'
-                errors += 1
-            else:
-                if delay < 1:
-                    errorText += F'\n"throttle" must be at least 1 second (is {nodeItems["throttle"]})'
-                errors += 1
-
-       # Put a warning if no default specified when values are given in mapping
-        if "mapping" in nodeItems:
-            mappingItems = nodeItems["mapping"]
-            if "values" in mappingItems and "default" not in mappingItems:
-                warningText += "\nIt may be a good idea to specify 'mapping/default' when using 'mapping/values'"
-                warnings += 1
-
-        # Look for type definition
-        definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type)
-        # If we have at least one type definition
-        if definitionItems != None:
-            # Is this type not associated with a particular sub type?
-            if not definitionItems["noSubType"]:
-                # Type has specific sub type, search for this sub type
-                definitionItems = getDictField(domoticzTypes["definitions"], "", "typeValue", type, "subTypeValue", subType)
-                if definitionItems != None:
-                    # Do we have an associated switch type?
-                    if "switchtype" in nodeItems:
-                        try:
-                            switchType = int(nodeItems["switchtype"])
-                        except:
-                            pass
-                        else:
-                            # When having definition items
-                            if definitionItems != None:
-                                # Check for switch type
-                                if "switchType" in definitionItems:
-                                    #  There is a switch type in definition, value is switch
-                                    if definitionItems["switchType"] == "switch":
-                                        # Check that configuration value exists in switch types definition
-                                        value = getDictField(domoticzTypes["switchTypes"], "name", "value", switchType)
-                                        # Save value or put an error message
-                                        if value != None:
-                                            switchTypeLib = value
-                                        else:
-                                            errorText += F"\nswitchType {switchType} is not a known switch type for type {type}, sub type {subType}"
-                                            errors += 1
-                                #  There is a switch type in definition, value is meter
-                                    elif definitionItems["switchType"] == "meter":
-                                        # Check that configuration value exists in switch types definition
-                                        value = getDictField(domoticzTypes["meterTypes"], "name", "value", switchType)
-                                        # Save value or put an error message
-                                        if value != None:
-                                            switchTypeLib = value
-                                        else:
-                                            errorText += F"\nswitchType {switchType} is not a known meter type for type {type}, sub type {subType}"
-                                            errors += 1
-                                    # User specified a switch type while no defined
-                                    elif switchType:
-                                        warningText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
-                                        warnings += 1
-                                else:
-                                    # User specified a switch type while no defined
-                                    if switchType != 0:
-                                        warningText += F"\nswitchType should be 0, not {switchType} for type {type}, sub type {subType}"
-                                        warnings += 1
-                                # Check for multiple sValues
-                                if "sValue2" in definitionItems:
-                                    if "initial" in nodeItems:
-                                        if "svalue" not in nodeItems["initial"]:
-                                            warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
-                                            warnings += 1
-                                    else:
-                                        warningText += F'\nType {type}, sub type {subType} has multiple items sValue, but "initial/svalue" not found'
-                                        warnings += 1
-                            else:
-                                errorText += F"\nType {type}, sub type {subType} not supported!"
-                                errors += 1
-            # Compute sValue item count associated with this type/sub type
-            sValueCount = 0
-            # Count all sValue dans save each digit count for floats
-            if definitionItems != None:
-                digitsList = []
-                for item in definitionItems.keys():
-                    if item.startswith("sValue"):
-                        if definitionItems[item]["dataType"] == "floating point number":
-                            if "digits" in definitionItems[item]:
-                                # Insert digit count
-                                digitsList.append(definitionItems[item]["digits"])
-                            else:
-                                # 0 means float without decimals
-                                digitsList.append(0)
-                        else:
-                            # -1 means not float
-                            digitsList.append(-1)
-                        sValueCount += 1
-                # Check for initial sValue items if given
-                if "initial" in nodeItems:
-                    if "svalue" in nodeItems["initial"]:
-                        givenValueCount = getItemCount(nodeItems["initial"]["svalue"])
-                        if givenValueCount != sValueCount:
-                            errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'initial/svalue' while {sValueCount} required"
-                            errors += 1
-                # Check for multiplier count if given
-                if "mapping" in nodeItems:
-                    if "multiplier" in nodeItems["mapping"]:
-                        givenValueCount = getItemCount(nodeItems["mapping"]["multiplier"])
-                        if givenValueCount > 1 and givenValueCount != sValueCount:
-                            errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'mapping/multiplier' while {sValueCount} required"
-                            errors += 1
-                # Check for digits count if given
-                if "mapping" in nodeItems:
-                    if "digits" in nodeItems["mapping"]:
-                        givenValueCount = getItemCount(nodeItems["mapping"]["digits"])
-                        if givenValueCount > 1 and givenValueCount != sValueCount:
-                            errorText += F"\n{givenValueCount} item{'s'[:givenValueCount^1]} given in 'mapping/digits' while {sValueCount} required"
-                            errors += 1
-                        else:
-                            # Check any given digit count less or equal of max digit, for floats (or zero for others)
-                            if givenValueCount:
-                                # Scan all elements in digits
-                                i = -1
-                                for part in nodeItems["mapping"]["digits"].split(";"):
-                                    i += 1
-                                    try:
-                                        if part != "":
-                                            digitValue = int(part)
-                                        else:
-                                            digitValue = 0
-                                    except:
-                                        errorText += F'\ninvalid numeric value in "digits": {nodeItems["mapping"]["digits"]}, element {i+1}'
-                                        errors += 1
-                                    else:
-                                        # If this float value?
-                                        if digitsList[i] != -1:
-                                            # If given value is not zero
-                                            if digitValue > digitsList[i]:
-                                                warningText += F"\nDigit {i+1} is {digitValue}, should be no more than {digitsList[i]}"
-                                                warnings += 1
-                                        else:
-                                            if digitValue > 0:
-                                                warningText += F"\nDigit {i+1} is {digitValue}, should be zero for non float values"
-                                                warnings += 1
-                            else:
-                                # Only one value given on digits
-                                try:
-                                    digitValue = int(nodeItems["mapping"]["digits"])
-                                except:
-                                    errorText += F'\ninvalid numeric value in "digits": {nodeItems["mapping"]["digits"]}'
-                                    errors += 1
-                                else:
-                                    # For all sValues
-                                    for i in range(len(digitsList)):
-                                        # If this float value?
-                                        if digitsList[i] != -1:
-                                            # If given value is not zero
-                                            if digitValue > digitsList[i]:
-                                                warningText += F"\nDigit {i+1} is {digitValue}, should be no more than {digitsList[i]}"
-                                                warnings += 1
-        if traceFlag:
-            if definitionItems != None:
-                # List all nValue and sValue
-                for item in definitionItems.keys():
-                    if item == "nValue" or item.startswith("sValue"):
-                        items = definitionItems[item]
-                        # Remove format item
-                        if "format" in items:
-                            del items["format"]
-                        print(f"    {item}: {formatJson(items)}")
-        device = nodeKey if nodeKey else nodeTopic
-        if device in devices:
-            errorText += F"\nduplicate topic '{device}' node/key found"
-            errors += 1
-        else:
-            devices.append(device)
-        if errorText:
-            print(F"    Error{'s'[:errors^1]} in {node}")
-            for errorLine in errorText[1:].split('\n'):
-                print("    --> "+errorLine)
-            errorSeen += errors
-        if warningText:
-            print(F"    Warning{'s'[:warnings^1]} in {node}")
-            for warningLine in warningText[1:].split('\n'):
-                print("    --> "+warningLine)
-            warningSeen += warnings
-    if errorSeen:
-        print(F"  Error{'s'[:errorSeen^1]} found in {jsonFile}, fix them and recheck!!!")
-    elif warningSeen:
-        print(F"  Warning{'s'[:warningSeen^1]} detected in {jsonFile}")
-    else:
-        print("  File seems good")
+# Compare 2 versions in format 1.2.3-4
+def compareVersions(version1: str, version2: str) -> int:
+    version1Parts = extractVersion(version1)                        # Exxtract versions
+    version2Parts = extractVersion(version2)
+    for i in range(min(len(version1Parts), len(version2Parts))):    # Compare common part
+        if int(version1Parts[i]) > int(version2Parts[i]):           # This par is greater in version1
+            return 1
+        elif int(version1Parts[i]) < int(version2Parts[i]):         # This part is lower in version 1
+            return -1
+        # Here, parts are thr same
+    if len(version1) > len(version2):                               # Verions1 has more items than version2
+        return 1
+    elif len(version1) < len(version2):                             # Verions1 has less items than version2
+        return -1
+    # Here parts are the same and have same length
+    return 0
 
 # *** Main code ***
 
-# Init arguments variables
-cdeFile = __file__
-if cdeFile[:2] == './':
-    cdeFile = cdeFile[2:]
+# Extract this script file name
+cdeFile = pathlib.Path(__file__).stem
+currentPath = pathlib.Path(__file__).parent.resolve()
 
-print(F"{cdeFile} V{version} - Use --trace to get details")
+# Set current working directory to this python file folder
+os.chdir(currentPath)
+
+print(F"{cdeFile} V{codeVersion} - Use --trace to get details")
 inputFiles = []
 traceFlag = False
 domoticzTypesFile = "DomoticzTypes.json"
-domoticzTypes = {}
+domoticzTypesJson = {}
 typeLib = ""
 subTypeLib = ""
 switchTypeLib = ""
+logStream = None
+checkV1File = FF_checkV1File()
 
 # Use command line if given
 if sys.argv[1:]:
@@ -481,6 +156,7 @@ else:
 # Read arguments
 helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
     [--input=<input file(s)>]: input file name (can be repeated, default to *.json)
+    [--log]: keep a log file of each analyzed file
     [--trace]: enable trace
     [--help]: print this help message
 
@@ -513,20 +189,38 @@ if traceFlag:
 # Read Domoticz types
 with open(domoticzTypesFile, "rt", encoding="UTF-8") as typesStream:
     try:
-        domoticzTypes = json.load(typesStream)
+        domoticzTypesJson = json.load(typesStream)
     except Exception as error:
         print(F"{error} when reading {domoticzTypesFile}")
-
-# Set current working directory to this python file folder
-os.chdir(pathlib.Path(__file__).parent.resolve())
 
 # Read config files
 for specs in inputFiles:
     for configFile in glob.glob(specs):
-        try:
-            with open(configFile, encoding = 'UTF-8') as configStream:
-                jsonData = json.load(configStream)
-        except Exception as exception:
-            print(str(exception)+" when loading "+configFile+". Fix error and retry check!!!")
-        else:
-            checkJson(jsonData, configFile)
+        if configFile != domoticzTypesFile:
+            try:
+                with open(configFile, encoding = 'UTF-8') as configStream:
+                    jsonData = json.load(configStream)
+            except Exception as exception:
+                if traceFlag:
+                    logStream = open(pathlib.Path(configFile).stem+".log", "wt", encoding="utf-8")
+                printMsg(logStream, str(exception)+" when loading "+configFile+". Fix this and retry check!!!", "error")
+            else:
+                fileFormat = "1.0"
+                parameters = getValue(jsonData, "[parameters]", None)
+                fileFormat = getValue(parameters, "version", "1.0")
+                if traceFlag:
+                    logStream = open(pathlib.Path(configFile).stem+".log", "wt", encoding="utf-8")
+                errorSeen, messages = checkV1File.checkV1Json(jsonData, configFile, domoticzTypesJson)
+                if errorSeen:
+                    jsonData = {}
+                    printMsg(logStream, F"Error analysing V{fileFormat} file {configFile}")
+                    for elements in messages:
+                        printMsg(logStream, elements[1], elements[0])
+                else:
+                    if messages != []:
+                        printMsg(logStream, F"Information analysing V{fileFormat} file {configFile}")
+                        for elements in messages:
+                            originalElements = elements
+                            printMsg(logStream, elements[1], elements[0])
+            if logStream != None:
+                logStream.close()
