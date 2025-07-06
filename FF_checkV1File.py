@@ -1,13 +1,15 @@
 # MqttMapper V1.0 file format checks
 import json
 from typing import Tuple, Any, List
+from DomoticzTypes import DomoticzTypes
 
 class FF_checkV1File:
     # Class initialization
     def __init__(self):
-        self.fileVersion = "25.6.23-1"                              # File version
+        self.fileVersion = "25.6.24-1"                              # File version
         self.errorSeen = False;                                     # Do we seen an error ?
         self.allMessages = []                                       # All messages to be printed
+        self.switchTypes = DomoticzTypes()                          # Load types functions
 
     # Prints an error message, saving it and setting error flag
     def printError(self, message: str) -> None:

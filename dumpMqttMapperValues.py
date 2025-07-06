@@ -13,7 +13,7 @@
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 #
 
-codeVersion = "1.3.0"
+codeVersion = "25.6.24-1"
 
 import os
 import sys
@@ -76,11 +76,11 @@ def getValue(dict, key, default=''):
     else:
         if key in dict:
             if dict[key] == None:
-                return default #or None
+                return default                                      #or None
             else:
                 return dict[key]
         else:
-            return default #or None
+            return default                                          #or None
 
 # Checks for duplicates device (ending) names in database
 def checkForDatabaseDuplicates(databaseConnection):
@@ -238,9 +238,9 @@ def dumpTopics(jsonParameters, jsonConfiguration, jsonConfigurationFile):
         databaseDefinition = getDatabaseDataById(deviceId, "    Database: ")
         printLog(F"{deviceName}")
         printLog(F"    MqttMapper: {mqttMapperDefinition}")
-        if apiDefinition != "": 
+        if apiDefinition != "":
             printLog(F"{apiDefinition}")
-        if databaseDefinition != "": 
+        if databaseDefinition != "":
             printLog(F"{databaseDefinition}")
         if mqttInstalled and mqttIsConnected:
             mqttValue = "    MQTT: "
@@ -305,7 +305,7 @@ def getDatabaseDataById(deviceId, prefix):
                     + F", nValue='{data[4]}'" \
                     + F", sValue='{data[5]}'" \
                     + F", Color='{data[7]}'" \
-                    + F", LastLevel='{data[6]}'" 
+                    + F", LastLevel='{data[6]}'"
             cursor.close()
             return response[1:]
         else:
@@ -320,7 +320,7 @@ def getApiDataById(deviceId, prefix):
         result = getValue(domoticzDevices, "result")
         if result != "":
             response = ""
-            for device in result:    
+            for device in result:
                 if getValue(device, "ID") == deviceId:
                     response += F"\n{prefix}" \
                         + F"Name='{getValue(device, 'Name')}'" \
@@ -413,7 +413,7 @@ if not inputFiles:
 
 if domoticzUrl == None:
     domoticzUrl = "http://127.0.0.1:8080/"
- 
+
 # Add an ending "/" if not given
 if not domoticzUrl.endswith("/"):
     domoticzUrl += "/"
@@ -429,7 +429,7 @@ mqttIsConnected = False
 # Set current working directory to this python file folder
 os.chdir(pathlib.Path(__file__).parent.resolve())
 
-# Ask for domoticz API version and device list 
+# Ask for domoticz API version and device list
 domoticzVersion = None
 
 global domoticzDevices
@@ -482,7 +482,7 @@ if sqlite3Installed:
                 dbStream.write(binaryContent)
         except Exception as exception:
             errorMessage = str(exception)+" when writing "+databaseFileName
-            
+
     # Open database
     if errorMessage == None:
         try:

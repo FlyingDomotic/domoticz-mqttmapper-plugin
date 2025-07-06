@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.5.27-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.6.24-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -32,13 +32,12 @@
     </params>
 </plugin>
 """
-import Domoticz
-# This line is used by VsCodium when running outside Domoticz environment
-try:
-    from Domoticz import *
-except:
-    pass
 
+#   -----------------------------------------
+#   ---------------- Imports ----------------
+#   -----------------------------------------
+
+import Domoticz
 import json
 import time
 import subprocess
@@ -47,7 +46,17 @@ from typing import Any
 from datetime import datetime, timezone
 from DomoticzTypes import DomoticzTypes
 
-#   MQTT client class
+# Used by VsCodium when running outside Domoticz environment
+#   to simulate internal Domoticz functions/variables definition
+try:
+    from Domoticz import *
+except:
+    pass
+
+#   ---------------------------------------------------
+#   ---------------- MQTT client class ----------------
+#   ---------------------------------------------------
+
 class MqttClient:
     Address = ""
     Port = ""
@@ -114,7 +123,7 @@ class MqttClient:
         self.isConnected = False
         if self.mqttConn != None:
             if self.mqttConn.Connected():
-                self.mqttConn.Disconnect() 
+                self.mqttConn.Disconnect()
         self.mqttConn = None
 
     # MQTT connected callback
@@ -161,7 +170,10 @@ class MqttClient:
             if self.mqttPublishCb != None:
                 self.mqttPublishCb(topic, Data['Payload'])
 
-#   Plug-in base class
+#   ----------------------------------------------------------
+#   ---------------- Plug-in base class class ----------------
+#   ----------------------------------------------------------
+
 class BasePlugin:
     # MQTT settings
     mqttClient = None
@@ -176,8 +188,97 @@ class BasePlugin:
     initDone = False
     switchTypes = DomoticzTypes()
 
+    # Executed on plug-in connection
+    def onConnect(self, Connection, Status, Description):
+        # Exit if init not properly done
+        if not self.initDone or self.mqttClient == None:
+            return
+        self.mqttClient.onConnect(Connection, Status, Description)
+
+    # Executed on plug-in disconnection
+    def onDisconnect(self, Connection):
+        # Exit if init not properly done
+        if not self.initDone or self.mqttClient == None:
+            return
+        self.mqttClient.onDisconnect(Connection)
+
+    # Executed on plug-in message reception
+    def onMessage(self, Connection, Data):
+        # Exit if init not properly done
+        if not self.initDone or self.mqttClient == None:
+            return
+        self.mqttClient.onMessage(Connection, Data)
+
+    # Executed on MQTT connection
+    def onMQTTConnected(self):
+        # Exit if init not properly done
+        if not self.initDone or self.mqttClient == None:
+            return
+        Domoticz.Debug(F"onMQTTConnected")
+        self.mqttClient.Subscribe(self.getTopics())
+
+    # Executed on MQTT disconnection
+    def onMQTTDisconnected(self):
+        # Exit if init not properly done
+        if not self.initDone:
+            return
+        Domoticz.Debug(F"onMQTTDisconnected")
+
+    # Executed on MQTT subscribtion
+    def onMQTTSubscribed(self):
+        # Exit if init not properly done
+        if not self.initDone:
+            return
+        # (Re)subscribed, refresh device info
+        Domoticz.Debug(F"onMQTTSubscribed")
+
+    # Executed when a device is added
+    def onDeviceAdded(self, Unit):
+        # Exit if init not properly done
+        if not self.initDone:
+            return
+        Domoticz.Log(F"onDeviceAdded {self.deviceStr(Unit)}")
+
+    # Executed when a device is modified
+    def onDeviceModified(self, Unit):
+        # Exit if init not properly done
+        if not self.initDone:
+            return
+        device = Devices[Unit]
+        Domoticz.Log(F"onDeviceModified {self.deviceStr(Unit)}, {device.DeviceID}, nValue={device.nValue}, sValue={device.sValue}")
+
+    # Executed when a device is removed
+    def onDeviceRemoved(self, Unit):
+        # Exit if init not properly done
+        if not self.initDone:
+            return
+        Domoticz.Log(F"onDeviceRemoved {self.deviceStr(Unit)}")
+
+    # Find a device by name in devices table
+    def getDevice(self, deviceName):
+        for device in Devices:
+            if (Devices[device].DeviceID == deviceName) :
+                # Return device
+                return Devices[device]
+        # Return None if not found
+        return None
+
+    # Get next free device Id
+    def getNextDeviceId(self):
+        nextDeviceId = 1
+        while True:
+            exists = False
+            for device in Devices:
+                if (device == nextDeviceId) :
+                    exists = True
+                    break
+            if (not exists):
+                break;
+            nextDeviceId = nextDeviceId + 1
+        return nextDeviceId
+
     # Converts a value to boolean (return True for some string values, integer or float different of zero, false else)
-    def convert2bool(self, val):
+    def convertToBool(self, val):
         valType = type(val).__name__
         if valType == "str":
             if val.lower() in ['y', 'yes', 't', 'true', 'on']:
@@ -187,7 +288,7 @@ class BasePlugin:
         elif valType == "float":
             return valType != 0.0
         return False
-    
+
     # Returns a dictionary value giving a key or default value if not existing
     def getValue(self, dict, key, default: Any =''):
         if dict == None:
@@ -195,45 +296,54 @@ class BasePlugin:
         else:
             if key in dict:
                 if dict[key] == None:
-                    return default #or None
+                    return default
                 else:
                     return dict[key]
             else:
-                return default #or None
+                return default
+
+    # Return value of a key in a list of dictionary, or default value if not found in all dictionaries
+    def getValueInDictList(self, dictList, key, default: Any =''):
+        for dict in dictList:
+            if dict != None:
+                if key in dict:
+                    if dict[key] != None:
+                        return dict[key]
+        return default
 
     # Return a path in a dictionary or default value if not existing
-    #   When value is a list, [sub]path can be either "*" to test all list elements, or a numerical index, starting from 1) 
+    #   When value is a list, [sub]path can be either "*" to test all list elements, or a numerical index, starting from 1)
     def getPathValue (self, dict, path, separator = '/', default: Any =''):
         try:
-            pathElements = path.split(separator) # Split path with separator
-            pathElement = pathElements[0] # Extract first part of path
-            if len(pathElements) > 1: # Do we have remaining path?
-                pathRemaining = separator.join(pathElements[1:]) # Yes, build it, removing first one
+            pathElements = path.split(separator)                    # Split path with separator
+            pathElement = pathElements[0]                           # Extract first part of path
+            if len(pathElements) > 1:                               # Do we have remaining path?
+                pathRemaining = separator.join(pathElements[1:])    # Yes, build it, removing first one
             else:
-                pathRemaining = "" # No, set empty
-            element = dict # Load data
-            if type(element).__name__ == "list": # Is data a list?
-                if pathElement == "*": # Yes, do we have a star?
-                    found = False # No item found yet
-                    for subElement in element: # Scan all elements for token
+                pathRemaining = ""                                  # No, set empty
+            element = dict                                          # Load data
+            if type(element).__name__ == "list":                    # Is data a list?
+                if pathElement == "*":                              # Yes, do we have a star?
+                    found = False                                   # No item found yet
+                    for subElement in element:                      # Scan all elements for token
                         result = self.getPathValue(subElement,pathRemaining, separator, None)
-                        if result != None: # We found a match
-                            element = result # Load result
-                            pathRemaining = "" # Clean path as we already have the result
-                            found = True # Set found flag
-                            break # Exit loop
-                    if not found: # If nothing found
-                        return default # Return default
-                else: # We have a list with an index
-                    index = int(pathElement) # Extract list index from path
-                    if index < 1 or index > len(element): # Check it
-                        return default # Bad index
-                    element = element[index-1] # Extract data giving index
-            else: # We don't have a list (but a dict)
-                if pathElement not in element: # Check for path in data
-                    return default # Not found, return default
-                element = element[pathElement] # Extract data
-            if pathRemaining != "": # Do we still have remaining path?
+                        if result != None:                          # We found a match
+                            element = result                        # Load result
+                            pathRemaining = ""                      # Clean path as we already have the result
+                            found = True                            # Set found flag
+                            break                                   # Exit loop
+                    if not found:                                   # If nothing found
+                        return default                              # Return default
+                else:                                               # We have a list with an index
+                    index = int(pathElement)                        # Extract list index from path
+                    if index < 1 or index > len(element):           # Check it
+                        return default                              # Bad index
+                    element = element[index-1]                      # Extract data giving index
+            else:                                                   # We don't have a list (but a dict)
+                if pathElement not in element:                      # Check for path in data
+                    return default                                  # Not found, return default
+                element = element[pathElement]                      # Extract data
+            if pathRemaining != "":                                 # Do we still have remaining path?
                 element = self.getPathValue(element, pathRemaining, separator, default) # Iterate
         except:
             element = default
@@ -254,6 +364,47 @@ class BasePlugin:
             return True
         except ValueError:
             return False
+
+    # Return value to use, depending on 'multiplier' and 'digits' for numerical data
+    #   If setMapping is specified, we're about to set the value.
+    #   Multiplier and/or digits should be taken from setMapping first, if they exists.
+    #   Else, they'll be taken from nodeMapping
+    #   If multiplier/digit contains a list separated by ";", then itemNumber is used as index
+    def computeValue(self, itemValue, nodeMapping, itemNumber, setMapping=None):
+        if self.isFloat(itemValue):                                 # If raw value is numeric or float
+            result = float(itemValue)                               # Convert value as float
+            if int(result) == result:                               # Is value an integer?
+                result = int(result)                                # Force to integer
+            multiplier = None
+            digits = None
+            if setMapping:                                          # Are we in set operation?
+                multiplier = self.getValue(setMapping, 'multiplier', None)  # Extract multiplier from set parameters
+                digits = self.getValue(setMapping, 'digits', None)  # Extract number of digits needed from mapping parameters
+            if multiplier == None:                                  # Multiplier not given in setMapping
+                multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier from node parameters
+            if multiplier !=None:                                   # Do we have a multiplier?
+                if type(multiplier).__name__ == "str":              # Is multiplier a string?
+                    parts = multiplier.split(";")                   # Split string giving ";"
+                    if itemNumber < len(parts):                     # Is itemNumber within parts?
+                        multiplier = float(parts[itemNumber])       # Isolate this part and use it as multiplier
+                if setMapping:                                      # Is this a set operation?
+                    result /= float(multiplier)                     # Yes, divide by multiplier
+                else:
+                    result *= float(multiplier)                     # No, multiply
+            if digits == None:                                      # Digits not given in setMapping
+                digits = self.getValue(nodeMapping, 'digits', None) # Extract digits from node parameters
+            if digits == None:                                      # Digits not defined elsewhere
+                return result                                       # Return float not rounded
+            if type(digits).__name__ == "str":                      # Is digits a string?
+                parts = digits.split(";")                           # Split string giving ";"
+                if itemNumber < len(parts):                         # Is itemNumber within parts?
+                    digits = parts[itemNumber]                      # Isolate this part and use it as digits
+            if int(digits) <= 0:                                    # Digits is negative or zero
+                return int(result)                                  # Return integer
+            else:                                                   # Digits defined and positive
+                return round(result, int(digits))                   # Return rounded value
+        else:                                                       # Value is not numerical
+            return itemValue                                        # Return original value else
 
     # Return True if a message matches
     def itemFoundInMessage(self, nodeSelect, message, nodeName):
@@ -301,80 +452,16 @@ class BasePlugin:
                         return False
         return True
 
-    # Return value to use, depending on 'multiplier' and 'digits' for numerical data
-    #   If setMapping is specified, we're about to set the value.
-    #   Multiplier and/or digits should be taken from setMapping first, if they exists.
-    #   Else, they'll be taken from nodeMapping
-    #   If multiplier/digit contains a list separated by ";", then itemNumber is used as index
-    def computeValue(self, itemValue, nodeMapping, itemNumber, setMapping=None):
-        if self.isFloat(itemValue):                                         # If raw value is numeric or float
-            result = float(itemValue)                                       # Convert value as float
-            if int(result) == result:                                       # Is value an integer?
-                result = int(result)                                        # Force to integer
-            multiplier = None
-            digits = None
-            if setMapping:                                                  # Are we in set operation?
-                multiplier = self.getValue(setMapping, 'multiplier', None)  # Extract multiplier from set parameters
-                digits = self.getValue(setMapping, 'digits', None)          # Extract number of digits needed from mapping parameters
-            if multiplier == None:                                          # Multiplier not given in setMapping
-                multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier from node parameters
-            if multiplier !=None:                                           # Do we have a multiplier?
-                if type(multiplier).__name__ == "str":                      # Is multiplier a string?
-                    parts = multiplier.split(";")                           # Split string giving ";"
-                    if itemNumber < len(parts):                             # Is itemNumber within parts?
-                        multiplier = float(parts[itemNumber])               # Isolate this part and use it as multiplier
-                if setMapping:                                              # Is this a set operation?
-                    result /= float(multiplier)                             # Yes, divide by multiplier
-                else:
-                    result *= float(multiplier)                             # No, multiply
-            if digits == None:                                              # Digits not given in setMapping
-                digits = self.getValue(nodeMapping, 'digits', None)         # Extract digits from node parameters
-            if digits == None:                                              # Digits not defined elsewhere
-                return result                                               # Return float not rounded
-            if type(digits).__name__ == "str":                              # Is digits a string?
-                parts = digits.split(";")                                   # Split string giving ";"
-                if itemNumber < len(parts):                                 # Is itemNumber within parts?
-                    digits = parts[itemNumber]                              # Isolate this part and use it as digits
-            if int(digits) <= 0:                                            # Digits is negative or zero
-                return int(result)                                          # Return integer
-            else:                                                           # Digits defined and positive
-                return round(result, int(digits))                           # Return rounded value
-        else:                                                               # Value is not numerical
-            return itemValue                                                # Return original value else
-
-    # Find a device by name in devices table
-    def getDevice(self, deviceName):
-        for device in Devices:
-            if (Devices[device].DeviceID == deviceName) :
-                # Return device
-                return Devices[device]
-        # Return None if not found
-        return None
-
-    # Get next free device Id
-    def getNextDeviceId(self):
-        nextDeviceId = 1
-        while True:
-            exists = False
-            for device in Devices:
-                if (device == nextDeviceId) :
-                    exists = True
-                    break
-            if (not exists):
-                break;
-            nextDeviceId = nextDeviceId + 1
-        return nextDeviceId
-
     # Return data definition for a given device
     def getDeviceDefinition(self, device):
         # Iterating through the JSON list
         if self.jsonData != None:
             for node in self.jsonData.items():
                 nodeItems = node[1]
-                nodeTopic = self.getValue(nodeItems, 'topic', None)                 # Get MQTT topic
-                nodeKey = self.getValue(nodeItems, 'key', nodeTopic)                # Get device key
-                if device.DeviceID == nodeKey:                                      # Is this the right topic?
-                    return nodeItems                                                # Yes, return definition
+                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
+                nodeKey = self.getValue(nodeItems, 'key', nodeTopic)# Get device key
+                if device.DeviceID == nodeKey:                      # Is this the right topic?
+                    return nodeItems                                # Yes, return definition
         return None
 
     # Execute a local command
@@ -382,12 +469,11 @@ class BasePlugin:
         Domoticz.Log(F"Executing {command}")
         localProcess = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         if localProcess.stdout != None:
-            for line in localProcess.stdout.readlines():    # Copy all stdout and/or stderr lines to log
+            for line in localProcess.stdout.readlines():            # Copy all stdout and/or stderr lines to log
                 Domoticz.Log(F'>{line.decode("utf-8")}')
-        finalStatus = localProcess.wait()   # Get final status
-        if (finalStatus):   # Did we got an error?
+        finalStatus = localProcess.wait()                           # Get final status
+        if (finalStatus):                                           # Did we got an error?
             Domoticz.Error(F"Error {finalStatus} executing {command}")
-
 
     # Format device name
     def deviceStr(self, unit):
@@ -395,6 +481,63 @@ class BasePlugin:
         if unit in Devices:
             name = Devices[unit].Name
         return format(unit, '03d') + "/" + name
+
+    # Returns list of topics to subscribe to
+    def getTopics(self):
+        topics = set()
+        # Go through JSON file to extract topics
+        if self.jsonData != None:
+            for node in self.jsonData.items():
+                nodeItems = node[1]
+                nodeTopic = self.getValue(nodeItems, 'topic', None)
+                # Add topic if not already in list (as multiple devices on the same topic are allowed)
+                if nodeTopic not in topics:
+                    topics.add(nodeTopic)
+        Domoticz.Debug(F"getTopics: '{topics}'")
+        return list(topics)
+
+    # Dump plug-in configuration to log
+    def dumpConfigToLog(self):
+        for x in Parameters:
+            if Parameters[x] != "":
+                Domoticz.Log(F"'{x}': '{Parameters[x]}'")
+        Domoticz.Log(F"Device count: {str(len(Devices))}")
+        for x in Devices:
+            Domoticz.Log(F"Device: {x} - {str(Devices[x])}")
+
+    # Dump MQTT received message to log
+    def dumpMQTTMessageToLog(self, topic, rawmessage, prefix=''):
+        message = rawmessage.decode('utf8','replace')
+        message = str(message.encode('unicode_escape'))
+        Domoticz.Log(F"{prefix}{topic}: '{message}'")
+
+    # Check if a token is present in root device or in one of its sub device
+    def hasTokenPresent(self, nodeItems, itemName):
+        # Does item exist in nodeItems?
+        if itemName in nodeItems:
+            return True
+        # Scan all sub devices
+        subDevices = self.getValue(nodeItems, "subdevices", {})
+        for subDeviceKey in subDevices:
+            # Does item exist in this sub device?
+            if itemName in subDevices[subDeviceKey]:
+                return True
+        # Nothing found
+        return False
+
+    # Return a list with different values of an item name in a device and all its sub devices
+    def getValuesList(self, nodeItems, itemName):
+        returnList = []
+        if itemName in nodeItems:
+            returnList.append(nodeItems[itemName])
+        # Scan all sub devices
+        subDevices = self.getValue(nodeItems, "subdevices", {})
+        for subDeviceKey in subDevices:
+            # Does item exist in this sub device?
+            subDevice = subDevices[subDeviceKey]
+            if itemName in subDevice and subDevice[itemName]:
+                returnList.append(subDevice[itemName])
+        return returnList
 
     # Return device unit givine a device name
     def getUnit(self, device):
@@ -404,11 +547,32 @@ class BasePlugin:
                 unit = k
         return unit
 
+    # Return True if mappingdimmer is found at node or set level
+    def hasMappingDimmer(self, nodeItems: dict) -> bool:
+        setItems = self.getValue(nodeItems, "set", None)
+        return self.getValue(nodeItems, "mappingdimmer", None) != None \
+            or self.getValue(setItems, "mappingdimmer", None) != None
+
+    # Send a pending throttled message
+    def sendThrottled(self, nodeIndex):
+        if self.jsonData != None:
+            self.setDeviceFromMessage(nodeIndex, self.jsonData[nodeIndex], self.throttleData[nodeIndex], "sendThrottled")
+
+    # Check if a throttle is active for a device index
+    def isThrottleActive(self, nodeLastUpdate, nodeThrottle):
+        return ((self.utcTime()) - nodeLastUpdate) < int(nodeThrottle)
+
+    # Return UTC time
+    def utcTime(self):
+        return datetime.now(timezone.utc).timestamp()
+
+    ##### MqttMapper initialization routine #####
+
     # Executed on plug-in start
     def onStart(self):
         # Parse options
         self.debugging = Parameters["Mode6"]
-        DumpConfigToLog()
+        self.dumpConfigToLog()
         if self.debugging == "Verbose+":
             Domoticz.Debugging(2+4+8+16+64+128)
         elif self.debugging == "Verbose":
@@ -431,14 +595,12 @@ class BasePlugin:
         with open(jsonFile, encoding = 'UTF-8') as configStream:
             try:
                 self.jsonData = json.load(configStream)
-            except Exception as e:
-                errorLine = 0
-                if e.__traceback__ != None:
-                    errorLine = e.__traceback__.tb_lineno
-                Domoticz.Error(F"Error loading {jsonFile} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
+            except Exception as exception:
+                Domoticz.Error(F"Error loading {jsonFile}: {str(exception)}")
                 Domoticz.Error(F"You should probably use any online 'json format checker' to locate JSON syntax error in {jsonFile}")
                 return
-        # Go through Json file to create devices
+
+        # Go through JSON file to create devices
         deviceList = []
         for node in self.jsonData.items():
             nodeName = node[0]
@@ -462,7 +624,7 @@ class BasePlugin:
                     Domoticz.Log(F"Creating device {nodeName}")
                     Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=nodeVisible).Create()
                     initialData = self.getValue(nodeItems, 'initial', None)
-                    if initialData: # Set initial data if required
+                    if initialData:                                 # Set initial data if required
                         nValue = int(self.getValue(initialData, 'nvalue', 0))
                         sValue = self.getValue(initialData, 'svalue', '')
                         Domoticz.Log(F"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
@@ -502,41 +664,50 @@ class BasePlugin:
         self.lastMqttCheckUtc = self.utcTime()
         Domoticz.Heartbeat(3)
 
-    # Executed on plug-in connection
-    def onConnect(self, Connection, Status, Description):
+    # Executed every "Domoticz.Heartbeat" interval seconds
+    def onHeartbeat(self):
         # Exit if init not properly done
         if not self.initDone or self.mqttClient == None:
             return
-        self.mqttClient.onConnect(Connection, Status, Description)
 
-    # Executed on plug-in disconnection
-    def onDisconnect(self, Connection):
-        # Exit if init not properly done
-        if not self.initDone or self.mqttClient == None:
-            return
-        self.mqttClient.onDisconnect(Connection)
+        # Get UTC time
+        nowUtc = self.utcTime()
 
-    # Executed on plug-in message reception
-    def onMessage(self, Connection, Data):
-        # Exit if init not properly done
-        if not self.initDone or self.mqttClient == None:
-            return
-        self.mqttClient.onMessage(Connection, Data)
+        # Reconnect if connection has dropped every 15 seconds
+        if (nowUtc - self.lastMqttCheckUtc) > 15:
+            self.lastMqttCheckUtc = nowUtc
+            if self.mqttClient.mqttConn == None or not self.mqttClient.isConnected:
+                Domoticz.Debug(F"Reconnecting")
+                self.mqttClient.Open()
+        else:
+            self.mqttClient.Ping()
 
-    # Executed on MQTT connection
-    def onMQTTConnected(self):
-        # Exit if init not properly done
-        if not self.initDone or self.mqttClient == None:
-            return
-        Domoticz.Debug(F"onMQTTConnected")
-        self.mqttClient.Subscribe(self.getTopics())
+        # Check if UTC time was set backward
+        if nowUtc < self.lastHeartbeatUtc:
+            Domoticz.Log(F"UTC time set backward, releasing all changes")
+            # Scan all throttle date
+            for nodeIndex in self.throttleLastDate:
+                # Do we have a pending message?
+                if self.throttleData[nodeIndex] != "":
+                    # Send pending message (last date will be updated in setDeviceFromMessage)
+                    self.sendThrottled(nodeIndex)
+                else:
+                    # Overwrite last date taking in account time already spent between last UTC and last message date
+                    self.throttleLastDate[nodeIndex] = nowUtc - (self.lastHeartbeatUtc - self.throttleLastDate[nodeIndex])
+        else:
+            # Release all pending expired throttled messages
+            for nodeIndex in self.throttleLastDate:
+                # Do we have a pending message?
+                if self.throttleData[nodeIndex] != "" and self.jsonData != None:
+                    # Is throttle expired?
+                    if not self.isThrottleActive(self.throttleLastDate[nodeIndex], self.getValue(self.jsonData[nodeIndex], 'throttle', 0)):
+                        # Send pending message (last date will be updated in setDeviceFromMessage)
+                        self.sendThrottled(nodeIndex)
 
-    # Executed on MQTT disconnection
-    def onMQTTDisconnected(self):
-        # Exit if init not properly done
-        if not self.initDone:
-            return
-        Domoticz.Debug(F"onMQTTDisconnected")
+        # Set last heartbeat time
+        self.lastHeartbeatUtc = nowUtc
+
+    ##### MQTT received message is used to change Domoticz's device state/data #####
 
     # Executed on MQTT publishing
     def onMQTTPublish(self, topic, rawmessage):
@@ -545,13 +716,13 @@ class BasePlugin:
             return
 
         if self.debugging == "Extra verbose":
-            DumpMQTTMessageToLog(topic, rawmessage, 'onMQTTPublish: ')
+            self.dumpMQTTMessageToLog(topic, rawmessage, 'onMQTTPublish: ')
 
         # Iterating through the JSON list
         for node in self.jsonData.items():
             nodeItems = node[1]
-            nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
-            if nodeTopic == topic:  # Is this the right topic?
+            nodeTopic = self.getValue(nodeItems, 'topic', None)     # Get MQTT topic
+            if nodeTopic == topic:                                  # Is this the right topic?
                 # Check for throttle value in node description
                 nodeThrottle = self.getValue(nodeItems, 'throttle', None)
                 if nodeThrottle != None:
@@ -566,19 +737,6 @@ class BasePlugin:
                         self.throttleLastDate[node[0]] = self.utcTime()
                 # No throttle or throttle not active, use message right now
                 self.setDeviceFromMessage(node[0], nodeItems, rawmessage, "onMQTTPublish")
-
-    # Check if a throttle is active for a device index
-    def isThrottleActive(self, nodeLastUpdate, nodeThrottle):
-        return ((self.utcTime()) - nodeLastUpdate) < int(nodeThrottle)
-
-    # Return UTC time
-    def utcTime(self):
-        return datetime.now(timezone.utc).timestamp()
-
-    # Send a pending throttled message
-    def sendThrottled(self, nodeIndex):
-        if self.jsonData != None:
-            self.setDeviceFromMessage(nodeIndex, self.jsonData[nodeIndex], self.throttleData[nodeIndex], "sendThrottled")
 
     # Set device value giving a message, either directly or throttled
     def setDeviceFromMessage(self, nodeIndex, nodeItems, rawmessage, source):
@@ -597,8 +755,8 @@ class BasePlugin:
             if e.__traceback__ != None:
                 errorLine = e.__traceback__.tb_lineno
             Domoticz.Error(F"Error decoding {rawmessage} - {type(e).__name__} at line {errorLine} of {__file__}: {e}")
-        nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
-        nodeKey = self.getValue(nodeItems, 'key', nodeTopic) # Get device key
+        nodeTopic = self.getValue(nodeItems, 'topic', None)         # Get MQTT topic
+        nodeKey = self.getValue(nodeItems, 'key', nodeTopic)        # Get device key
         device = self.getDevice(nodeKey)
         if device == None:
             Domoticz.Error(F"Can't find device key {nodeKey}")
@@ -638,7 +796,7 @@ class BasePlugin:
                 Domoticz.Error(F"Can't understand 'reject' with type {type(nodeReject).__name__} for nodeKey")
                 topicSelected = False
         if topicSelected:
-            nodeType = self.getValue(nodeItems, 'type', "0")   # Read some values for this device
+            nodeType = self.getValue(nodeItems, 'type', "0")        # Read some values for this device
             nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
             nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
             nodeMapping = self.getValue(nodeItems, 'mapping', None)
@@ -648,59 +806,59 @@ class BasePlugin:
             mappingBattery = self.getValue(nodeMapping, 'battery', None)
             valueToSet = None
             if mappingItem !=None:
-                if mappingItem == '':   # Empty mapping means (not json) full message
+                if mappingItem == '':                               # Empty mapping means (not json) full message
                     mappingItem = "~*"
                 readValue = ''
                 itemIndex = -1
                 isOnlyMessage = None
-                items = mappingItem.split(';')  # Work with multiple items values
-                for item in items:  # Read all values to map
-                    readValue += ";"# Add ';' as separator
-                    itemIndex += 1  # Increment index
-                    if item[0:1] == '~': # Does item start with '~'?
-                        if item == '~': # If item is just '~', insert previous sValue item
-                            sValue = device.sValue.split(';')   # Extract current sValue
-                            if itemIndex < len(sValue): # Is index within device sValue range?
-                                valueToSet = sValue[itemIndex]  # Yes, load it
+                items = mappingItem.split(';')                      # Work with multiple items values
+                for item in items:                                  # Read all values to map
+                    readValue += ";"                                # Add ';' as separator
+                    itemIndex += 1                                  # Increment index
+                    if item[0:1] == '~':                            # Does item start with '~'?
+                        if item == '~':                             # If item is just '~', insert previous sValue item
+                            sValue = device.sValue.split(';')       # Extract current sValue
+                            if itemIndex < len(sValue):             # Is index within device sValue range?
+                                valueToSet = sValue[itemIndex]      # Yes, load it
                             else:
-                                valueToSet = '' # No, use empty string
-                            readValue += str(valueToSet)    # Insert the value
+                                valueToSet = ''                     # No, use empty string
+                            readValue += str(valueToSet)            # Insert the value
                             isOnlyMessage = False
-                        elif item == "~*":  # Item is ~*, insert topic content
+                        elif item == "~*":                          # Item is ~*, insert topic content
                             readValue += str(self.computeValue(message, nodeMapping, itemIndex))
                             if isOnlyMessage == None:
                                     isOnlyMessage = True
                         else:
                             isOnlyMessage = False
-                            readValue += item[1:]   # Add item, removing initial '~'
+                            readValue += item[1:]                   # Add item, removing initial '~'
                     else:
                         isOnlyMessage = False
                         itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                         if itemValue == None:
                             Domoticz.Error(F"Can't find >{item}'< in >'{message}<, message ignored")
                             return
-                        else:   # Add extracted value
+                        else:                                       # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
-                readValue = readValue[1:] # Remove first ';'  
+                readValue = readValue[1:]                           # Remove first ';'
                 if  mappingValues != None:
-                    valueToSet = mappingDefault or 0 # Set default mapping (or 0)
-                    for testValue in mappingValues:  # Scan all mapping values
+                    valueToSet = mappingDefault or 0                # Set default mapping (or 0)
+                    for testValue in mappingValues:                 # Scan all mapping values
                         Domoticz.Log(F'testValue="{testValue}" ({type(testValue).__name__}), readValue="{readValue}" ({type(readValue).__name__})')
                         if type(testValue).__name__ == "bool":
-                            if testValue == self.convert2bool(readValue):
+                            if testValue == self.convertToBool(readValue):
                                 valueToSet = mappingValues[testValue]   # Insert mapped value
                         else:
-                            if str(testValue) == str(readValue):  # Is this the same value?
+                            if str(testValue) == str(readValue):    # Is this the same value?
                                 valueToSet = mappingValues[testValue]   # Insert mapped value
                 else:
-                    if isOnlyMessage == True:                           # If we have only message into readValue
-                        valueToSet = rawmessage.decode('utf8')          # Use original message instead of it's dict representation
-                    else:                                               # Read value is more complex
-                        valueToSet = readValue                          # Set value = read value
-            else:   # No mapping given
+                    if isOnlyMessage == True:                       # If we have only message into readValue
+                        valueToSet = rawmessage.decode('utf8')      # Use original message instead of it's dict representation
+                    else:                                           # Read value is more complex
+                        valueToSet = readValue                      # Set value = read value
+            else:                                                   # No mapping given
                 Domoticz.Error(F"No mapping for {device.Name}")
 
-            if valueToSet != None: # Value given, set it
+            if valueToSet != None:                                  # Value given, set it
                 batteryValue = 255
                 if mappingBattery != None:
                     batteryValue = self.getPathValue(message, mappingBattery, '/', 255) # Extract battery value from message
@@ -712,17 +870,17 @@ class BasePlugin:
                     batteryText = F", batteryLevel: {batteryValue}"
                 else:
                     batteryText =""
-                if self.isFloat(valueToSet):  # Set nValue and sValue depending on value type (numeric or not, switch or not)
-                    readValue = str(valueToSet) # Force read value as string
-                    if self.switchTypes.isSwitch(nodeType):   # This is a switch
+                if self.isFloat(valueToSet):                        # Set nValue and sValue depending on value type (numeric or not, switch or not)
+                    readValue = str(valueToSet)                     # Force read value as string
+                    if self.switchTypes.isSwitch(nodeType):         # This is a switch
                         if self.switchTypes.isLevelSwitch(nodeType, nodeSubtype, nodeSwitchtype): # This is a switch with dimmer or level
                             nValueToSet = 0 if str(valueToSet) == '0' else 1 if str(valueToSet) == '100' else 2
                             sValueToSet = str(valueToSet)
-                        else:   # Not a dimmer/level switch
+                        else:                                       # Not a dimmer/level switch
                             nValueToSet = 0 if str(valueToSet) == '0' else 1
                             sValueToSet = ""
                     else:
-                        if self.switchTypes.hasNvalueData: # If device has nValue data, round sValue (text)
+                        if self.switchTypes.hasNvalueData:          # If device has nValue data, round sValue (text)
                             nValueToSet = int(round(float(valueToSet),0))
                         else:
                             # Set nValue to zero
@@ -730,17 +888,11 @@ class BasePlugin:
                         sValueToSet = readValue
                     Domoticz.Log(F"Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}")  # Value is numeric or float
                     device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
-                else:   # Value is not numeric
-                    Domoticz.Log(F"Setting {device.Name} to >{valueToSet}<{batteryText}") 
+                else:                                               # Value is not numeric
+                    Domoticz.Log(F"Setting {device.Name} to >{valueToSet}<{batteryText}")
                     device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
 
-    # Executed on MQTT subscribtion
-    def onMQTTSubscribed(self):
-        # Exit if init not properly done
-        if not self.initDone:
-            return
-        # (Re)subscribed, refresh device info
-        Domoticz.Debug(F"onMQTTSubscribed")
+    ##### Domoticz's device state/data change is sent to MQTT #####
 
     # Executed when Domoticz (on user request) send a command
     def onCommand(self, Unit, Command, Level, sColor):
@@ -809,7 +961,7 @@ class BasePlugin:
                 targetValue = '100'
             elif Command == 'Set Level':
                 targetValue = str(Level)
-            elif self.isFloat(Command):                                                 # If command is numeric or float
+            elif self.isFloat(Command):                             # If command is numeric or float
                 targetValue = Command
             else:
                 Domoticz.Error(F'Command: "{Command}" not supported by default. Please add "commands" for {device.Name}')
@@ -825,13 +977,13 @@ class BasePlugin:
             setTopic = None
             setPayload = None
             valueToSet = None
-            if nodeSet != None:  # Do we have some SET parameters?
+            if nodeSet != None:                                     # Do we have some SET parameters?
                 localCommand = self.getValue(nodeSet, 'command', None)      # Get command, default to None
-                nodeTopic = self.getValue(nodeItems, 'topic', None)         # Get MQTT topic
+                nodeTopic = self.getValue(nodeItems, 'topic', None) # Get MQTT topic
                 setTopic = self.getValue(nodeSet, 'topic', None if localCommand else nodeTopic) # Get topic, default to None if a command has been given, subscribed topic else
-                setPayload = self.getValue(nodeSet, 'payload', "#")         # Get value, default to #
-                setRetain = self.getValue(nodeSet, 'retain', True)          # Get retain, default to true
-                setMapping = self.getValue(nodeSet, 'mapping', None)        # Get set mapping, default to None
+                setPayload = self.getValue(nodeSet, 'payload', "#") # Get value, default to #
+                setRetain = self.getValue(nodeSet, 'retain', True)  # Get retain, default to true
+                setMapping = self.getValue(nodeSet, 'mapping', None)# Get set mapping, default to None
                 setMappingValues = self.getValue(setMapping, 'values', None)# Get set mapping values, default to None
                 mappingValues = self.getValue(nodeMapping, 'values', None)  # Get mapping values, default to None
                 nodeType = self.getValue(nodeItems, 'type', "0")
@@ -839,117 +991,44 @@ class BasePlugin:
                 nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
                 if self.switchTypes.canBeSet(nodeType, nodeSubtype, nodeSwitchtype): # Select valid types
                     if setMappingValues != None:
-                        for testValue in setMappingValues: # Scan all mapping values
+                        for testValue in setMappingValues:          # Scan all mapping values
                             if setMappingValues[testValue] == targetValue:  # Is this the same value?
-                                valueToSet = testValue  # Insert mapped value
-                        if valueToSet == None:  # No mapping value found
+                                valueToSet = testValue              # Insert mapped value
+                        if valueToSet == None:                      # No mapping value found
                             Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
                     elif mappingValues != None:
-                        for testValue in mappingValues: # Scan all mapping values
+                        for testValue in mappingValues:             # Scan all mapping values
                             if mappingValues[testValue] == targetValue:  # Is this the same value?
-                                valueToSet = testValue  # Insert mapped value
-                        if valueToSet == None:  # No mapping value found
+                                valueToSet = testValue              # Insert mapped value
+                        if valueToSet == None:                      # No mapping value found
                             Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
-                    else: # No mapping given, use command value
+                    else:                                           # No mapping given, use command value
                         valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
-                else:   # Device not in canBeSet list
+                else:                                               # Device not in canBeSet list
                     Domoticz.Error(F"Can't set device type {nodeType}, subtype {nodeSubtype}, switchtype {nodeSwitchtype} yet. Please ask for support.")
                     return
-                if valueToSet != None and setTopic != None: # Value and topic given, set it
+                if valueToSet != None and setTopic != None:         # Value and topic given, set it
                     if isinstance(setPayload, str):
                         payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string
                     else:
                         payload = json.dumps(setPayload).replace("#", valueToSet)   # payload is a JSON dictionay
                     Domoticz.Log(F"Setting {setTopic} to >{payload}<, retain={setRetain}")
                     self.mqttClient.Publish(setTopic, payload, 1 if setRetain else 0)
-                if localCommand != None: # Command given, execute it
+                if localCommand != None:                            # Command given, execute it
                     localCommand = str(localCommand).replace("#", str(valueToSet)) # Replace "#" in command by value
                     self.executeCommand(localCommand)
-            else:   # No set given
+            else:                                                   # No set given
                 Domoticz.Error(F"No SET parameters for {device.Name}/{device.DeviceID} in {nodeItems}")
 
-    # Executed when a device is added
-    def onDeviceAdded(self, Unit):
-        # Exit if init not properly done
-        if not self.initDone:
-            return
-        Domoticz.Log(F"onDeviceAdded {self.deviceStr(Unit)}")
+#   --------------------------------------------
+#   --------------- Plug-in code ---------------
+#   --------------------------------------------
 
-    # Executed when a device is modified
-    def onDeviceModified(self, Unit):
-        # Exit if init not properly done
-        if not self.initDone:
-            return
-        device = Devices[Unit]
-        Domoticz.Log(F"onDeviceModified {self.deviceStr(Unit)}, {device.DeviceID}, nValue={device.nValue}, sValue={device.sValue}")
-
-    # Executed when a device is removed
-    def onDeviceRemoved(self, Unit):
-        # Exit if init not properly done
-        if not self.initDone:
-            return
-        Domoticz.Log(F"onDeviceRemoved {self.deviceStr(Unit)}")
-
-    # Executed at regular interval
-    def onHeartbeat(self):
-        # Exit if init not properly done
-        if not self.initDone or self.mqttClient == None:
-            return
-
-        # Get UTC time
-        nowUtc = self.utcTime()
-
-        # Reconnect if connection has dropped every 15 seconds
-        if (nowUtc - self.lastMqttCheckUtc) > 15:
-            self.lastMqttCheckUtc = nowUtc
-            if self.mqttClient.mqttConn == None or not self.mqttClient.isConnected:
-                Domoticz.Debug(F"Reconnecting")
-                self.mqttClient.Open()
-        else:
-            self.mqttClient.Ping()
-
-        # Check if UTC time was set backward
-        if nowUtc < self.lastHeartbeatUtc:
-            Domoticz.Log(F"UTC time set backward, releasing all changes")
-            # Scan all throttle date
-            for nodeIndex in self.throttleLastDate:
-                # Do we have a pending message?
-                if self.throttleData[nodeIndex] != "":
-                    # Send pending message (last date will be updated in setDeviceFromMessage)
-                    self.sendThrottled(nodeIndex)
-                else:
-                    # Overwrite last date taking in account time already spent between last UTC and last message date
-                    self.throttleLastDate[nodeIndex] = nowUtc - (self.lastHeartbeatUtc - self.throttleLastDate[nodeIndex])
-        else:
-            # Release all pending expired throttled messages
-            for nodeIndex in self.throttleLastDate:
-                # Do we have a pending message?
-                if self.throttleData[nodeIndex] != "" and self.jsonData != None:
-                    # Is throttle expired?
-                    if not self.isThrottleActive(self.throttleLastDate[nodeIndex], self.getValue(self.jsonData[nodeIndex], 'throttle', 0)):
-                        # Send pending message (last date will be updated in setDeviceFromMessage)
-                        self.sendThrottled(nodeIndex)
-
-        # Set last heartbeat time
-        self.lastHeartbeatUtc = nowUtc
-
-    # Returns list of topics to subscribe to
-    def getTopics(self):
-        topics = set()
-        # Go through Json file to extract topics
-        if self.jsonData != None:
-            for node in self.jsonData.items():
-                nodeItems = node[1]
-                nodeTopic = self.getValue(nodeItems, 'topic', None)
-                # Add topic if not already in list (as multiple devices on the same topic are allowed)
-                if nodeTopic not in topics:
-                    topics.add(nodeTopic)
-        Domoticz.Debug(F"getTopics: '{topics}'")
-        return list(topics)
-
+# Declare plug-in class instance
 global _plugin
 _plugin = BasePlugin()
 
+# Forward all events to plug-in class
 def onStart():
     global _plugin
     _plugin.onStart()
@@ -985,16 +1064,3 @@ def onDeviceRemoved(Unit):
 def onHeartbeat():
     global _plugin
     _plugin.onHeartbeat()
-
-def DumpConfigToLog():
-    for x in Parameters:
-        if Parameters[x] != "":
-            Domoticz.Log(F"'{x}': '{Parameters[x]}'")
-    Domoticz.Log(F"Device count: {str(len(Devices))}")
-    for x in Devices:
-        Domoticz.Log(F"Device: {x} - {str(Devices[x])}")
-
-def DumpMQTTMessageToLog(topic, rawmessage, prefix=''):
-    message = rawmessage.decode('utf8','replace')
-    message = str(message.encode('unicode_escape'))
-    Domoticz.Log(F"{prefix}{topic}: '{message}'")

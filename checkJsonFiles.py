@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-codeVersion = "25.6.23-1"
+codeVersion = "25.6.24-1"
 
 import glob
 import os
@@ -198,7 +198,7 @@ for specs in inputFiles:
     for configFile in glob.glob(specs):
         if configFile != domoticzTypesFile:
             try:
-                with open(configFile, encoding = 'UTF-8') as configStream:
+                with open(configFile, "rt", encoding = 'UTF-8') as configStream:
                     jsonData = json.load(configStream)
             except Exception as exception:
                 if traceFlag:
