@@ -156,7 +156,6 @@ else:
 # Read arguments
 helpMsg = 'Usage: ' + cdeFile + ' [options]' + """
     [--input=<input file(s)>]: input file name (can be repeated, default to *.json)
-    [--log]: keep a log file of each analyzed file
     [--trace]: enable trace
     [--help]: print this help message
 
