@@ -1,8 +1,9 @@
 ﻿# MqttMapper Domoticz plug-in / plug-in MqttMapper pour Domoticz
 
-[Cliquez ici pour la version française plus bas dans ce document](#Version française)
+[Cliquez ici pour la version française plus bas dans ce document](#france)
 
 MqttMapper is a Domoticz Python plug-in allowing to map MQTT topics directly to Domoticz devices.
+
 
 ## What's for?
 If you want to be able to read/write some MQTT topics and maps them to Domoticz devices, without having to install NodeRed, and/or integrate sensors that don't have HomeAssistant discovery item, this plug-in is made for you.
@@ -569,8 +570,7 @@ Topic content:
 
 ------------------------------------------------
 
-<a id="Version française"></a>
-# Version française
+# <a id="france">Version française</a>
 
 MqttMapper est un plug-in Domoticz qui permet de relier des dispositifs Domoticz à MQTT directement.
 
