@@ -550,7 +550,7 @@ Domoticz device value:
  -69 
 ```
 
-## Message with specific item value
+## Message with specific item value to be selected
 ```
 Setup:
 {"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": "ok"}}
@@ -566,8 +566,52 @@ Topic content:
 
 -> Message ignored
  
+Note: you can put a list after "value", like:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": ["ok", "changed", "same"]}}
+
+Message will be selected if item value is one of those listed
+
 ```
 
+## Message with specific item value to be rejected
+```
+Setup:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "": {"item": "status", "value": "error"}}
+
+Topic content:
+{"temperature": 19, "humidity":70, "status": "ok"}
+
+Domoticz device value:
+ 19 
+
+Topic content:
+{"temperature": 19, "humidity":70, "status": "error"}
+
+-> Message ignored
+ 
+Note: you can put a list after "value", like:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "reject": {"item": "status", "value": ["bad", "error"]}}
+
+Message will be rejected if item value is one of those listed
+
+```
+
+## Message reusing existing value
+```
+Setup:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature;~;~"}}
+
+Domoticz device value (before change):
+ 19;66;0 
+
+Topic content:
+{"temperature": 19}
+
+
+Domoticz device value (after change):
+21;66;0
+ 
+```
 ------------------------------------------------
 
 # <a id="france">Version française</a>
@@ -1120,7 +1164,7 @@ Valeur du dispositif Domoticz :
  -69 
 ```
 
-## Messages avec une valeur particulière
+## Messages avec une valeur particulière à sélectionner
 ```
 Configuration :
 {"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": "ok"}}
@@ -1135,5 +1179,48 @@ Contenu du topic :
 {"temperature": 19, "humidity":70, "status": "bad"}
 
 -> Message ignoré
+ 
+Note: vous pouvez utiliser une liste après "value", tel que:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": ["ok", "changed", "same"]}}
+
+Le message sera sélectionné si la valeur de l'item est une de celles de la liste
+```
+
+## Messages avec une valeur particulière à rejeter
+```
+Configuration :
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "reject": {"item": "status", "value": "error"}}
+
+Contenu du topic :
+{"temperature": 19, "humidity":70, "status": "ok"}
+
+Valeur du dispositif Domoticz :
+ 19 
+
+Contenu du topic :
+{"temperature": 19, "humidity":70, "status": "error"}
+
+-> Message ignoré
+ 
+Note: vous pouvez utiliser une liste après "value", tel que:
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "reject": {"item": "status", "value": ["ok", "changed", "same"]}}
+
+Le message sera rejeté si la valeur de l'item est une de celles de la liste
+```
+
+## Message réutilisant des valeurs existantes
+```
+Configuration :
+{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature;~;~"}}
+
+Contenu du topic (avant le changement) :
+ 19;66;0 
+
+Contenu du topic :
+{"temperature": 19}
+
+
+Contenu du topic (après le changement) :
+ 21;66;0
  
 ```
