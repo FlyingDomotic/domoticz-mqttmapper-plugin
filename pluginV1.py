@@ -837,7 +837,6 @@ class pluginV1:
                 else:
                     batteryText =""
                 if self.isFloat(valueToSet):                        # Set nValue and sValue depending on value type (numeric or not, switch or not)
-                    readValue = str(valueToSet)                     # Force read value as string
                     if self.switchTypes.isSwitch(nodeType):         # This is a switch
                         if self.switchTypes.isLevelSwitch(nodeType, nodeSubtype, nodeSwitchtype): # This is a switch with dimmer or level
                             nValueToSet = 0 if str(valueToSet) == '0' else 1 if str(valueToSet) == '100' else 2
@@ -851,7 +850,7 @@ class pluginV1:
                         else:
                             # Set nValue to zero
                             nValueToSet = 0
-                        sValueToSet = readValue
+                        sValueToSet = str(valueToSet)
                     Domoticz.Log(F"Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}")  # Value is numeric or float
                     device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
                 else:                                               # Value is not numeric
