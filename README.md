@@ -394,6 +394,15 @@ Here's a partial list of device options that can be specified in `options` of JS
 |----------------|----------------------------------|----------------------------------------------|
 | Counter        | `"ValueQuantity":"Distance",`    | `Distance` is label                          |
 |                | `"ValueUnits":"km"`              | `km` is unit                                 |
+|                | `"DisableLogAutoUpdate": "true"` | Disables automatic day/week/month/year computation |
+|                | `"AddDBLogEntry" : "true"`       | Enables inserting data in in history log     |
+| kWh counter    | `EnergyMeterMode": "1"`          | Set energyMeterMode to "Calculated"          |
+| SetPoint       | `"ValueStep": "0.5"`             | Defines setPoint increment                   | 
+|                | `"ValueMin":"-200"`              | Defines setPoint minimum value               |
+|                | `"ValueMax":"200"`               | Defines setPoint maximum value               |
+|                | `"ValueUnit":"°C"`               | Defines setPoint unit                        |
+| RFXcom custom  | `"ValueQuantity": "Custom"`      | Defines a known quantity type                | 
+|     sensor     | `"ValueUnits": "customunit"`     | Defines unit for custom type                 | 
 | Custom counter | `1;km`                           | `1` is multiplier, `km` is unit              |
 | Selector       | `"SelectorStyle":"1",`           | `0`=drop-down list, `1`= radio buttons       |
 |                | `"LevelOffHidden": "true",`      | `true` to hide off level, `false` to show it |
@@ -1003,14 +1012,24 @@ Note: pour éviter de récupérer des tonnes de "Error: MQTT mapper hardware thr
 
 Voici une liste partielle des options utilisables avec le mot clef `options` du fichier de configuration au format JSON.
 
-| Dispositif     | Options                          | Signification                               |
-|----------------|----------------------------------|---------------------------------------------|
-| Counter        | `"ValueQuantity":"Distance",`    | `Distance` est utilisé comme étiquette      |
-|                | `"ValueUnits":"km"`              | `km` représente l'unité                     |
-| Custom counter | `1;km`                           | `1` est le multiplicateur, `km` l'unité     |
-| Selector       | `"SelectorStyle":"1",`           | `0` = liste déroulante, `1` = boutons radio |
+| Dispositif     | Options                          | Signification                                |
+|----------------|----------------------------------|----------------------------------------------|
+| Counter        | `"ValueQuantity":"Distance",`    | `Distance` est utilisé comme étiquette       |
+|                | `"ValueUnits":"km"`              | `km` représente l'unité                      |
+|                | `"DisableLogAutoUpdate": "true"` | Désactive les cumuls jour/semaine/mois/an    |
+|                | `"AddDBLogEntry" : "true"`       | Active l'insertion des données dans l'historique |
+| kWh counter    | `EnergyMeterMode": "1"`          | Définit energyMeterMode à "Calculé"          |
+| SetPoint       | `"ValueStep": "0.5"`             | Définit l'incrément du setPoint              | 
+|                | `"ValueMin":"-200"`              | Définit la valeur minimum du setPoint        |
+|                | `"ValueMax":"200"`               | Définit la valeur maximum du setPoint        |
+|                | `"ValueUnit":"°C"`               | Définit l'unité du setPoint                  |
+| RFXcom custom  | `"ValueQuantity": "Custom"`      | Définit une quantité connue à utiliser       | 
+|     sensor     | `"ValueUnits": "customunit"`     | Définit l'unité pour un type "custom"        | 
+| Custom counter | `1;km`                           | `1` est le multiplicateur, `km` l'unité      |
+| Selector       | `"SelectorStyle":"1",`           | `0` = liste déroulante, `1` = boutons radio  |
 |                | `"LevelOffHidden": "true",`      | `true` pour cacher le niveau off, `false` pour le montrer |
 |                | `"LevelNames":"Off|Auto|Forced"` | Etiquettes de chaque niveau, séparées par `|` (ici `Off` = 0, `Auto` = 10, `Forced` = 20)|
+| Device type    | Options                          | Meaning                                      |
 
 ## Vérification des fichiers JSON
 
