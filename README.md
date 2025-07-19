@@ -404,6 +404,8 @@ Here's a partial list of device options that can be specified in `options` of JS
 | RFXcom custom  | `"ValueQuantity": "Custom"`      | Defines a known quantity type                | 
 |     sensor     | `"ValueUnits": "customunit"`     | Defines unit for custom type                 | 
 | Custom counter | `1;km`                           | `1` is multiplier, `km` is unit              |
+| Blinds (all)   | `"reverseState" : "true"`        | `true`indicates "on" state is "off", "off" is "on" |
+|                | `"reversePosition" : "true"`     | `true`indicates position 100 is 0, 0 is 100  |
 | Selector       | `"SelectorStyle":"1",`           | `0`=drop-down list, `1`= radio buttons       |
 |                | `"LevelOffHidden": "true",`      | `true` to hide off level, `false` to show it |
 |                | `"LevelNames":"Off|Auto|Forced"` | Labels of each level, separated by `|` (here `Off` = 0, `Auto` = 10, `Forced` = 20)|
@@ -1026,10 +1028,11 @@ Voici une liste partielle des options utilisables avec le mot clef `options` du 
 | RFXcom custom  | `"ValueQuantity": "Custom"`      | Définit une quantité connue à utiliser       | 
 |     sensor     | `"ValueUnits": "customunit"`     | Définit l'unité pour un type "custom"        | 
 | Custom counter | `1;km`                           | `1` est le multiplicateur, `km` l'unité      |
+| Blinds (all)   | `"reverseState" : "true"`        | `true`indique état "on"="off", "off"="on"    |
+|                | `"reversePosition" : "true"`     | `true`indique position 100=0, 0=100          |
 | Selector       | `"SelectorStyle":"1",`           | `0` = liste déroulante, `1` = boutons radio  |
 |                | `"LevelOffHidden": "true",`      | `true` pour cacher le niveau off, `false` pour le montrer |
 |                | `"LevelNames":"Off|Auto|Forced"` | Etiquettes de chaque niveau, séparées par `|` (ici `Off` = 0, `Auto` = 10, `Forced` = 20)|
-| Device type    | Options                          | Meaning                                      |
 
 ## Vérification des fichiers JSON
 
