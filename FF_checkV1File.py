@@ -6,7 +6,7 @@ from DomoticzTypes import DomoticzTypes
 class FF_checkV1File:
     # Class initialization
     def __init__(self):
-        self.fileVersion = "25.6.24-1"                              # File version
+        self.fileVersion = "25.7.25-1"                              # File version
         self.errorSeen = False;                                     # Do we seen an error ?
         self.allMessages = []                                       # All messages to be printed
         self.switchTypes = DomoticzTypes()                          # Load types functions
@@ -171,10 +171,10 @@ class FF_checkV1File:
             "node/commands": {"mandatory":  False, "type":  "dict"},
             "node/select": {"mandatory":  False, "type":  "dict"},
                 "select/item": {"mandatory":  True, "type":  "str"},
-                "select/value": {"mandatory":  True, "type":  ["str", "list"]},
+                "select/value": {"mandatory":  False, "type":  ["str", "list"]},
             "node/reject": {"mandatory":  False, "type":  "dict"},
                 "reject/item": {"mandatory":  True, "type":  "str"},
-                "reject/value": {"mandatory":  True, "type":  ["str", "list"]},
+                "reject/value": {"mandatory":  False, "type":  ["str", "list"]},
             "commands/xxx": {"mandatory":  False, "type":  "dict"},
                 "xxx/topic": {"mandatory":  False, "type":  "str"},
                 "xxx/retain": {"mandatory":  False, "type":  "bool"},

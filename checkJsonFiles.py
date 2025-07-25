@@ -17,7 +17,7 @@
 #   Author: Flying Domotic
 #   License: GPL 3.0
 
-codeVersion = "25.6.24-1"
+codeVersion = "25.7.25-1"
 
 import glob
 import os

@@ -384,15 +384,18 @@ class pluginV1:
     def itemFoundInMessage(self, nodeSelect, message, nodeName):
         selectItem = self.getValue(nodeSelect, 'item', None)        # Get select item
         selectValue = self.getValue(nodeSelect, 'value', None)      # Get select value
-        if selectItem == None or selectValue == None:               # Any error?
-            Domoticz.Error(F"Key 'select' should have both 'item' and 'value' defined in {nodeSelect} for {nodeName}")
+        if selectItem == None:                                      # Any error?
+            Domoticz.Error(F"Key 'select' should have 'item' defined in {nodeSelect} for {nodeName}")
             return False
         else:
             selectItemValue = self.getPathValue(message, selectItem, '/', None) # Extract select value from message
             if selectItemValue == None:
-                Domoticz.Error(F"Can't find '{selectItem}' in message for {nodeName}")
+                if selectValue != None:                             # Don't complain if any value accepted
+                    Domoticz.Log(F"Can't find '{selectItem}' in message for {nodeName}")
                 return False
             else:
+                if selectValue == None:                             # Just item specified, validate any value
+                    return True
                 if type(selectValue).__name__ == "list":            # Value is a list
                     if selectItemValue not in selectValue:
                         Domoticz.Log(F"'{selectItem}' is '{selectItemValue}' instead of '{selectValue}' for {nodeName}")
@@ -407,15 +410,19 @@ class pluginV1:
     def itemNotFoundInMessage(self, nodeReject, message, nodeName):
         rejectItem = self.getValue(nodeReject, 'item', None)        # Get reject item
         rejectValue = self.getValue(nodeReject, 'value', None)      # Get reject value
-        if rejectItem == None or rejectValue == None:               # Any error?
-            Domoticz.Error(F"Key 'reject' should have both 'item' and 'value' defined in {nodeReject} for {nodeName}")
+        if rejectItem == None:                                      # Any error?
+            Domoticz.Error(F"Key 'reject' should have 'item' in {nodeReject} for {nodeName}")
             return False
         else:
             rejectItemValue = self.getPathValue(message, rejectItem, '/', None) # Extract reject value from message
             if rejectItemValue == None:
+                if rejectValue != None:                             # Don't complain if any value rejected
                 Domoticz.Error(F"Can't find '{rejectItem}' in message for {nodeName}")
                 return False
             else:
+                if rejectValue == None:                             # Just item specified, reject any value
+                    Domoticz.Log(F"'{rejectItem}' found for {nodeName}")
+                    return False
                 if type(rejectValue).__name__ == "list":            # Value is a list
                     if rejectItemValue in rejectValue:
                         Domoticz.Log(F"'{rejectItem}' is '{rejectItemValue}' for {nodeName}")
