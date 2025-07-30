@@ -417,7 +417,7 @@ class pluginV1:
             rejectItemValue = self.getPathValue(message, rejectItem, '/', None) # Extract reject value from message
             if rejectItemValue == None:
                 if rejectValue != None:                             # Don't complain if any value rejected
-                Domoticz.Error(F"Can't find '{rejectItem}' in message for {nodeName}")
+                    Domoticz.Error(F"Can't find '{rejectItem}' in message for {nodeName}")
                 return False
             else:
                 if rejectValue == None:                             # Just item specified, reject any value
