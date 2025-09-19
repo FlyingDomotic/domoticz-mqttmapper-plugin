@@ -2,13 +2,13 @@
 #   ---------------- Imports ----------------
 #   -----------------------------------------
 
-import Domoticz
+import os
 import json
 import time
 import subprocess
-import os
 from typing import Any
 from datetime import datetime, timezone
+import Domoticz
 from DomoticzTypes import DomoticzTypes
 
 # Used by VsCodium when running outside Domoticz environment
@@ -264,30 +264,30 @@ class pluginV1:
         return False
 
     # Returns a dictionary value giving a key or default value if not existing
-    def getValue(self, dict, key, default: Any =''):
-        if dict == None:
+    def getValue(self, dictionary, key, default: Any =''):
+        if dictionary == None:
             return default
         else:
-            if key in dict:
-                if dict[key] == None:
+            if key in dictionary:
+                if dictionary[key] == None:
                     return default
                 else:
-                    return dict[key]
+                    return dictionary[key]
             else:
                 return default
 
     # Return value of a key in a list of dictionary, or default value if not found in all dictionaries
     def getValueInDictList(self, dictList, key, default: Any =''):
-        for dict in dictList:
-            if dict != None:
-                if key in dict:
-                    if dict[key] != None:
-                        return dict[key]
+        for dictionary in dictList:
+            if dictionary != None:
+                if key in dictionary:
+                    if dictionary[key] != None:
+                        return dictionary[key]
         return default
 
     # Return a path in a dictionary or default value if not existing
     #   When value is a list, [sub]path can be either "*" to test all list elements, or a numerical index, starting from 1)
-    def getPathValue (self, dict, path, separator = '/', default: Any =''):
+    def getPathValue (self, dictionary, path, separator = '/', default: Any =''):
         try:
             pathElements = path.split(separator)                    # Split path with separator
             pathElement = pathElements[0]                           # Extract first part of path
@@ -295,7 +295,7 @@ class pluginV1:
                 pathRemaining = separator.join(pathElements[1:])    # Yes, build it, removing first one
             else:
                 pathRemaining = ""                                  # No, set empty
-            element = dict                                          # Load data
+            element = dictionary                                          # Load data
             if type(element).__name__ == "list":                    # Is data a list?
                 if pathElement == "*":                              # Yes, do we have a star?
                     found = False                                   # No item found yet
@@ -313,7 +313,7 @@ class pluginV1:
                     if index < 1 or index > len(element):           # Check it
                         return default                              # Bad index
                     element = element[index-1]                      # Extract data giving index
-            else:                                                   # We don't have a list (but a dict)
+            else:                                                   # We don't have a list (but a dictionary)
                 if pathElement not in element:                      # Check for path in data
                     return default                                  # Not found, return default
                 element = element[pathElement]                      # Extract data
@@ -605,7 +605,7 @@ class pluginV1:
                         if device != None:
                             device.Update(nValue = nValue, sValue = sValue)
                         else:
-                                    Domoticz.Error(F"Can't find device {nodeKey}")
+                            Domoticz.Error(F"Can't find device {nodeKey}")
                 else:
                     # Update device only if something changed
                     if nodeOptions == None:
@@ -909,7 +909,26 @@ class pluginV1:
                            payload = commandPayload
                     else:
                         payload = json.dumps(commandPayload)
-                    payload = payload.replace("<command>", str(Command)).replace("<level>", str(Level)).replace("<color>", str(sColor))
+                    payload = payload.replace("<command>", str(Command)).replace("<level>", str(Level))
+                    # If we have a color, replace <color> items by their values
+                    if sColor != "":
+                        try:
+                            # Decode color as json
+                            colorDict = json.loads(sColor)
+                        except Exception as e:
+                            Domoticz.Error(F"Error decoding {sColor} - {type(e).__name__}: {e}")
+                            # Use an empty dictionary
+                            colorDict = {}
+                        # Replace <color>
+                        payload = payload.replace("<color>", str(sColor))
+                        # Replace <color:?> items
+                        payload = payload.replace("<color:m>", str(self.getValue(colorDict, "m", "")))
+                        payload = payload.replace("<color:t>", str(self.getValue(colorDict, "t", "")))
+                        payload = payload.replace("<color:r>", str(self.getValue(colorDict, "r", "")))
+                        payload = payload.replace("<color:g>", str(self.getValue(colorDict, "g", "")))
+                        payload = payload.replace("<color:b>", str(self.getValue(colorDict, "b", "")))
+                        payload = payload.replace("<color:cw>", str(self.getValue(colorDict, "cw", "")))
+                        payload = payload.replace("<color:ww>", str(self.getValue(colorDict, "ww", "")))
                     Domoticz.Log(F"Setting {commandTopic} to >{payload}<, retain={commandRetain}")
                     if self.mqttClient != None:
                         self.mqttClient.Publish(commandTopic, payload, 1 if commandRetain else 0)

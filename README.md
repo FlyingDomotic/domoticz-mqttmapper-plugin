@@ -352,7 +352,7 @@ In given example, `Open` and `Close` have fixed payload, `Stop` includes <comman
 
 Level payload has a specific format, as numeric values are not allowed as string. Instead of putting directly JSON format in payload data, payload is put on a string, and quotes are escaped using "\".
 
-Command list is not closed. You may want to add some as soon as you find them in Domoticz. However, here's list of discovered commands at time of writing this document: `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contains the given command, `<level>` contains user requested level and `<color>` user requested color.
+Command list is not closed. You may want to add some as soon as you find them in Domoticz. However, here's list of discovered commands at time of writing this document: `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contains the given command, `<level>` contains user requested level, `<color>`, `<color:m>`, `<color:t>`, `<color:r>`, `<color:g>`, `<color:b>`, `<color:cw>` and `<color:ww>` user requested color items. 
 
 It's also possible to add a `<default>` command, that will be used if none of given commands matches those received. This could be the only command, if needed.
 
@@ -976,7 +976,7 @@ Dans l'exemple donné, `Open` et `Close` ont un contenu fixe, `Stop` inclue la v
 
 Le contenu de payload a un format spécifique, les valeurs numériques n'étant pas autorisées dans des chaînes de caractères. Au lieu d'indiquer directement du JSON dans le contenu, la charge est mise dans une chaîne de caractères et les marques "guillemets" sont échappées par un "\".
 
-La liste des commandes n'est pas fixe. On peut en ajouter dès que Domoticz en ajoute. Pour aider, voici la liste des commandes découvertes dans Domoticz au moment de l'écriture de ce document : `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contient la commande passée par Domoticz, `<level>` contient l'intensité ou le niveau donné par l'utilisateur et `<color>` la couleur donnée par l'utilisateur.
+La liste des commandes n'est pas fixe. On peut en ajouter dès que Domoticz en ajoute. Pour aider, voici la liste des commandes découvertes dans Domoticz au moment de l'écriture de ce document : `On`, `Off`, `Toggle`, `Set Level`, `Open`, `Close`, `Stop`, `Set Color`. `<command>` contient la commande passée par Domoticz, `<level>` contient l'intensité ou le niveau donné par l'utilisateur, `<color>`, `<color:m>`, `<color:t>`, `<color:r>`, `<color:g>`, `<color:b>`, `<color:cw>` et `<color:ww>` la couleur donnée par l'utilisateur.
 
 Il est également possible d'indiquer une commande `<default>` qui sera utilisée si aucune des commandes données ne correspondant à celle reçue. Ce peut être la seule, si besoin.
 
