@@ -159,6 +159,7 @@ class FF_checkV1File:
             "node/initial": {"mandatory":  False, "type":  "dict"},
                 "initial/nvalue": {"mandatory":  False, "type":  ["int", "str"]},
                 "initial/svalue": {"mandatory":  False, "type":  "str"},
+            "node/restrictupdate" : {"mandatory":  False, "type":  "bool"},
             "node/visible": {"mandatory":  False, "type":  "bool"},
             "node/set": {"mandatory":  False, "type":  "dict"},
                 "set/topic": {"mandatory":  False, "type":  "str"},

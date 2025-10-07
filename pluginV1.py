@@ -773,6 +773,7 @@ class pluginV1:
             nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
             nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
             nodeMapping = self.getValue(nodeItems, 'mapping', None)
+            restrictUpdate = self.getValue(nodeItems, 'restrictupdate', False)
             mappingItem = self.getValue(nodeMapping, 'item', None)
             mappingDefault = self.getValue(nodeMapping, 'default', None)
             mappingValues = self.getValue(nodeMapping, 'values', None)
@@ -858,11 +859,17 @@ class pluginV1:
                             # Set nValue to zero
                             nValueToSet = 0
                         sValueToSet = str(valueToSet)
-                    Domoticz.Log(F"Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}")  # Value is numeric or float
-                    device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
-                else:                                               # Value is not numeric
-                    Domoticz.Log(F"Setting {device.Name} to >{valueToSet}<{batteryText}")
-                    device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
+                    if restrictUpdate == False or device.sValue != sValueToSet or device.nValue != nValueToSet:
+                        Domoticz.Log(F"Setting {device.Name} to {nValueToSet}/{sValueToSet}{batteryText}")  # Value is numeric or float
+                        device.Update(nValue=nValueToSet, sValue=sValueToSet, BatteryLevel=batteryValue)
+                    else:
+                        Domoticz.Log(F"No changes on {device.Name}")
+                else:
+                    if restrictUpdate == False or device.sValue != str(valueToSet):
+                        Domoticz.Log(F"Setting {device.Name} to >{valueToSet}<{batteryText}")
+                        device.Update(nValue=0, sValue=str(valueToSet), BatteryLevel=batteryValue)
+                    else:
+                        Domoticz.Log(F"No changes on {device.Name}")
 
     ##### Domoticz's device state/data change is sent to MQTT #####
 

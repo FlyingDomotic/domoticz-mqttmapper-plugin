@@ -386,6 +386,8 @@ If a message is received while the previous change is less than `throttle` secon
 
 Note: to avoid tons of "Error: MQTT mapper hardware thread seems to have ended unexpectedly" in Domoticz logs, `throttle` can't be less than 3 seconds.
 
+As normal behavior, Domoticz set lastUpdate each time a value is received, even if it's the same as current one. MqttMapper may update device only when value to store changes, if users specifies `"node/restrictupdate": True"` in device configuration. Default value is `False`, meaning each received messages updates Domoticz device.
+
 ## Device options (partial) list
 
 Here's a partial list of device options that can be specified in `options` of JSON configuration file.
@@ -1009,6 +1011,8 @@ Dans certains cas, l'intervalle de mise à jour des messages MQTT est plus élev
 Si un message est reçu alors que le délai avec la dernière modification du dispositif est inférieur à `throttle` secondes, le message sera sauvegardé (et écrase par de nouvelles versions si besoin) jusqu'à ce que le délai `throttle` expire. A ce moment, le dispositif Domoticz  sera mis à jour avec la dernière version. Les messages ne sont pas perdus, mais seule la dernière version est conservée et mise à jour toutes les `throttle` secondes.
 
 Note: pour éviter de récupérer des tonnes de "Error: MQTT mapper hardware thread seems to have ended unexpectedly" dans les logs de Domoticz, `throttle` doit être au moins égal à 3 secondes.
+
+Le comportement normal de Domoticz est de mettre à jour lastUpdate a chaque modification, même si la valeur du dispositif est identique à celle existante. MqttMapper peut ne mettre à jour le dispositif que si sa valeur change en spécifiant `"restrictupdate": True"` dans sa configuration. La valeur par défaut est `False`, ce qui signifie que le dispositif est mis à jour en permanence, y compris lorsque la valeur reste identique à la précédente.
 
 ## Liste (partielle) des options
 
