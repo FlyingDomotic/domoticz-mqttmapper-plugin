@@ -1,6 +1,6 @@
 {
     "config": {
-        "date": "2024-11-01T10:14:59.874000",
+        "date": "2025-10-12T18:24:02.596500",
         "version": "2024.7.0"
     },
     "types": {
@@ -6235,6 +6235,11 @@
             "switchType": "meter",
             "sValue": {
                 "name": "counter",
+                "dataType": "number",
+                "format": "%d"
+            },
+            "sValue2": {
+                "name": "instant",
                 "dataType": "number",
                 "format": "%d"
             }
