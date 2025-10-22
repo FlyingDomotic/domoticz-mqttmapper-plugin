@@ -416,6 +416,38 @@ Here's a partial list of device options that can be specified in `options` of JS
 
 You may run checkJsonFiles.py to scan JSON file for important errors. It'll scan all JSON files in the current folder and display errors. Fix them until no errors are found.
 
+## How to extract topics and item using MqttExplorer?
+
+One difficult thing, when you're new to MQTT, is finding data topic and values. Using a tool like MqttExplorer (https://mqtt-explorer.com/) may help you.
+
+MqttExplorer is a tool to get (and set/delete) MQTT topics. When started, it'll display immediately retained topics, and then every MQTT message received since startup. It'll also store history of changes of current session. You may have to wait a bit if device you want to use is sending message at regular interval, without retained flag.
+
+Here's an example of MqttExplorer display:
+
+![screenshot (simpleValue)](/simpleValue.png)
+
+First step is to find interesting data into left pane. Just click on the line containing it. The full topic name will be displayed under `Topic` in the right pane. Just click on the icon just after `Topic` (representing a double sheet, labeled `Copy to clipboard`) to get it copied into clipboard!
+
+Then paste the value in MqttMapper configuration, after `topic` keyword.
+
+In this case, `info = true` highlighted line is found under `zigbee2mqtt/bridge/info`, so click button right of `Topic` and past value into MqttMapper definition after `topic:` to make it as `"topic": "zigbee2mqtt/bridge/info"`.
+
+Then go back to MqttExplorer right panel, and have a look at `Value` part.
+
+This could be either a simple text or a JSON specification (enclosed by `{}` or `[]`)
+
+For a simple non JSON text, just specify `"item": ""` in MqttMapper definition
+
+![screenshot (jsonValue)](images/jsonValue.png)
+
+When having a JSON value, specify key you want to load into `item`. In previous image, to get content of `state`, specify `"topic": "radar/LWT"` and `"item": "state"`.
+
+More complex JSON data can also be retrieved:
+
+![screenshot (complexValue)](images/complexValue.png)
+
+Here, JSON data structure has multiple levels. To get `x` value of `target_1`, use `"item": "target1/x"`
+
 ## Debug tool
 
 ### dumpMqttMapper
@@ -1013,6 +1045,38 @@ Si un message est reçu alors que le délai avec la dernière modification du di
 Note: pour éviter de récupérer des tonnes de "Error: MQTT mapper hardware thread seems to have ended unexpectedly" dans les logs de Domoticz, `throttle` doit être au moins égal à 3 secondes.
 
 Le comportement normal de Domoticz est de mettre à jour lastUpdate a chaque modification, même si la valeur du dispositif est identique à celle existante. MqttMapper peut ne mettre à jour le dispositif que si sa valeur change en spécifiant `"restrictupdate": True"` dans sa configuration. La valeur par défaut est `False`, ce qui signifie que le dispositif est mis à jour en permanence, y compris lorsque la valeur reste identique à la précédente.
+
+## Comment extraire les sujets et valeurs des messages MQTT avec MqttExplorer ?
+
+Une chose difficile, lorsqu'on est pas habitué à MQTT, est de trouver les sujets (topics) et valeurs. Utiliser un outil comme MqttExplorer (https://mqtt-explorer.com/) peut aider.
+
+MqttExplorer est un outil pour lire (écrire et détruire) des suejts MQTT. Lorsqu'il démarre, il affiche immédiatement les messages MQTT avec l'option "retenu" (retain), puis chaque message reçu ensuite. Il conserve également l'historique des modifications de la session courante. On peut avoir à attendre un peu si le dispositif qu'on souhaite utiliser envoie des messages à intervalle régulier, mais sans cette option "retenu".
+
+Voici un exemple d'affichage de MqttExplorer :
+
+![Copie d'écran (simpleValue)](/simpleValue.png)
+
+La première étape est de trouver la donnée qui nous intéresse dans le panneau ge gauche. Cliquer sur la ligne qui la contient. Le sujet complet est alors affiché sous`Topic` dans le panneau de gauche. Cliquer simplement sur l'icône juste après `Topic` (représentant une feuille double, libellée `Copy to clipboard`) pour avoir une copie dans le presse papier (clipboard).
+
+Coller ensuite la valeur dans le fichier de configuration de MqttMapper, après le mot clef `topic`.
+
+Dans cet exemple, la ligne en surbrillance`info = true` est trouvée dans le sujet `zigbee2mqtt/bridge/info`, donc cliquer sur le bouton à droite de `Topic` et coller la valeur dans votre fichier de configuration MqttMapper après le mot clef `topic:` , ce qui donne `"topic": "zigbee2mqtt/bridge/info"`.
+
+Revenir ensuite dans le panneau de droite de MqttExplorer et jeter un œil au cadre `Value`.
+
+On peut trouver soit un texte simple, soit une spécification JSON (entourée de `{}` ou `[]`)
+
+Pour un simple texte (non JSON), spécifier simplement`"item": ""` dans la définition MqttMapper.
+
+![Copie d'écran (jsonValue)](images/jsonValue.png)
+
+Lorsqu'on a une spécification JSON, il faut spécifier la clef qu'on souhaite charger dans `item`. Dans l"image précédente, pour obtenir le contenu de `state`, spécifier `"topic": "radar/LWT"` et `"item": "state"`.
+
+Des données JSON plus complexes peuvent également être utilisées :
+
+![Copie d'écran (complexValue)](images/complexValue.png)
+
+Ici, la structure de données JSON a de multiples niveaux.Pour récupérer la valeur de `x` de `target_1`, utiliser `"item": "target1/x"`
 
 ## Liste (partielle) des options
 
