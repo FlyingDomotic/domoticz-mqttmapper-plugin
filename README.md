@@ -424,7 +424,7 @@ MqttExplorer is a tool to get (and set/delete) MQTT topics. When started, it'll 
 
 Here's an example of MqttExplorer display:
 
-![screenshot (simpleValue)](/simpleValue.png)
+![screenshot (simpleValue)](images/simpleValue.png)
 
 First step is to find interesting data into left pane. Just click on the line containing it. The full topic name will be displayed under `Topic` in the right pane. Just click on the icon just after `Topic` (representing a double sheet, labeled `Copy to clipboard`) to get it copied into clipboard!
 
