@@ -650,7 +650,7 @@ Domoticz device value (before change):
  19;66;0 
 
 Topic content:
-{"temperature": 19}
+{"temperature": 21}
 
 
 Domoticz device value (after change):
@@ -1307,7 +1307,7 @@ Contenu du topic (avant le changement) :
  19;66;0 
 
 Contenu du topic :
-{"temperature": 19}
+{"temperature": 21}
 
 
 Contenu du topic (après le changement) :
