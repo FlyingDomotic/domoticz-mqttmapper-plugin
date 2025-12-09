@@ -344,7 +344,7 @@ class pluginV1:
     #   Multiplier and/or digits should be taken from setMapping first, if they exists.
     #   Else, they'll be taken from nodeMapping
     #   If multiplier/digit contains a list separated by ";", then itemNumber is used as index
-    def computeValue(self, itemValue, nodeMapping, itemNumber, setMapping=None):
+    def computeValue(self, itemValue, nodeMapping, itemNumber, setMapping=None, setFlag=False):
         if self.isFloat(itemValue):                                 # If raw value is numeric or float
             result = float(itemValue)                               # Convert value as float
             if int(result) == result:                               # Is value an integer?
@@ -352,18 +352,26 @@ class pluginV1:
             multiplier = None
             digits = None
             if setMapping:                                          # Are we in set operation?
+                if self.debugging == "Extra verbose":
+                    Domoticz.Log(F"setMapping: {setMapping}")
                 multiplier = self.getValue(setMapping, 'multiplier', None)  # Extract multiplier from set parameters
                 digits = self.getValue(setMapping, 'digits', None)  # Extract number of digits needed from mapping parameters
             if multiplier == None:                                  # Multiplier not given in setMapping
+                if self.debugging == "Extra verbose":
+                    Domoticz.Log(F"nodeMapping: {nodeMapping}")
                 multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier from node parameters
             if multiplier !=None:                                   # Do we have a multiplier?
                 if type(multiplier).__name__ == "str":              # Is multiplier a string?
                     parts = multiplier.split(";")                   # Split string giving ";"
                     if itemNumber < len(parts):                     # Is itemNumber within parts?
                         multiplier = float(parts[itemNumber])       # Isolate this part and use it as multiplier
-                if setMapping:                                      # Is this a set operation?
+                if setFlag:                                         # Is this a set operation?
+                    if self.debugging == "Extra verbose":
+                        Domoticz.Log(F"Dividing by {multiplier}")
                     result /= float(multiplier)                     # Yes, divide by multiplier
                 else:
+                    if self.debugging == "Extra verbose":
+                        Domoticz.Log(F"Multiplying by {multiplier}")
                     result *= float(multiplier)                     # No, multiply
             if digits == None:                                      # Digits not given in setMapping
                 digits = self.getValue(nodeMapping, 'digits', None) # Extract digits from node parameters
@@ -373,8 +381,13 @@ class pluginV1:
                 parts = digits.split(";")                           # Split string giving ";"
                 if itemNumber < len(parts):                         # Is itemNumber within parts?
                     digits = parts[itemNumber]                      # Isolate this part and use it as digits
+            if self.debugging == "Extra verbose":
+                Domoticz.Log(F"Rounding by {digits}")
             if int(digits) <= 0:                                    # Digits is negative or zero
-                return int(result)                                  # Return integer
+                if type(result).__name__ == "float":                # Is result a float?
+                    return int(result + 0.5)                        # Return integer rounded
+                else:
+                    return int(result)                              # Return integer
             else:                                                   # Digits defined and positive
                 return round(result, int(digits))                   # Return rounded value
         else:                                                       # Value is not numerical
@@ -570,7 +583,7 @@ class pluginV1:
                 self.jsonData = json.load(configStream)
             except Exception as exception:
                 Domoticz.Error(F"Error loading {jsonFile}: {str(exception)}")
-                Domoticz.Error(F"You should probably use any online 'json format checker' to locate JSON syntax error in {jsonFile}")
+                Domoticz.Error(F"Run {self.parameters['HomeFolder']}checkJsonFiles.py to locate JSON syntax error in {jsonFile}")
                 return
 
         # Go through JSON file to create devices
@@ -801,7 +814,9 @@ class pluginV1:
                         elif item == "~*":                          # Item is ~*, insert topic content
                             readValue += str(self.computeValue(message, nodeMapping, itemIndex))
                             if isOnlyMessage == None:
-                                    isOnlyMessage = True
+                                    # Don't force message only if multiplier or digit are given
+                                    if self.getValue(nodeMapping, 'multiplier', None) == None and self.getValue(nodeMapping, 'digits', None) == None:
+                                        isOnlyMessage = True
                         else:
                             isOnlyMessage = False
                             readValue += item[1:]                   # Add item, removing initial '~'
@@ -814,6 +829,8 @@ class pluginV1:
                         else:                                       # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                 readValue = readValue[1:]                           # Remove first ';'
+                if self.debugging == "Extra verbose":               ## Add debug if required
+                    Domoticz.Debug(F"readValue: {readValue}, isOnlyMessage: {isOnlyMessage}")
                 if  mappingValues != None:
                     valueToSet = mappingDefault or 0                # Set default mapping (or 0)
                     for testValue in mappingValues:                 # Scan all mapping values
@@ -987,24 +1004,20 @@ class pluginV1:
                 nodeType = self.getValue(nodeItems, 'type', "0")
                 nodeSubtype = self.getValue(nodeItems, 'subtype', "0")
                 nodeSwitchtype = self.getValue(nodeItems, 'switchtype', "0")
-                if self.switchTypes.canBeSet(nodeType, nodeSubtype, nodeSwitchtype): # Select valid types
-                    if setMappingValues != None:
-                        for testValue in setMappingValues:          # Scan all mapping values
-                            if setMappingValues[testValue] == targetValue:  # Is this the same value?
-                                valueToSet = testValue              # Insert mapped value
-                        if valueToSet == None:                      # No mapping value found
-                            Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
-                    elif mappingValues != None:
-                        for testValue in mappingValues:             # Scan all mapping values
-                            if mappingValues[testValue] == targetValue:  # Is this the same value?
-                                valueToSet = testValue              # Insert mapped value
-                        if valueToSet == None:                      # No mapping value found
-                            Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
-                    else:                                           # No mapping given, use command value
-                        valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet))
-                else:                                               # Device not in canBeSet list
-                    Domoticz.Error(F"Can't set device type {nodeType}, subtype {nodeSubtype}, switchtype {nodeSwitchtype} yet. Please ask for support.")
-                    return
+                if setMappingValues != None:
+                    for testValue in setMappingValues:              # Scan all mapping values
+                        if setMappingValues[testValue] == targetValue:  # Is this the same value?
+                            valueToSet = testValue                  # Insert mapped value
+                    if valueToSet == None:                          # No mapping value found
+                        Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
+                elif mappingValues != None:
+                    for testValue in mappingValues:                 # Scan all mapping values
+                        if mappingValues[testValue] == targetValue: # Is this the same value?
+                            valueToSet = testValue                  # Insert mapped value
+                    if valueToSet == None:                          # No mapping value found
+                        Domoticz.Error(F"Can't map >{targetValue}< for {device.Name}")
+                else:                                               # No mapping given, use command value
+                    valueToSet = str(self.computeValue(targetValue, nodeMapping, 0, nodeSet, True))
                 if valueToSet != None and setTopic != None:         # Value and topic given, set it
                     if isinstance(setPayload, str):
                         payload = str(setPayload).replace("#", valueToSet)  # payload is a simple string

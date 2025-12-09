@@ -10,7 +10,7 @@
 #
 #   Flying Domotic - https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin
 """
-<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.10.7-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
+<plugin key="MqttMapper" name="MQTT mapper with network interface" author="Flying Domotic" version="25.12.9-1" externallink="https://github.com/FlyingDomotic/domoticz-mqttmapper-plugin">
     <description>
         MQTT mapper plug-in<br/><br/>
         Maps MQTT topics to Domoticz devices<br/>
@@ -133,7 +133,7 @@ def onStart():
             jsonData = json.load(configStream)
         except Exception as exception:
             Domoticz.Error(F"Error loading {jsonFile}: {str(exception)}")
-            Domoticz.Error(F"You should probably use any online 'json format checker' to locate JSON syntax error in {jsonFile}")
+            Domoticz.Error(F"Run {Parameters['HomeFolder']}checkJsonFiles.py to locate JSON syntax error in {jsonFile}")
             return
 
     parameters = getValue(jsonData, "[parameters]", None)
