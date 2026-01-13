@@ -29,9 +29,10 @@ class MqttClient:
     mqttConnectedCb = None
     mqttDisconnectedCb = None
     mqttPublishCb = None
+    debugging = 0
 
     #Initialization
-    def __init__(self, Parameters, Devices, destination, port, mqttConnectedCb, mqttDisconnectedCb, mqttPublishCb, mqttSubackCb):
+    def __init__(self, Parameters, Devices, destination, port, mqttConnectedCb, mqttDisconnectedCb, mqttPublishCb, mqttSubackCb, debugging):
         Domoticz.Debug(F"MqttClient::__init__")
         self.parameters = Parameters
         self.devices = Devices
@@ -41,6 +42,7 @@ class MqttClient:
         self.mqttDisconnectedCb = mqttDisconnectedCb
         self.mqttPublishCb = mqttPublishCb
         self.mqttSubackCb = mqttSubackCb
+        self.debugging = debugging
         self.Open()
 
     # Default value
@@ -68,7 +70,7 @@ class MqttClient:
     # Publish a payload into a topic
     def Publish(self, topic, payload, retain = 0):
         if (self.mqttConn == None or not self.isConnected):
-            Domoticz.Error(F"MqttCLient::MQTT not connected, can't Publish {topic}={payload}, retain={retain}")
+            Domoticz.Error(F"MqttClient::MQTT not connected, can't Publish {topic}={payload}, retain={retain}")
         else:
             Domoticz.Debug(F"MqttClient::Publish {topic}={payload}, retain={retain}")
             self.mqttConn.Send({'Verb': 'PUBLISH', 'Topic': topic, 'Payload': bytearray(payload, 'utf-8'), 'Retain': retain})
@@ -116,6 +118,9 @@ class MqttClient:
 
     # MQTT message received callback
     def onMessage(self, Connection, Data):
+        if self.debugging == "Verbose+":
+            for dataItem in Data:
+                Domoticz.Debug(F"MqttClient::onMessage:: Data {dataItem}={Data[dataItem]}")
         topic = ''
         if 'Topic' in Data:
             topic = Data['Topic']
@@ -153,7 +158,7 @@ class pluginV1:
         self.mqttClient = None
         self.mqttserveraddress = ""
         self.mqttserverport = ""
-        self.debugging = "Normal"
+        self.debugging = Parameters["Mode6"]
         self.throttleLastDate = {}
         self.throttleData = {}
         self.lastHeartbeatUtc = 0
@@ -352,12 +357,12 @@ class pluginV1:
             multiplier = None
             digits = None
             if setMapping:                                          # Are we in set operation?
-                if self.debugging == "Extra verbose":
+                if self.debugging == "Verbose+":
                     Domoticz.Log(F"setMapping: {setMapping}")
                 multiplier = self.getValue(setMapping, 'multiplier', None)  # Extract multiplier from set parameters
                 digits = self.getValue(setMapping, 'digits', None)  # Extract number of digits needed from mapping parameters
             if multiplier == None:                                  # Multiplier not given in setMapping
-                if self.debugging == "Extra verbose":
+                if self.debugging == "Verbose+":
                     Domoticz.Log(F"nodeMapping: {nodeMapping}")
                 multiplier = self.getValue(nodeMapping, 'multiplier', None) # Extract multiplier from node parameters
             if multiplier !=None:                                   # Do we have a multiplier?
@@ -366,11 +371,11 @@ class pluginV1:
                     if itemNumber < len(parts):                     # Is itemNumber within parts?
                         multiplier = float(parts[itemNumber])       # Isolate this part and use it as multiplier
                 if setFlag:                                         # Is this a set operation?
-                    if self.debugging == "Extra verbose":
+                    if self.debugging == "Verbose+":
                         Domoticz.Log(F"Dividing by {multiplier}")
                     result /= float(multiplier)                     # Yes, divide by multiplier
                 else:
-                    if self.debugging == "Extra verbose":
+                    if self.debugging == "Verbose+":
                         Domoticz.Log(F"Multiplying by {multiplier}")
                     result *= float(multiplier)                     # No, multiply
             if digits == None:                                      # Digits not given in setMapping
@@ -381,7 +386,7 @@ class pluginV1:
                 parts = digits.split(";")                           # Split string giving ";"
                 if itemNumber < len(parts):                         # Is itemNumber within parts?
                     digits = parts[itemNumber]                      # Isolate this part and use it as digits
-            if self.debugging == "Extra verbose":
+            if self.debugging == "Verbose+":
                 Domoticz.Log(F"Rounding by {digits}")
             if int(digits) <= 0:                                    # Digits is negative or zero
                 if type(result).__name__ == "float":                # Is result a float?
@@ -628,7 +633,7 @@ class pluginV1:
                         device.Update(nValue = device.nValue, sValue = device.sValue, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), Options=nodeOptions)
 
         # Connect to MQTT server
-        self.mqttClient = MqttClient(self.parameters, self.devices, self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed)
+        self.mqttClient = MqttClient(self.parameters, self.devices, self.mqttserveraddress, self.mqttserverport, self.onMQTTConnected, self.onMQTTDisconnected, self.onMQTTPublish, self.onMQTTSubscribed, self.debugging)
         parametersFile = self.parameters['HomeFolder'] + self.parameters["Mode1"] + ".parameters"
         try:
             with open(parametersFile, "wt") as f:
@@ -701,7 +706,7 @@ class pluginV1:
         if not self.initDone or self.jsonData == None:
             return
 
-        if self.debugging == "Extra verbose":
+        if self.debugging == "Verbose+":
             self.dumpMQTTMessageToLog(topic, rawmessage, 'onMQTTPublish: ')
 
         # Iterating through the JSON list
@@ -829,7 +834,7 @@ class pluginV1:
                         else:                                       # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
                 readValue = readValue[1:]                           # Remove first ';'
-                if self.debugging == "Extra verbose":               ## Add debug if required
+                if self.debugging == "Verbose+":                    ## Add debug if required
                     Domoticz.Debug(F"readValue: {readValue}, isOnlyMessage: {isOnlyMessage}")
                 if  mappingValues != None:
                     valueToSet = mappingDefault or 0                # Set default mapping (or 0)
