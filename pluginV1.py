@@ -612,18 +612,28 @@ class pluginV1:
                 else:
                     deviceList.append(nodeKey)
                 if (device == None):
-                    Domoticz.Log(F"Creating device {nodeName}")
-                    Domoticz.Device(Name=nodeName, Unit=self.getNextDeviceId(), Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=nodeKey if nodeKey else nodeTopic, Options=nodeOptions, Used=nodeVisible).Create()
-                    initialData = self.getValue(nodeItems, 'initial', None)
-                    if initialData:                                 # Set initial data if required
-                        nValue = int(self.getValue(initialData, 'nvalue', 0))
-                        sValue = self.getValue(initialData, 'svalue', '')
-                        Domoticz.Log(F"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
-                        device = self.getDevice(nodeKey)
-                        if device != None:
-                            device.Update(nValue = nValue, sValue = sValue)
-                        else:
-                            Domoticz.Error(F"Can't find device {nodeKey}")
+                    newUnit = self.getNextDeviceId()
+                    deviceKey = nodeKey if nodeKey else nodeTopic
+                    Domoticz.Log(F"Creating device '{nodeName}' with key '{deviceKey}' as unit {newUnit}")
+                    if self.debugging == "Verbose+":
+                        Domoticz.Log(F"Name='{nodeName}', Unit='{newUnit}', Type={int(nodeType)}, Subtype={int(nodeSubtype)}, Switchtype={int(nodeSwitchtype)}, DeviceID='{deviceKey}', Options='{nodeOptions}', Used='{nodeVisible}'")
+                    Domoticz.Device(Name=nodeName, Unit=newUnit, Type=int(nodeType), Subtype=int(nodeSubtype), Switchtype=int(nodeSwitchtype), DeviceID=deviceKey, Options=nodeOptions, Used=nodeVisible).Create()
+                    # Check for new device proper creation
+                    try:
+                        newDevice = self.devices[newUnit]
+                    except IndexError:
+                        Domoticz.Error(F"Error creating device {nodeName}")
+                    else:
+                        initialData = self.getValue(nodeItems, 'initial', None)
+                        if initialData:                                 # Set initial data if required
+                            nValue = int(self.getValue(initialData, 'nvalue', 0))
+                            sValue = self.getValue(initialData, 'svalue', '')
+                            Domoticz.Log(F"Initializing {nodeName} with nValue={nValue} and sValue={sValue}")
+                            device = self.getDevice(nodeKey)
+                            if device != None:
+                                device.Update(nValue = nValue, sValue = sValue)
+                            else:
+                                Domoticz.Error(F"Can't find device '{nodeKey}'")
                 else:
                     # Update device only if something changed
                     if nodeOptions == None:
@@ -750,7 +760,7 @@ class pluginV1:
         nodeKey = self.getValue(nodeItems, 'key', nodeTopic)        # Get device key
         device = self.getDevice(nodeKey)
         if device == None:
-            Domoticz.Error(F"Can't find device key {nodeKey}")
+            Domoticz.Error(F"Can't find device key '{nodeKey}'")
             return
         Domoticz.Debug(source+" found "+str(nodeTopic)+", Device '" + device.Name + "', message '" + str(message) + "'")
         nodeSelect = self.getValue(nodeItems, 'select', None)       # Is there a "select" option?
@@ -829,7 +839,7 @@ class pluginV1:
                         isOnlyMessage = False
                         itemValue = self.getPathValue(message, item, '/', None) # Extract value from message
                         if itemValue == None:
-                            Domoticz.Error(F"Can't find >{item}'< in >'{message}<, message ignored")
+                            Domoticz.Error(F"Can't find '{item}' in '{message}', message ignored")
                             return
                         else:                                       # Add extracted value
                             readValue += str(self.computeValue(itemValue, nodeMapping, itemIndex))
