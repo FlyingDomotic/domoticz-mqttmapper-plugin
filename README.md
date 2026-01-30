@@ -224,6 +224,8 @@ This time, payload is in JSON format (`item` is not empty). This mean that the v
 
 `select` allow to consider only message having a specific item with a given value (else message will be just ignored). Here, only message with `"isOk": "yes"` will be selected.
 
+In the same spirit, `reject` allow to consider only message not having a specific item with a given value.
+
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
@@ -882,6 +884,8 @@ Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur ext
 'digits' est également optionnel et indique le nombre de décimales à utiliser pour arrondir la valeur. Là encore, vous pouvez utiliser "1;2;0" si vous avez plusieurs valeurs à donner.
 
 `select` permet de ne considérer que les messages ayant un item particulier contenant une valeur spécifique (sinon, le message sera simplement ignoré). Ici, seuls les messages avec `"isOk": "yes"` seront sélectionnés.
+
+De même, `reject` permet de ne considérer que les messages n'ayant pas un item particulier contenant une valeur spécifique.
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
