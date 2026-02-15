@@ -226,6 +226,24 @@ This time, payload is in JSON format (`item` is not empty). This mean that the v
 
 In the same spirit, `reject` allow to consider only message not having a specific item with a given value.
 
+You can put a list after `value`, like:
+```ts
+        "select": {"item": "status", "value": ["ok", "changed", "same"]}}`
+```
+
+Message will be selected/rejected if item value is one of those listed.
+
+You may also not specify `value` at all. In this case, messages having `item` in message will be selected/rejected.
+
+Finally, you may add a list of `item`/`value` pairs like:
+```ts
+    "select": [
+        {"item": "fPort", "value": 85},
+        {"item": "object/socket_status"}
+    ]
+```
+to select/reject message meeting all listed conditions. As previously said, `value` can be a list or not given, in each pair.
+
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
         "type": "82", "subtype": "5", "switchtype": "0",
@@ -613,11 +631,6 @@ Topic content:
 
 -> Message ignored
  
-Note: you can put a list after "value", like:
-{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": ["ok", "changed", "same"]}}
-
-Message will be selected if item value is one of those listed
-
 ```
 
 ## Message with specific item value to be rejected
@@ -886,6 +899,25 @@ Cette fois, le contenu est au format JSON (`item` n'est pas vide). La valeur ext
 `select` permet de ne considérer que les messages ayant un item particulier contenant une valeur spécifique (sinon, le message sera simplement ignoré). Ici, seuls les messages avec `"isOk": "yes"` seront sélectionnés.
 
 De même, `reject` permet de ne considérer que les messages n'ayant pas un item particulier contenant une valeur spécifique.
+
+Il est possible d'indiquer une liste après `value`,  comme :
+```ts
+        "select": {"item": "status", "value": ["ok", "changed", "same"]}}`
+```
+
+Le message sera sélectionné/rejeté si la valeur du contenu de `item` est une de celles listées.
+
+Il est aussi possible de ne pas spécifier `value`. Dans ce cas, les messages ayant `item` seront séletionnés/rejetés.
+
+Enfin vous pouvez indiquer une liste :
+```ts
+    "select": [
+        {"item": "fPort", "value": 85},
+        {"item": "object/socket_status"}
+    ]
+```
+
+pour sélectionner/rejeter les messages remplissant toutes les conditions listées. comme déjà expliqué, `value` peut également être une liste ou non spécifié, pour chaque couple.
 
 ```ts
     "Kitchen temperature": {"topic": "zigbee2mqtt/Kitchen",
@@ -1273,12 +1305,7 @@ Contenu du topic :
 {"temperature": 19, "humidity":70, "status": "bad"}
 
 -> Message ignoré
- 
-Note: vous pouvez utiliser une liste après "value", tel que:
-{"device":{"topic": "sensor/state",  "mapping": {"item": "temperature"}, "select": {"item": "status", "value": ["ok", "changed", "same"]}}
-
-Le message sera sélectionné si la valeur de l'item est une de celles de la liste
-```
+ ```
 
 ## Messages avec une valeur particulière à rejeter
 ```
